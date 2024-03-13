@@ -7,6 +7,7 @@
 		addHiddenColumns
 	} from 'svelte-headless-table/plugins';
 
+	
 	import { readable } from 'svelte/store';
 	import * as Table from '$lib/components/ui/table';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
