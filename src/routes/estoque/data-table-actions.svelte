@@ -2,6 +2,7 @@
     import Ellipsis from "lucide-svelte/icons/ellipsis";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
     import { Button } from "$lib/components/ui/button";
+	import { goto } from "$app/navigation";
    
     export let id: string;
   </script>
@@ -21,7 +22,7 @@
     <DropdownMenu.Content>
       <DropdownMenu.Group>
         <DropdownMenu.Label>Opções</DropdownMenu.Label>
-        <DropdownMenu.Item on:click={() => navigator.clipboard.writeText(id)}>
+        <DropdownMenu.Item on:click={() => goto('/produtos')}>
           Criar novo produto
         </DropdownMenu.Item>
       </DropdownMenu.Group>

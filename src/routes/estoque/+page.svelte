@@ -2,8 +2,17 @@
 	import type { PageData } from './$types';
 	import DataTable from './data-table.svelte';
 	export let data: PageData;
+
+	const estoque = data.estoque.map((item) => {
+		return {
+			id: item.id,
+			nome: item.var_produto?.produto?.nome + ' ' + item.var_produto?.categoria?.nome,
+			quantidade: item.quantidade,
+			tipo: item.var_produto?.categoria?.nome ?? 'Sem categoria',
+		};
+	});
 </script>
 
 <div class="container mx-auto py-10">
-	<DataTable data={data.estoque} />
+	<DataTable data={estoque} />
 </div>
