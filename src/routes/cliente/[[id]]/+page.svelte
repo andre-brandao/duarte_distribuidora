@@ -6,7 +6,7 @@
 
 
 
-<main class="flex justify-center items-center md:h-screen">
+<main class="flex justify-center">
 
     <ProdutoForm data={data.form} />
 </main>
