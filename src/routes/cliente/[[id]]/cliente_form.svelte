@@ -23,7 +23,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Popover from '$lib/components/ui/popover';
 
-	let person_type = '';
+	let person_type = 'Pessoa Fisica';
 
 	export let data: SuperValidated<Infer<FormSchema>>;
 
@@ -75,7 +75,7 @@
 		<Form.Field {form}>
 			<Form.Control>
 				<Form.Label>
-					{#each ['Pessoa Juridica', 'Pessoa Fisica'] as option}
+					{#each ['Pessoa Fisica', 'Pessoa Juridica'] as option}
 						<label class="mr-3">
 							<input type="radio" name="cpf_cnpj" value={option} bind:group={person_type} />
 							{option}

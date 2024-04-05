@@ -78,6 +78,10 @@
 				</div>
 			</Dialog.Header>
 			<div class="row flex items-center justify-between gap-2 text-center">
+				<!--se esta aberto ou fechado-->
+				<code class="bg-green-500 py-1 px-2 rounded">
+					{pedidos_caixa.em_aberto}
+				</code>
 				<p>Numero do pedido #{pedidos_caixa.num_pedido}</p>
 				<p>Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
 				<Input
