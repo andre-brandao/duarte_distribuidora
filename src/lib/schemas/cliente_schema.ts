@@ -7,7 +7,7 @@ export const formSchema = z.object({
 	data_nascimento: z.string().optional(),
 	celular: z.string().min(11).max(11),
 	telefone_fixo: z.string().min(10).max(10).optional(),
-    cpf_cnpj: z.string().min(11).max(14),
+    cpf_cnpj: z.string().min(11).max(14).optional(),
     rg_ie: z.string().min(5).max(20).optional(),
 });
 

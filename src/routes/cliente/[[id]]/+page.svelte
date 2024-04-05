@@ -4,9 +4,6 @@
 	export let data: PageData;
 </script>
 
-
-
 <main class="flex justify-center">
-
-    <ProdutoForm data={data.form} />
+	<ProdutoForm data={data.form} />
 </main>
