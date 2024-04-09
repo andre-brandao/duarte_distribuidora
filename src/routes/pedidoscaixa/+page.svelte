@@ -1,0 +1,114 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import { Trigger } from '$lib/components/ui/dropdown-menu';
+	import CardProduto from '$lib/components/breninteste/card/CardProduto.svelte';
+	import { onMount } from 'svelte';
+
+	export let data: PageData;
+
+	const pedidos_caixa = {
+		num_pedido: 0,
+		datahora_pedido: '',
+		isOpen: true,
+		criado_por: 'User',
+		itens_pedido: [
+			{ id: 1, nome: 'Item 1', preco: 10.0, categoria: 'Categoria 1' },
+			{ id: 2, nome: 'Item 2', preco: 20.0, categoria: 'Categoria 2' },
+			{ id: 3, nome: 'Item 3', preco: 30.0, categoria: 'Categoria 3' }
+		],
+		valor_total: 0
+	};
+
+	pedidos_caixa.valor_total = pedidos_caixa.itens_pedido.reduce(
+		(total, item) => total + item.preco,
+		0
+	);
+
+	onMount(() => {
+		pedidos_caixa.datahora_pedido = new Date().toLocaleString('pt-BR', {
+			day: '2-digit',
+			month: '2-digit',
+			hour: '2-digit',
+			minute: '2-digit'
+		});
+	});
+</script>
+
+<div class="container">
+	<div class="gap-0 py-1">
+		<div class="items-center gap-0 py-7">
+			<h1 class="text-center text-3xl font-bold">Pedido no caixa</h1>
+		</div>
+	</div>
+	<div class="row flex items-center justify-between gap-2 text-center">
+		<code class={`rounded px-3 py-1 ${pedidos_caixa.isOpen ? 'bg-green-500' : 'bg-red-500'}`}>
+			{pedidos_caixa.isOpen ? 'EM ABERTO' : 'FECHADO'}
+		</code>
+		<p>Numero do pedido #{pedidos_caixa.num_pedido}</p>
+		<p>Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
+		<Dialog.Root>
+			<Dialog.Trigger class={buttonVariants({ variant: 'brenosubmit' })}
+				>ACESSAR PRODUTOS</Dialog.Trigger
+			>
+			<Dialog.Content class="sm:max-w-[1400px]">
+				<Dialog.Header>
+					<div class="gap-0 py-1">
+						<div class="items-center gap-0 py-6 flex">
+							<Dialog.Title class="text-center text-3xl">Produtos</Dialog.Title>
+							<Input
+								id="name"
+								placeholder="Pesquisar produto..."
+								class="col-span-1 h-auto w-auto px-2 py-1"
+							/>
+						</div>
+					</div>
+				</Dialog.Header>
+				<div class="grid grid-cols-3">
+					{#each new Array(3) as item}
+						<CardProduto />
+					{/each}
+				</div>
+			</Dialog.Content>
+		</Dialog.Root>
+	</div>
+	<div class="row-auto my-8 flex gap-10">
+		<div class="col-auto">
+			<!--Criado por: - observacao input -->
+			<p>Criado por: {pedidos_caixa.criado_por}</p>
+		</div>
+		<div class="col-auto">
+			<!--itens do pedido - total - subtotal-->
+			<h2 class="text-3xl font-bold">Itens do pedido:</h2>
+			<ul class="text-lg">
+				{#each pedidos_caixa.itens_pedido as item (item.id)}
+					<li class="py-2">{item.nome} - R${item.preco}</li>
+					<hr />
+				{/each}
+				<li class="text-3xl font-bold">Valor Total: R${pedidos_caixa.valor_total}</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--Botão vincular cliente - mais opcoes -->
+	<!-- <div>
+		<Button class="w-full">Vincular a um cliente</Button>
+	</div>
+	<div class="w-full">
+		<Button class="w-full">Mais opcoes</Button>
+	</div> -->
+	<div class="row-auto flex">
+		<div class="col-auto border p-2">
+			<!--cancelar-->
+			<a href="/" class={buttonVariants({ variant: 'brenosubmit' })}>CANCELAR</a>
+		</div>
+		<div class="col-auto border p-2">
+			<!--Imprimir - pagamento-->
+			<Button variant="brenosubmit">IMPRIMIR</Button>
+			<Button variant="brenosubmit">PAGAMENTO</Button>
+		</div>
+	</div>
+</div>
