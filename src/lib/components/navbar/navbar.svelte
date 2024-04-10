@@ -26,9 +26,9 @@
 	</div>
 </nav> -->
 <button
-	data-drawer-target="sidebar-multi-level-sidebar"
-	data-drawer-toggle="sidebar-multi-level-sidebar"
-	aria-controls="sidebar-multi-level-sidebar"
+	data-drawer-target="logo-sidebar"
+	data-drawer-toggle="logo-sidebar"
+	aria-controls="logo-sidebar"
 	type="button"
 	class="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 sm:hidden"
 >
@@ -49,14 +49,14 @@
 </button>
 
 <aside
-	id="default-sidebar"
-	class="fixed left-0 top-0 z-40 h-screen w-auto -translate-x-full transition-transform sm:translate-x-0"
+	id="logo-sidebar"
+	class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0"
 	aria-label="Sidebar"
 >
-	<div class="h-full overflow-y-auto border bg-gray-100 py-4 px-3">
-		<a href="/" class="mb-5 flex items-center space-x-3 rtl:space-x-reverse">
-			<span class="self-center whitespace-nowrap text-2xl font-semibold">Duarte Distribuidora</span>
-		</a>
+	<div class="h-full overflow-y-auto border bg-gray-100 px-3 py-4">
+		<a href="/" class="flex items-center ps-2.5 mb-5">
+            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Duarte Distribuidora</span>
+         </a>
 		<ul class="space-y-2 font-medium">
 			<ButtonNav href="/test" label="Novo produto" Icon={CirclePlus} />
 			<ButtonNav href="/cliente" label="Novo cliente" Icon={UserPlus} />
@@ -65,4 +65,5 @@
 		</ul>
 	</div>
 </aside>
+
 
