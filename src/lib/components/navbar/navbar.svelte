@@ -1,6 +1,18 @@
-<script>
+<script lang="ts">
 	import ButtonNav from './buttonnav.svelte';
 	import { CirclePlus, Package, ShoppingCart, UserPlus } from 'lucide-svelte';
+	import type { ComponentType } from 'svelte';
+	import type { Icon } from 'lucide-svelte';
+	let itens: {
+		label: string;
+		href: string;
+		icon: ComponentType<Icon>;
+	}[] = [
+		{ label: 'Novo produto', href: '/produtos', icon: CirclePlus },
+		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
+		{ label: 'Estoque', href: '/estoque', icon: Package },
+		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart }
+	];
 </script>
 
 <!-- <nav class="border border-gray-200 bg-gray-50">
@@ -54,16 +66,15 @@
 	aria-label="Sidebar"
 >
 	<div class="h-full overflow-y-auto border bg-gray-100 px-3 py-4">
-		<a href="/" class="flex items-center ps-2.5 mb-5">
-            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Duarte Distribuidora</span>
-         </a>
+		<a href="/" class="mb-5 flex items-center ps-2.5">
+			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+				>Duarte Distribuidora</span
+			>
+		</a>
 		<ul class="space-y-2 font-medium">
-			<ButtonNav href="/test" label="Novo produto" Icon={CirclePlus} />
-			<ButtonNav href="/cliente" label="Novo cliente" Icon={UserPlus} />
-			<ButtonNav href="/estoque" label="Estoque" Icon={Package} />
-			<ButtonNav href="/pedidoscaixa" label="Pedidos no caixa" Icon={ShoppingCart} />
+			{#each itens as item}
+				<ButtonNav href={item.href} label={item.label} Icon={item.icon} />
+			{/each}
 		</ul>
 	</div>
 </aside>
-
-
