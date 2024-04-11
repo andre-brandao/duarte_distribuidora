@@ -7,6 +7,7 @@
 	import { Trigger } from '$lib/components/ui/dropdown-menu';
 	import CardProduto from '$lib/components/breninteste/card/CardProduto.svelte';
 	import { onMount } from 'svelte';
+	import { Textarea } from "$lib/components/ui/textarea";
 
 	export let data: PageData;
 
@@ -42,13 +43,13 @@
 	<div class="rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700">
 		<div class="">
 			<div class="gap-0 py-1">
-				<div class="items-center gap-0 py-7">
-					<h1 class="text-center text-3xl font-bold">Pedido no caixa</h1>
+				<div class="items-center gap-0 pb-7">
+					<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 				</div>
 			</div>
 			<div class="row flex items-center justify-between gap-2 text-center">
 				<code class={`rounded px-3 py-1 ${pedidos_caixa.isOpen ? 'bg-green-500' : 'bg-red-500'}`}>
-					{pedidos_caixa.isOpen ? 'EM ABERTO' : 'FECHADO'}
+					{pedidos_caixa.isOpen ? 'Em aberto' : 'Fechado'}
 				</code>
 				<p>Numero do pedido #{pedidos_caixa.num_pedido}</p>
 				<p>Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
@@ -80,7 +81,8 @@
 			<div class="row-auto my-8 flex gap-10">
 				<div class="col-auto">
 					<!--Criado por: - observacao input -->
-					<p>Criado por: {pedidos_caixa.criado_por}</p>
+					<p class="pb-6">Criado por: {pedidos_caixa.criado_por}</p>
+					<Textarea placeholder="Anotar observacões..." id="message" />
 				</div>
 				<div class="col-auto">
 					<!--itens do pedido - total - subtotal-->
