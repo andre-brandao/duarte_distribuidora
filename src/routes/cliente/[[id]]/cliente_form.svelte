@@ -23,9 +23,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Popover from '$lib/components/ui/popover';
 
-	//INICIO AQ
-	let person_type = '';
-	//FIM AQI
+	let person_type = 'Pessoa Fisica';
 
 	export let data: SuperValidated<Infer<FormSchema>>;
 
@@ -44,8 +42,8 @@
 	$: value = $formData.data_nascimento ? parseDate($formData.data_nascimento) : undefined;
 </script>
 
-<form method="POST" use:enhance class="w-[500px] m-8">
-	<div class="rounded-lg border border-gray-400 p-10 shadow-sm bg-gray-100">
+<form method="POST" use:enhance class="m-8 w-[500px]">
+	<div class="rounded-lg border border-gray-400 bg-gray-100 p-10 shadow-sm">
 		<h1
 			class="self-center whitespace-nowrap pb-8 text-center text-2xl font-semibold dark:text-white"
 		>
@@ -77,7 +75,7 @@
 		<Form.Field {form}>
 			<Form.Control>
 				<Form.Label>
-					{#each ['Pessoa Juridica', 'Pessoa Fisica'] as option}
+					{#each ['Pessoa Fisica', 'Pessoa Juridica'] as option}
 						<label class="mr-3">
 							<input type="radio" name="cpf_cnpj" value={option} bind:group={person_type} />
 							{option}
@@ -159,23 +157,14 @@
 			</Form.Control>
 		</Form.Field>
 
-		<!-- cpf cnpj -->
-		<!-- <div class="flex gap-1">
-			<Form.Field {form} name="cpf_cnpj">
-				<Form.Control let:attrs>
-					<Form.Label>CPF/CNPJ</Form.Label>
-					<Input {...attrs} bind:value={$formData.cpf_cnpj} />
-				</Form.Control>
-	
-				<Form.Description>CPF ou CNPJ do cliente.</Form.Description>
-				<Form.FieldErrors />
-			</Form.Field>
-	
-		</div> -->
 		<Form.Field {form} name="rg_ie">
 			<Form.Control let:attrs>
-				<Form.Label>RE ou IE</Form.Label>
-				<Input {...attrs} bind:value={$formData.rg_ie} />
+				<Form.Label>{person_type === 'Pessoa Juridica' ? 'IE' : 'RG'} do cliente</Form.Label>
+				<Input
+					{...attrs}
+					bind:value={$formData.rg_ie}
+					placeholder="Digite o {person_type === 'Pessoa Juridica' ? 'IE' : 'RG'}"
+				/>
 			</Form.Control>
 
 			<Form.Description></Form.Description>
