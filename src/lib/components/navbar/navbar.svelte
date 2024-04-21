@@ -1,8 +1,9 @@
 <script lang="ts">
 	import ButtonNav from './buttonnav.svelte';
-	import { CirclePlus, Package, ShoppingCart, UserPlus } from 'lucide-svelte';
+	import { CirclePlus, Package, ShoppingCart, UserPlus, Plus } from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
+
 	let itens: {
 		label: string;
 		href: string;
@@ -11,32 +12,11 @@
 		{ label: 'Novo produto', href: '/produtos', icon: CirclePlus },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
-		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart }
+		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
+		// { label: 'Abir caixa', href: '/', icon: Plus }
 	];
 </script>
 
-<!-- <nav class="border border-gray-200 bg-gray-50">
-	<div class="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
-		<div>
-			<a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-				<span class="self-center whitespace-nowrap text-2xl font-semibold dark:text-white"
-					>Duarte Distribuidora</span
-				>
-			</a>
-		</div>
-
-		<div class="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
-			<ul
-				class="mt-4 flex flex-col rounded-lg font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-transparent md:dark:bg-transparent rtl:space-x-reverse"
-			>
-				<ButtonNav href="/test" label="Novo produto" Icon={CirclePlus} />
-				<ButtonNav href="/cliente" label="Novo cliente" Icon={UserPlus} />
-				<ButtonNav href="/estoque" label="Estoque" Icon={Package} />
-				<ButtonNav href="/pedidoscaixa" label="Pedidos no caixa" Icon={ShoppingCart} />
-			</ul>
-		</div>
-	</div>
-</nav> -->
 <button
 	data-drawer-target="logo-sidebar"
 	data-drawer-toggle="logo-sidebar"

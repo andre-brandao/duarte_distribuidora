@@ -1,38 +1,35 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+	import { Plus } from 'lucide-svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
 
-	export let produto = {
-		nome: 'Heinekein',
-		id: 0,
-		preco: 10,
-		categoria: 'Cerveja',
-		imagem: 'https://picsum.photos/200'
-	};
+	export let nome: string;
+	export let preco: number;
+	export let categoria: string;
+	export let img: string;
 </script>
 
-<main class="mt-5 flex items-center justify-center">
-	<button>
-		<Card.Root class="w-auto">
-			<div class="row flex">
-				<div class="column">
-					<Card.Header>
-						<Card.Title class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-							>{produto.nome}</Card.Title
-						>
-					</Card.Header>
-					<Card.Content class="flex items-center">
-						<div class="flex-grow">
-							<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
-								Categoria: {produto.categoria}
-							</p>
-							<p class="text-2xl font-bold text-gray-900 dark:text-white">R${produto.preco}</p>
-						</div>
-					</Card.Content>
-				</div>
-				<div class="column">
-					<img src={produto.imagem} alt="" class="ml-auto rounded-r-xl object-cover" />
-				</div>
-			</div>
-		</Card.Root>
-	</button>
-</main>
+<hr />
+<div class="flex py-3">
+	<div class="w-full flex-none md:w-auto">
+		<img
+			alt="Descrição da Imagem"
+			src={img}
+			class="h-16 w-16 rounded-lg object-cover md:h-20 md:w-20"
+		/>
+	</div>
+
+	<div class="flex-grow pl-4">
+		<div>
+			<h2 class="text-xl font-bold">{nome}</h2>
+			<h3 class="text-md text-gray-600">{categoria}</h3>
+		</div>
+	</div>
+	<div class="w-full text-right">
+		<span class="block pb-3 text-xl font-bold">R${preco}</span>
+		<Button class="flex-none">
+			<p class="pr-2">Adicionar</p>
+			<Plus />
+		</Button>
+	</div>
+</div>

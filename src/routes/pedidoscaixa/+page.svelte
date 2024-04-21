@@ -1,14 +1,9 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { Trigger } from '$lib/components/ui/dropdown-menu';
-	import CardProduto from '$lib/components/breninteste/card/CardProduto.svelte';
 	import { onMount } from 'svelte';
-	import { Textarea } from "$lib/components/ui/textarea";
-
+	import { Textarea } from '$lib/components/ui/textarea';
+	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	export let data: PageData;
 
 	const pedidos_caixa = {
@@ -47,53 +42,36 @@
 					<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 				</div>
 			</div>
-			<div class="row flex items-center justify-between gap-2 text-center">
-				<code class={`rounded px-3 py-1 ${pedidos_caixa.isOpen ? 'bg-green-500' : 'bg-red-500'}`}>
-					{pedidos_caixa.isOpen ? 'Em aberto' : 'Fechado'}
-				</code>
-				<p>Numero do pedido #{pedidos_caixa.num_pedido}</p>
-				<p>Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
-				<Dialog.Root>
-					<Dialog.Trigger class={buttonVariants({ variant: 'brenosubmit' })}
-						>ACESSAR PRODUTOS</Dialog.Trigger
-					>
-					<Dialog.Content class="sm:max-w-[1400px]">
-						<Dialog.Header>
-							<div class="gap-0 py-1">
-								<div class="flex items-center gap-0 py-6">
-									<Dialog.Title class="text-center text-3xl">Produtos</Dialog.Title>
-									<Input
-										id="name"
-										placeholder="Pesquisar produto..."
-										class="col-span-1 h-auto w-auto px-2 py-1"
-									/>
-								</div>
-							</div>
-						</Dialog.Header>
-						<div class="grid grid-cols-3">
-							{#each new Array(3) as item}
-								<CardProduto />
-							{/each}
-						</div>
-					</Dialog.Content>
-				</Dialog.Root>
+			<div class="row flex items-center justify-between gap-2">
+				<div>
+					<code class={`rounded px-3 py-1 ${pedidos_caixa.isOpen ? 'bg-green-500' : 'bg-red-500'}`}>
+						{pedidos_caixa.isOpen ? 'Em aberto' : 'Fechado'}
+					</code>
+					<p class="pt-3">Numero do pedido #{pedidos_caixa.num_pedido}</p>
+					<p class="pt-3">Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
+				</div>
+				<ModalProduto />
 			</div>
 			<div class="row-auto my-8 flex gap-10">
 				<div class="col-auto">
 					<!--Criado por: - observacao input -->
 					<p class="pb-6">Criado por: {pedidos_caixa.criado_por}</p>
-					<Textarea placeholder="Anotar observacões..." id="message" />
+					<Textarea placeholder="Anotar observacões..." id="message" class="h-36" />
 				</div>
-				<div class="col-auto">
-					<!--itens do pedido - total - subtotal-->
-					<h2 class="text-3xl font-bold">Itens do pedido:</h2>
-					<ul class="text-lg">
-						{#each pedidos_caixa.itens_pedido as item (item.id)}
-							<li class="py-2">{item.nome} - R${item.preco}</li>
-							<hr />
-						{/each}
-						<li class="text-3xl font-bold">Valor Total: R${pedidos_caixa.valor_total}</li>
-					</ul>
+				<div class="border">
+					<div class="col-auto">
+						<!--itens do pedido - total - subtotal-->
+						<h2 class="text-3xl font-bold">Itens do pedido:</h2>
+						<ul class="text-lg">
+							{#each pedidos_caixa.itens_pedido as item (item.id)}
+								<li class="py-2">{item.nome} - R${item.preco}</li>
+								<hr />
+							{/each}
+						</ul>
+						<h2 class="flex justify-end text-3xl font-bold">
+							Total:&nbsp;<span class="text-green-500">R${pedidos_caixa.valor_total}</span>
+						</h2>
+					</div>
 				</div>
 			</div>
 
@@ -118,3 +96,4 @@
 		</div>
 	</div>
 </div>
+
