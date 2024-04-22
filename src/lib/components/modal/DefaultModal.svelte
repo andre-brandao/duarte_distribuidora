@@ -1,12 +1,13 @@
-<script>
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+<script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
+	import { Button, buttonVariants } from '$lib/components/ui/button';
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>Edit Profile</Dialog.Trigger>
+	<Dialog.Trigger>Edit Profile
+	</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>Edit profile</Dialog.Title>

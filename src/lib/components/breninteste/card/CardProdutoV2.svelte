@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+    import DefaultModal from '$lib/components/modal/DefaultModal.svelte';
 
 	export let nome: string;
 	export let preco: number;
@@ -8,6 +9,7 @@
 </script>
 
 <main class="mt-5 flex items-center justify-center">
+    <DefaultModal />
 	<button>
 		<Card.Root class="w-auto">
 			<div class="row flex">
@@ -27,7 +29,7 @@
 					</Card.Content>
 				</div>
 				<div class="column">
-					<img src={img} alt="" class="ml-auto rounded-r-xl object-cover" />
+					<img src={img} alt="" class="ml-auto rounded-r-xl object-cover w-48 h-52" />
 				</div>
 			</div>
 		</Card.Root>

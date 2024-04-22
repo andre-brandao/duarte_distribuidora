@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ButtonNav from './buttonnav.svelte';
-	import { CirclePlus, Package, ShoppingCart, UserPlus, Plus } from 'lucide-svelte';
+	import { CirclePlus, Package, ShoppingCart, UserPlus, SquareMenu } from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
 
@@ -9,11 +9,11 @@
 		href: string;
 		icon: ComponentType<Icon>;
 	}[] = [
-		{ label: 'Novo produto', href: '/produtos', icon: CirclePlus },
+		{ label: 'Novo produto', href: '/test', icon: CirclePlus },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
-		// { label: 'Abir caixa', href: '/', icon: Plus }
+		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu }
 	];
 </script>
 
