@@ -1,13 +1,8 @@
-<script>
+<script lang="ts">
 	import '../app.pcss';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import Navbar from "$lib/components/navbar/navbar.svelte";
 </script>
 
-<nav class=" m-1 flex justify-between bg-primary p-2">
-	<a href="/"> Duarte Distribuidora </a>
-
-	<div class="flex gap-2">
-		<a href="/produtos" class="hover:underline"> Produtos </a>
-		<a href="/cliente" class="hover:underline"> Clientes </a>
-	</div>
-</nav>
+<Navbar/>
 <slot />

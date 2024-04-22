@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      categoria_produto: {
+      categoria: {
         Row: {
           created_at: string
           id: number
@@ -67,98 +67,224 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          nome: string
           quantidade: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          quantidade: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          quantidade?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_estoque_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "var_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pedido: {
+        Row: {
+          cliente_id: number
+          created_at: string
+          id: number
+          meta_data: Json | null
           tipo: string
+          total_in_cents: number
+        }
+        Insert: {
+          cliente_id: number
+          created_at?: string
+          id?: number
+          meta_data?: Json | null
+          tipo: string
+          total_in_cents: number
+        }
+        Update: {
+          cliente_id?: number
+          created_at?: string
+          id?: number
+          meta_data?: Json | null
+          tipo?: string
+          total_in_cents?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_pedido_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "cliente"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      preco: {
+        Row: {
+          created_at: string
+          id: number
+          preco_in_cents: number
+          tipo: string
+          var_produto_id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          preco_in_cents: number
+          tipo: string
+          var_produto_id: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          preco_in_cents?: number
+          tipo?: string
+          var_produto_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_preco_var_produto_id_fkey"
+            columns: ["var_produto_id"]
+            isOneToOne: false
+            referencedRelation: "var_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      produto: {
+        Row: {
+          created_at: string
+          id: number
+          nome: string
         }
         Insert: {
           created_at?: string
           id?: number
           nome: string
-          quantidade?: number
-          tipo?: string
         }
         Update: {
           created_at?: string
           id?: number
           nome?: string
-          quantidade?: number
-          tipo?: string
         }
         Relationships: []
       }
-      produto_ingrediente: {
+      produto_pedido: {
         Row: {
           created_at: string
-          ingrediente_id: number
-          produto_id: number
+          pedido_id: number
+          quantidade: number
+          total_in_cents: number
+          unidade_in_cents: number
+          var_produto_id: number
+        }
+        Insert: {
+          created_at?: string
+          pedido_id: number
+          quantidade?: number
+          total_in_cents: number
+          unidade_in_cents: number
+          var_produto_id: number
+        }
+        Update: {
+          created_at?: string
+          pedido_id?: number
+          quantidade?: number
+          total_in_cents?: number
+          unidade_in_cents?: number
+          var_produto_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_produto_pedido_pedido_id_fkey"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "pedido"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_produto_pedido_var_produto_id_fkey"
+            columns: ["var_produto_id"]
+            isOneToOne: false
+            referencedRelation: "var_produto"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transacao_estoque: {
+        Row: {
+          created_at: string
+          estoque_id: number
+          id: number
+          meta_data: Json | null
           quantidade: number
         }
         Insert: {
           created_at?: string
-          ingrediente_id: number
-          produto_id: number
-          quantidade?: number
+          estoque_id: number
+          id?: number
+          meta_data?: Json | null
+          quantidade: number
         }
         Update: {
           created_at?: string
-          ingrediente_id?: number
-          produto_id?: number
+          estoque_id?: number
+          id?: number
+          meta_data?: Json | null
           quantidade?: number
         }
         Relationships: [
           {
-            foreignKeyName: "public_produto_ingrediente_ingrediente_id_fkey"
-            columns: ["ingrediente_id"]
+            foreignKeyName: "public_transacao_estoque_estoque_id_fkey"
+            columns: ["estoque_id"]
             isOneToOne: false
             referencedRelation: "estoque"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "public_produto_ingrediente_produto_id_fkey"
-            columns: ["produto_id"]
-            isOneToOne: false
-            referencedRelation: "produtos"
-            referencedColumns: ["id"]
-          }
         ]
       }
-      produtos: {
+      var_produto: {
         Row: {
-          cateogira_id: number | null
+          categoria_id: number | null
           created_at: string
-          descricao: string
           id: number
-          nome: string
-          preco_atacado: number
-          preco_varejo: number
+          preco_custo_in_cents: number
+          produto_id: number
         }
         Insert: {
-          cateogira_id?: number | null
+          categoria_id?: number | null
           created_at?: string
-          descricao?: string
           id?: number
-          nome?: string
-          preco_atacado?: number
-          preco_varejo?: number
+          preco_custo_in_cents?: number
+          produto_id: number
         }
         Update: {
-          cateogira_id?: number | null
+          categoria_id?: number | null
           created_at?: string
-          descricao?: string
           id?: number
-          nome?: string
-          preco_atacado?: number
-          preco_varejo?: number
+          preco_custo_in_cents?: number
+          produto_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "public_produtos_cateogira_id_fkey"
-            columns: ["cateogira_id"]
+            foreignKeyName: "public_var_produto_categoria_id_fkey"
+            columns: ["categoria_id"]
             isOneToOne: false
-            referencedRelation: "categoria_produto"
+            referencedRelation: "categoria"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "public_var_produto_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produto"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
@@ -177,14 +303,16 @@ export type Database = {
   }
 }
 
+type PublicSchema = Database[Extract<keyof Database, "public">]
+
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -192,67 +320,67 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
