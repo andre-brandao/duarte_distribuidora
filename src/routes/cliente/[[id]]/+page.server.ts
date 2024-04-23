@@ -4,10 +4,7 @@ import { formSchema } from '$lib/schemas/cliente_schema.js';
 import { zod } from 'sveltekit-superforms/adapters';
 import { error, fail } from '@sveltejs/kit';
 
-// TODO CHANGE DB
-import { supabase } from '$lib/supabaseClient.js';
-
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
 	const id_cliente = params.id;
 
 	let form = await superValidate(zod(formSchema));
