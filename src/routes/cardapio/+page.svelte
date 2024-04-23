@@ -1,7 +1,6 @@
 <script lang="ts">
-	import CardProdutoV2 from '$lib/components/breninteste/card/CardProdutoV2.svelte';
+	import ModalCard from './../../lib/components/modal/ModalCard.svelte';
 	import type { PageData } from './$types';
-	import { produtos } from '$lib/stores/produtosStore';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { searchTerm, categoriasUnicas, filteredProdutos } from '$lib/stores/filtroProdutosStore';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
@@ -35,7 +34,7 @@
 			class="grid grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
 		>
 			{#each $filteredProdutos as produto (produto.id)}
-				<CardProdutoV2
+				<ModalCard
 					nome={produto.nome}
 					preco={produto.preco}
 					categoria={produto.categoria}

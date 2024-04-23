@@ -15,9 +15,16 @@
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
 		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu }
 	];
+	let navseila: HTMLElement;
+
+	function openNav() {
+		navseila.classList.remove('-translate-x-full');
+		navseila.classList.add('translate-x-0');
+	}
 </script>
 
 <button
+	on:click={openNav}
 	data-drawer-target="logo-sidebar"
 	data-drawer-toggle="logo-sidebar"
 	aria-controls="logo-sidebar"
@@ -41,6 +48,7 @@
 </button>
 
 <aside
+	bind:this={navseila}
 	id="logo-sidebar"
 	class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0"
 	aria-label="Sidebar"
