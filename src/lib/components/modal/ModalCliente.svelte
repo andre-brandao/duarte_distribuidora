@@ -1,12 +1,22 @@
 <script lang="ts">
-	import ButtonCliente from './../buttons/ButtonCliente.svelte';
+	import ButtonCliente from '$lib/components/buttons/ButtonCliente.svelte';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import CardCliente from '../breninteste/card/CardCliente.svelte';
-	import { searchTerm, categoriasUnicas, filteredProdutos } from '$lib/stores/filtroProdutosStore';
-	import { clientes } from '$lib/stores/clientesStore';
+	import CardCliente from '$lib/components/breninteste/card/CardCliente.svelte';
 	import { UserPlus } from 'lucide-svelte';
+
+	export let clientes: {
+		celular: string;
+		cpf_cnpj: string | null;
+		created_at: string;
+		data_nascimento: string | null;
+		email: string | null;
+		id: number;
+		nome: string;
+		rg_ie: string | null;
+		telefone_fixo: string | null;
+	}[];
 </script>
 
 <Dialog.Root>
@@ -30,8 +40,8 @@
 				</div>
 			</Dialog.Header>
 			<div class="grid pr-5">
-				{#each $clientes as cliente (cliente.id)}
-					<CardCliente nome={cliente.nome} email={cliente.email} celular={cliente.celular} />
+				{#each clientes as cliente (cliente.id)}
+					<CardCliente nome={cliente.nome} celular={cliente.celular} />
 				{/each}
 			</div>
 		</div>

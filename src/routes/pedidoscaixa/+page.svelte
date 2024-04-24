@@ -8,7 +8,10 @@
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Ban, Printer, DollarSign } from 'lucide-svelte';
 
-	//export let data: PageData;
+	import type { PageData } from './$types.js';
+	export let data: PageData;
+
+	const { clientes } = data;
 
 	const pedidos_caixa = {
 		num_pedido: 0,
@@ -64,7 +67,7 @@
 						</div>
 					</div>
 					<div>
-						<ModalCliente />
+						<ModalCliente {clientes}/>
 						<ButtonCardapio label={'CANCELAR'} Icon={Ban} href="/" />
 					</div>
 				</div>
