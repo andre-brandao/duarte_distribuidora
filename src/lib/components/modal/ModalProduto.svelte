@@ -4,6 +4,8 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import CardProduto from '$lib/components/breninteste/card/CardProduto.svelte';
 	import { searchTerm, categoriasUnicas, filteredProdutos } from '$lib/stores/filtroProdutosStore';
+	import ButtonCardapio from '../buttonCardapio/ButtonCardapio.svelte';
+	import { ShoppingBasket } from 'lucide-svelte';
 
 	function setFilter(categoria: string) {
 		$searchTerm = categoria;
@@ -11,9 +13,9 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'brenosubmit' })}
-		>ACESSAR PRODUTOS</Dialog.Trigger
-	>
+	<Dialog.Trigger>
+		<ButtonCardapio label={'ACESSAR PRODUTOS'} Icon={ShoppingBasket}/>
+	</Dialog.Trigger>
 	<Dialog.Content class="flex h-[600px] overflow-hidden sm:max-w-[900px]">
 		<div class="sticky top-0 flex h-full w-1/4 flex-col gap-2 bg-gray-100 p-4 text-center">
 			<Dialog.Title class="pb-2 text-center text-2xl">Categorias:</Dialog.Title>

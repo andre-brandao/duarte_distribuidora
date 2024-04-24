@@ -1,13 +1,10 @@
 <script lang="ts">
+	import { produtos } from './../../lib/stores/produtosStore.js';
 	import ButtonCardapio from './../../lib/components/buttonCardapio/ButtonCardapio.svelte';
-	import type { PageData } from './$types';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	import { CirclePlus } from 'lucide-svelte';
-	import type { ComponentType } from 'svelte';
-	import type { Icon } from 'lucide-svelte';
+	import { Ban, Printer, DollarSign } from 'lucide-svelte';
 
 	//export let data: PageData;
 
@@ -16,11 +13,7 @@
 		datahora_pedido: '',
 		isOpen: true,
 		criado_por: 'User',
-		itens_pedido: [
-			{ id: 1, nome: 'Item 1', preco: 10.0, categoria: 'Categoria 1' },
-			{ id: 2, nome: 'Item 2', preco: 20.0, categoria: 'Categoria 2' },
-			{ id: 3, nome: 'Item 3', preco: 30.0, categoria: 'Categoria 3' }
-		],
+		itens_pedido: $produtos,
 		valor_total: 0
 	};
 
@@ -47,58 +40,69 @@
 					<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 				</div>
 			</div>
-			<div class="row flex items-center justify-between gap-2">
-				<div>
-					<code class={`rounded px-3 py-1 ${pedidos_caixa.isOpen ? 'bg-green-500' : 'bg-red-500'}`}>
-						{pedidos_caixa.isOpen ? 'Em aberto' : 'Fechado'}
-					</code>
-					<p class="pt-3">Numero do pedido #{pedidos_caixa.num_pedido}</p>
-					<p class="pt-3">Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
-				</div>
-				<ModalProduto />
-			</div>
-			<div class="row-auto my-8 flex gap-10">
-				<div class="col-auto">
-					<!--Criado por: - observacao input -->
-					<p class="pb-6">Criado por: {pedidos_caixa.criado_por}</p>
-					<Textarea placeholder="Anotar observacões..." id="message" class="h-36" />
-				</div>
-				<div class="border">
-					<div class="col-auto">
-						<!--itens do pedido - total - subtotal-->
-						<h2 class="text-3xl font-bold">Itens do pedido:</h2>
-						<ul class="text-lg">
-							{#each pedidos_caixa.itens_pedido as item (item.id)}
-								<li class="py-2">{item.nome} - R${item.preco}</li>
-								<hr />
-							{/each}
-						</ul>
-						<h2 class="flex justify-end text-3xl font-bold">
-							Total:&nbsp;<span class="text-green-500">R${pedidos_caixa.valor_total}</span>
-						</h2>
+			<div class="flex justify-center">
+				<div class="col-auto mr-6 flex h-auto flex-col justify-between">
+					<div class="">
+						<h2 class="text-3xl font-bold">Informações do pedido:</h2>
+						<div
+							class={`mt-5 w-96 rounded-lg px-3 py-1 text-center font-bold text-white  ${pedidos_caixa.isOpen ? 'success-bg' : 'bg-red-500'}`}
+						>
+							{pedidos_caixa.isOpen ? 'Em aberto' : 'Fechado'}
+						</div>
+						<div class="mt-4">
+							<p>
+								Número do pedido <span class="font-bold text-primary">
+									#{pedidos_caixa.num_pedido}</span
+								>
+							</p>
+							<p>Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
+							<p>
+								Criado por: <span class="font-bold text-primary">{pedidos_caixa.criado_por}</span>
+							</p>
+						</div>
+					</div>
+					<div>
+						<button
+							class="group mb-4 flex w-96 content-center items-center justify-center rounded-lg border-2 border-primary bg-transparent py-1 text-center font-light text-secondary-foreground transition ease-in-out hover:border-transparent hover:bg-primary"
+						>
+							Vincular compra a cliente
+						</button>
+						<ButtonCardapio label={'CANCELAR'} Icon={Ban} />
 					</div>
 				</div>
-			</div>
 
-			<!--Botão vincular cliente - mais opcoes -->
-			<!-- <div>
-				<Button class="w-full">Vincular a um cliente</Button>
-			</div>
-			<div class="w-full">
-				<Button class="w-full">Mais opcoes</Button>
-			</div> -->
-			<div class="row-auto flex">
-				<div class="col-auto border p-2">
-					<!--cancelar-->
-					<a href="/" class={buttonVariants({ variant: 'brenosubmit' })}>CANCELAR</a>
+				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
+					<ul class="mb-4 text-center text-lg">
+						{#each pedidos_caixa.itens_pedido as item (item.id)}
+							<li class="py-2 font-bold">{item.nome} - R${item.preco}</li>
+							<hr />
+						{/each}
+					</ul>
+					<h2 class="mx-10 flex justify-center text-3xl font-bold">
+						Preco total:&nbsp;<span class="text-green-500">R${pedidos_caixa.valor_total}</span>
+					</h2>
 				</div>
-				<div class="col-auto border p-2">
-					<!--Imprimir - pagamento-->
-					<Button variant="brenosubmit">IMPRIMIR</Button>
-					<Button variant="brenosubmit">PAGAMENTO</Button>
-					<ButtonCardapio label={'TESTE'} Icon={CirclePlus} />
+
+				<div class="col-auto ml-6 flex h-auto flex-col justify-between">
+					<div>
+						<ModalProduto />
+						<p class="mb-2 mt-6">Observações sobre compra:</p>
+						<Textarea placeholder="Anotar observacões..." id="message" class="h-36" />
+					</div>
+					<div>
+						<div class="mb-4">
+							<ButtonCardapio label={'IMPRIMIR'} Icon={Printer} />
+						</div>
+						<ButtonCardapio label={'PAGAMENTO'} Icon={DollarSign} />
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	.success-bg {
+		background-color: #04cf00;
+	}
+</style>

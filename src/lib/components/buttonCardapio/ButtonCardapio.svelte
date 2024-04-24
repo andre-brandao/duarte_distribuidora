@@ -9,13 +9,13 @@
 <li class="list-none">
 	<a
 		{href}
-		class="group flex content-center items-center justify-center rounded-lg transition ease-in-out bg-primary py-2 text-center font-semibold text-secondary-foreground shadow-sm hover:bg-yellow-300"
+		class="group flex content-center items-center justify-center rounded-lg bg-primary w-96 py-3 text-center font-semibold text-secondary-foreground shadow-sm transition ease-in-out hover:bg-yellow-300"
 	>
 		<span class="mr-1">{label}</span>
 		{#if Icon}
 			<svelte:component
 				this={Icon}
-				class="h-5 w-5 ml-1 transition duration-75 group-hover:text-gray-900"
+				class="ml-1 h-5 w-5 transition duration-75 group-hover:text-gray-900"
 			/>
 		{/if}
 	</a>
