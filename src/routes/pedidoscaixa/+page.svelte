@@ -1,6 +1,8 @@
 <script lang="ts">
+	import ModalCliente from './../../lib/components/modal/ModalCliente.svelte';
+	import ButtonCliente from './../../lib/components/buttons/ButtonCliente.svelte';
+	import ButtonCardapio from './../../lib/components/buttons/ButtonCardapio.svelte';
 	import { produtos } from './../../lib/stores/produtosStore.js';
-	import ButtonCardapio from './../../lib/components/buttonCardapio/ButtonCardapio.svelte';
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
@@ -62,11 +64,7 @@
 						</div>
 					</div>
 					<div>
-						<button
-							class="group mb-4 flex w-96 content-center items-center justify-center rounded-lg border-2 border-primary bg-transparent py-1 text-center font-light text-secondary-foreground transition ease-in-out hover:border-transparent hover:bg-primary"
-						>
-							Vincular compra a cliente
-						</button>
+						<ModalCliente />
 						<ButtonCardapio label={'CANCELAR'} Icon={Ban} href="/" />
 					</div>
 				</div>

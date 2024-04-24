@@ -4,7 +4,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import CardProduto from '$lib/components/breninteste/card/CardProduto.svelte';
 	import { searchTerm, categoriasUnicas, filteredProdutos } from '$lib/stores/filtroProdutosStore';
-	import ButtonCardapio from '../buttonCardapio/ButtonCardapio.svelte';
+	import ButtonCardapio from '../buttons/ButtonCardapio.svelte';
 	import { ShoppingBasket } from 'lucide-svelte';
 
 	function setFilter(categoria: string) {
