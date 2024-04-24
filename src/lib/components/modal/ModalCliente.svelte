@@ -23,13 +23,13 @@
 	<Dialog.Trigger>
 		<ButtonCliente label={'Vincular compra a cliente'} Icon={UserPlus} />
 	</Dialog.Trigger>
-	<Dialog.Content class="flex h-[600px] overflow-hidden sm:max-w-[900px]">
+	<Dialog.Content class="flex h-[500px] overflow-hidden sm:max-w-[650px]">
 		<div class="w-full overflow-y-auto">
 			<Dialog.Header class="sticky top-0 bg-white">
 				<div class="gap-0 pb-5">
 					<div class=" flex items-center justify-between gap-0 pr-5">
 						<Dialog.Title class="pr-3 text-center text-3xl"
-							>Vincular compra a um cliente:</Dialog.Title
+							>Vincular a um cliente:</Dialog.Title
 						>
 						<Input
 							id="name"
@@ -40,6 +40,7 @@
 				</div>
 			</Dialog.Header>
 			<div class="grid pr-5">
+				<hr />
 				{#each clientes as cliente (cliente.id)}
 					<CardCliente nome={cliente.nome} celular={cliente.celular} />
 				{/each}
