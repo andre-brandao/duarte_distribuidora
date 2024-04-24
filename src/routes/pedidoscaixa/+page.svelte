@@ -1,10 +1,15 @@
 <script lang="ts">
+	import ButtonCardapio from './../../lib/components/buttonCardapio/ButtonCardapio.svelte';
 	import type { PageData } from './$types';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	export let data: PageData;
+	import { CirclePlus } from 'lucide-svelte';
+	import type { ComponentType } from 'svelte';
+	import type { Icon } from 'lucide-svelte';
+
+	//export let data: PageData;
 
 	const pedidos_caixa = {
 		num_pedido: 0,
@@ -91,9 +96,9 @@
 					<!--Imprimir - pagamento-->
 					<Button variant="brenosubmit">IMPRIMIR</Button>
 					<Button variant="brenosubmit">PAGAMENTO</Button>
+					<ButtonCardapio label={'TESTE'} Icon={CirclePlus} />
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-

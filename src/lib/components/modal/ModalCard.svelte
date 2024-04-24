@@ -38,25 +38,33 @@
 				</div>
 			</Card.Root>
 		</Dialog.Trigger>
-		<Dialog.Content class="sm:max-w-[425px]">
+		<Dialog.Content class="sm:max-w-[600px]">
 			<Dialog.Header>
-				<Dialog.Title>Edit profile</Dialog.Title>
+				<Dialog.Title>Editar {nome}</Dialog.Title>
 				<Dialog.Description>
-					Make changes to your profile here. Click save when you're done.
+					Faca as alteracões em {nome} e depois clique em salvar!
 				</Dialog.Description>
 			</Dialog.Header>
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="name" class="text-right">Name</Label>
-					<Input id="name" value="Pedro Duarte" class="col-span-3" />
+					<Label for="name" class="text-right">Nome</Label>
+					<Input id="name" value="{nome}" class="col-span-3" />
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="username" class="text-right">Username</Label>
-					<Input id="username" value="@peduarte" class="col-span-3" />
+					<Label for="category" class="text-right">Categoria</Label>
+					<Input id="category" value="{categoria}" class="col-span-3" />
+				</div>
+				<div class="grid grid-cols-4 items-center gap-4">
+					<Label for="price" class="text-right">Preco</Label>
+					<Input id="price" value="{preco}" class="col-span-3" />
+				</div>
+				<div class="grid grid-cols-4 items-center gap-4">
+					<Label for="imagem" class="text-right">Imagem</Label>
+					<Input id="imagem" type="file" accept="image/*" class="col-span-3" />
 				</div>
 			</div>
 			<Dialog.Footer>
-				<Button type="submit">Save changes</Button>
+				<Button type="submit">Salvar alteracões</Button>
 			</Dialog.Footer>
 		</Dialog.Content>
 	</Dialog.Root>
