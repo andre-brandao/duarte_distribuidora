@@ -1,8 +1,7 @@
 <script lang="ts">
-	import ModalCliente from './../../lib/components/modal/ModalCliente.svelte';
-	import ButtonCliente from './../../lib/components/buttons/ButtonCliente.svelte';
-	import ButtonCardapio from './../../lib/components/buttons/ButtonCardapio.svelte';
-	import { produtos } from './../../lib/stores/produtosStore.js';
+	import ModalCliente from '$lib/components/modal/ModalCliente.svelte';
+	import ButtonCliente from '$lib/components/buttons/ButtonCliente.svelte';
+	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
@@ -11,30 +10,30 @@
 	import type { PageData } from './$types.js';
 	export let data: PageData;
 
-	const { clientes } = data;
+	const { clientes, produtos } = data;
 
 	const pedidos_caixa = {
 		num_pedido: 0,
 		datahora_pedido: '',
 		isOpen: true,
 		criado_por: 'BRENO',
-		itens_pedido: $produtos,
+		//itens_pedido: produtos,
 		valor_total: 0
 	};
 
-	pedidos_caixa.valor_total = pedidos_caixa.itens_pedido.reduce(
-		(total, item) => total + item.preco,
-		0
-	);
+	// pedidos_caixa.valor_total = pedidos_caixa.itens_pedido.reduce(
+	// 	(total, item) => total + item.preco,
+	// 	0
+	// );
 
-	onMount(() => {
-		pedidos_caixa.datahora_pedido = new Date().toLocaleString('pt-BR', {
-			day: '2-digit',
-			month: '2-digit',
-			hour: '2-digit',
-			minute: '2-digit'
-		});
-	});
+	// onMount(() => {
+	// 	pedidos_caixa.datahora_pedido = new Date().toLocaleString('pt-BR', {
+	// 		day: '2-digit',
+	// 		month: '2-digit',
+	// 		hour: '2-digit',
+	// 		minute: '2-digit'
+	// 	});
+	// });
 </script>
 
 <div class="p-4 sm:ml-64">
@@ -74,10 +73,10 @@
 
 				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
 					<ul class="mb-4 text-center text-lg">
-						{#each pedidos_caixa.itens_pedido as item (item.id)}
+						<!-- {#each pedidos_caixa.itens_pedido as item (item.id)}
 							<li class="py-2 font-bold">{item.nome} - R${item.preco}</li>
 							<hr />
-						{/each}
+						{/each} -->
 					</ul>
 					<h2 class="mx-10 flex justify-center text-3xl font-bold">
 						Preco total:&nbsp;<span class="text-green-500">R${pedidos_caixa.valor_total}</span>
@@ -86,7 +85,7 @@
 
 				<div class="col-auto ml-6 flex h-auto flex-col justify-between">
 					<div>
-						<ModalProduto />
+						<ModalProduto {produtos}/>
 						<p class="mb-2 mt-6">Observações sobre compra:</p>
 						<Textarea placeholder="Anotar observacões..." id="message" class="mb-5 h-36" />
 					</div>

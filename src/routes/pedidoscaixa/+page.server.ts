@@ -16,7 +16,9 @@ export const load = (async ({ locals }) => {
 
 	const { data: produtos, error: err_produtos } = await supabase
 		.from('var_produto')
-		.select('*, produto(*), preco(*)');
+		.select('id, produto(*), preco(preco_in_cents,tipo), categoria(nome)');
+	// const { data: produtos, error: err_produtos } = await supabase
+	// .from('categoria').select('*,var_produto(id, produto(*), preco(preco_in_cents,tipo))')
 
 	if (err_produtos) {
 		console.log(err_produtos);

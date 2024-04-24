@@ -4,7 +4,6 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 
 	export let nome: string;
-
 	export let celular: string;
 </script>
 
