@@ -12,7 +12,7 @@
 		num_pedido: 0,
 		datahora_pedido: '',
 		isOpen: true,
-		criado_por: 'User',
+		criado_por: 'BRENO',
 		itens_pedido: $produtos,
 		valor_total: 0
 	};
@@ -33,14 +33,14 @@
 </script>
 
 <div class="p-4 sm:ml-64">
-	<div class="rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700">
+	<div class="rounded-lg p-4">
 		<div class="">
 			<div class="gap-0 py-1">
 				<div class="items-center gap-0 pb-7">
 					<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 				</div>
 			</div>
-			<div class="flex justify-center">
+			<div class="flex flex-col justify-center xl:flex-row">
 				<div class="col-auto mr-6 flex h-auto flex-col justify-between">
 					<div class="">
 						<h2 class="text-3xl font-bold">Informações do pedido:</h2>
@@ -67,7 +67,7 @@
 						>
 							Vincular compra a cliente
 						</button>
-						<ButtonCardapio label={'CANCELAR'} Icon={Ban} />
+						<ButtonCardapio label={'CANCELAR'} Icon={Ban} href="/" />
 					</div>
 				</div>
 
@@ -87,7 +87,7 @@
 					<div>
 						<ModalProduto />
 						<p class="mb-2 mt-6">Observações sobre compra:</p>
-						<Textarea placeholder="Anotar observacões..." id="message" class="h-36" />
+						<Textarea placeholder="Anotar observacões..." id="message" class="mb-5 h-36" />
 					</div>
 					<div>
 						<div class="mb-4">
