@@ -58,8 +58,10 @@
 					{@const varejo =
 						prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
 					<CardProduto
-						nome={`${prod.produto?.nome} ${prod.categoria?.nome}`}
+						nome={prod.produto?.nome ?? 'Sem nome'}
+						categoria={prod.categoria?.nome ?? 'Sem categoria'}
 						preco_in_cents={varejo}
+						img={'sem imagem'}
 					/>
 				{/each}
 			</div>
