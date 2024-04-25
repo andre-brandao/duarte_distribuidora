@@ -37,7 +37,7 @@
 </script>
 
 <div class="p-4 sm:ml-64">
-	<div class="rounded-lg p-4">
+	<div class="">
 		<div class="">
 			<div class="gap-0 py-1">
 				<div class="items-center gap-0 pb-7">

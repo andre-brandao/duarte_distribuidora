@@ -10,7 +10,7 @@
 
 <div class="p-4 sm:ml-64">
 	<div
-		class="rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700"
+		class=""
 	>
 		<div class="gap-0 py-1">
 			<div class="items-center gap-0 pb-7">
