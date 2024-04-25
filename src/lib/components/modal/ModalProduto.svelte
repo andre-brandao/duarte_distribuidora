@@ -50,9 +50,9 @@
 		>
 			<Dialog.Title class="pb-2 text-center text-2xl">Categorias:</Dialog.Title>
 			<div class="flex flex-col gap-2">
-				<!-- {#each $categoriasUnicas as categoria}
-					<Button on:click={() => setFilter(categoria)}>{categoria}</Button>
-				{/each} -->
+				{#each produtosFiltrados as categoria}
+					<Button>{categoria.categoria?.nome}</Button>
+				{/each}
 			</div>
 		</div>
 		<div class="w-3/4 overflow-y-auto">

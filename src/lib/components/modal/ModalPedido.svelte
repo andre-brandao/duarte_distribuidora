@@ -18,14 +18,12 @@
 	function increase() {
 		quantidade += 1;
 		precoTotal += preco;
-		console.log(precoTotal);
 	}
 
 	function decrease() {
 		if (quantidade > 1) {
 			quantidade -= 1;
 			precoTotal -= preco;
-			console.log(precoTotal);
 		}
 	}
 </script>
@@ -86,7 +84,7 @@
 						<Button on:click={increase}><Plus /></Button>
 					</div>
 				</div>
-				<p class="text-right text-xl mt-3">
+				<p class="mt-3 text-right text-xl">
 					Valor total: <span class="font-bold text-primary">R${precoTotal}</span>
 				</p>
 			</div>
