@@ -21,6 +21,24 @@
 			nome: string;
 		} | null;
 	}[];
+
+	let search = '';
+
+	$: produtosFiltrados = produtos.filter((p) => {
+		if (search.length === 0) {
+			return true;
+		}
+		if (
+			p.produto?.nome
+				.toLocaleLowerCase()
+				.includes(search.toLocaleLowerCase()) ||
+			p.categoria?.nome.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+		) {
+			return true;
+		}
+		return false;
+	});
+	console.log(produtosFiltrados);
 </script>
 
 <Dialog.Root>
@@ -49,19 +67,19 @@
 							id="name"
 							placeholder="Pesquisar produto..."
 							class="col-span-1 h-auto w-auto py-1"
+							bind:value={search}
 						/>
 					</div>
 				</div>
 			</Dialog.Header>
 			<div class="grid pr-5">
-				{#each produtos as prod (prod.id)}
+				{#each produtosFiltrados as prod (prod.id)}
 					{@const varejo =
 						prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
 					<CardProduto
 						nome={prod.produto?.nome ?? 'Sem nome'}
 						categoria={prod.categoria?.nome ?? 'Sem categoria'}
 						preco_in_cents={varejo}
-						img={'sem imagem'}
 					/>
 				{/each}
 			</div>

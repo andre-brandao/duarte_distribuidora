@@ -17,6 +17,20 @@
 		rg_ie: string | null;
 		telefone_fixo: string | null;
 	}[];
+
+	let search = '';
+	$: clientesFiltrados = clientes.filter((c) => {
+		if (search.length === 0) {
+			return true;
+		}
+		if (
+			search &&
+			c.nome.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+		) {
+			return true;
+		}
+		return false;
+	});
 </script>
 
 <Dialog.Root>
@@ -35,13 +49,14 @@
 							id="name"
 							placeholder="Pesquisar cliente..."
 							class="col-span-1 h-auto w-auto py-1"
+							bind:value={search}
 						/>
 					</div>
 				</div>
 			</Dialog.Header>
 			<div class="grid pr-5">
 				<hr />
-				{#each clientes as cliente (cliente.id)}
+				{#each clientesFiltrados as cliente (cliente.id)}
 					<CardCliente nome={cliente.nome} celular={cliente.celular} />
 				{/each}
 			</div>
