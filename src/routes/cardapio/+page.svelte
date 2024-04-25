@@ -2,18 +2,16 @@
 	import ModalCard from './../../lib/components/modal/ModalCard.svelte';
 	import type { PageData } from './$types';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import { searchTerm, categoriasUnicas, filteredProdutos } from '$lib/stores/filtroProdutosStore';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	export let data: PageData;
 
-	// export let data: PageData;
-
-	function setFilter(categoria: string) {
-		$searchTerm = categoria;
-	}
+	const { produtos } = data;
 </script>
 
 <div class="p-4 sm:ml-64">
-	<div class="rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700">
+	<div
+		class="rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700"
+	>
 		<div class="gap-0 py-1">
 			<div class="items-center gap-0 pb-7">
 				<h1 class="text-center text-4xl font-bold">Cardapio</h1>
@@ -24,22 +22,30 @@
 				id="name"
 				placeholder="Pesquisar produto..."
 				class="col-span-1 h-auto w-auto py-1"
-				bind:value={$searchTerm}
 			/>
-			{#each $categoriasUnicas as categoria}
+			<!-- {#each $categoriasUnicas as categoria}
 				<Button on:click={() => setFilter(categoria)}>{categoria}</Button>
-			{/each}
+			{/each} -->
 		</div>
 		<div
 			class="grid grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
 		>
-			{#each $filteredProdutos as produto (produto.id)}
+			{#each produtos as prod (prod.id)}
+				{@const varejo =
+					prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
 				<ModalCard
-					nome={produto.nome}
-					preco={produto.preco}
-					categoria={produto.categoria}
-					img={produto.img}
+					nome={prod.produto?.nome ?? 'Sem nome'}
+					preco={varejo ?? 0}
+					categoria={prod.categoria?.nome ?? 'Sem categoria'}
+					img={'nao tem'}
 				/>
+
+				<!-- {@const varejo =
+					prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
+				<ModalCard
+					nome={`${prod.produto?.nome} ${prod.categoria?.nome}`}
+					preco_in_cents={varejo}
+				/> -->
 			{/each}
 		</div>
 	</div>
