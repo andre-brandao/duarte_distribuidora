@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ModalCard from './../../lib/components/modal/ModalCard.svelte';
 	import type { PageData } from './$types';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	import ModalPedido from '$lib/components/modal/ModalPedido.svelte';
 	export let data: PageData;
 
 	const { produtos } = data;
@@ -33,7 +33,7 @@
 			{#each produtos as prod (prod.id)}
 				{@const varejo =
 					prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
-				<ModalCard
+				<ModalPedido
 					nome={prod.produto?.nome ?? 'Sem nome'}
 					preco={varejo ?? 0}
 					categoria={prod.categoria?.nome ?? 'Sem categoria'}
