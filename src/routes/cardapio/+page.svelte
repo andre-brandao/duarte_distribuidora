@@ -6,12 +6,27 @@
 	export let data: PageData;
 
 	const { produtos } = data;
+
+	let search = '';
+
+	$: produtosFiltrados = produtos.filter((p) => {
+		if (search.length === 0) {
+			return true;
+		}
+		if (
+			p.produto?.nome
+				.toLocaleLowerCase()
+				.includes(search.toLocaleLowerCase()) ||
+			p.categoria?.nome.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+		) {
+			return true;
+		}
+		return false;
+	});
 </script>
 
 <div class="p-4 sm:ml-64">
-	<div
-		class=""
-	>
+	<div class="">
 		<div class="gap-0 py-1">
 			<div class="items-center gap-0 pb-7">
 				<h1 class="text-center text-4xl font-bold">Cardapio</h1>
@@ -22,6 +37,7 @@
 				id="name"
 				placeholder="Pesquisar produto..."
 				class="col-span-1 h-auto w-auto py-1"
+				bind:value={search}
 			/>
 			<!-- {#each $categoriasUnicas as categoria}
 				<Button on:click={() => setFilter(categoria)}>{categoria}</Button>
@@ -30,7 +46,7 @@
 		<div
 			class="grid grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
 		>
-			{#each produtos as prod (prod.id)}
+			{#each produtosFiltrados as prod (prod.id)}
 				{@const varejo =
 					prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
 				<ModalPedido
@@ -39,13 +55,6 @@
 					categoria={prod.categoria?.nome ?? 'Sem categoria'}
 					img={'nao tem'}
 				/>
-
-				<!-- {@const varejo =
-					prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
-				<ModalCard
-					nome={`${prod.produto?.nome} ${prod.categoria?.nome}`}
-					preco_in_cents={varejo}
-				/> -->
 			{/each}
 		</div>
 	</div>

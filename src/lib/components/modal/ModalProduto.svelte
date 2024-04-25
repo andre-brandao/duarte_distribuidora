@@ -38,7 +38,6 @@
 		}
 		return false;
 	});
-	console.log(produtosFiltrados);
 </script>
 
 <Dialog.Root>
