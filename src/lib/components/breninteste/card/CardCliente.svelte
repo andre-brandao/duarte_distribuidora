@@ -14,7 +14,7 @@
 	</div>
 	<div>
 		<Button class="flex items-center">
-			<p class="pr-2">Adicionar</p>
+			<p class="pr-2">Vincular cliente</p>
 			<Plus />
 		</Button>
 	</div>
