@@ -41,7 +41,7 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger>
+	<Dialog.Trigger class="w-full">
 		<ButtonCardapio label={'ACESSAR PRODUTOS'} Icon={ShoppingBasket} />
 	</Dialog.Trigger>
 	<Dialog.Content class="flex h-[600px] overflow-hidden sm:max-w-[900px]">

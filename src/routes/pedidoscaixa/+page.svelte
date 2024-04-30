@@ -45,11 +45,11 @@
 				</div>
 			</div>
 			<div class="flex flex-col justify-center xl:flex-row">
-				<div class="col-auto mr-6 flex h-auto flex-col justify-between">
+				<div class="col-auto xl:mr-6 flex h-auto flex-col justify-between">
 					<div class="">
 						<h2 class="text-3xl font-bold">Informações do pedido:</h2>
 						<div
-							class={`mt-5 w-96 rounded-lg px-3 py-1 text-center font-bold text-white  ${pedidos_caixa.isOpen ? 'success-bg' : 'bg-red-500'}`}
+							class={`mt-5 w-full rounded-lg px-3 py-1 text-center font-bold text-white  ${pedidos_caixa.isOpen ? 'success-bg' : 'bg-red-500'}`}
 						>
 							{pedidos_caixa.isOpen ? 'Em aberto' : 'Fechado'}
 						</div>
@@ -71,7 +71,7 @@
 					</div>
 				</div>
 
-				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
+				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4 xl:my-3">
 					<ul class="mb-4 text-center text-lg">
 						<!-- {#each pedidos_caixa.itens_pedido as item (item.id)}
 							<li class="py-2 font-bold">{item.nome} - R${item.preco}</li>
@@ -83,7 +83,7 @@
 					</h2>
 				</div>
 
-				<div class="col-auto ml-6 flex h-auto flex-col justify-between">
+				<div class="col-auto xl:ml-6 flex h-auto flex-col justify-between">
 					<div>
 						<ModalProduto {produtos}/>
 						<p class="mb-2 mt-6">Observações sobre compra:</p>

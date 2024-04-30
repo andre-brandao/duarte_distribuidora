@@ -34,7 +34,7 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger>
+	<Dialog.Trigger class="w-full">
 		<ButtonCliente label={'Vincular compra a cliente'} Icon={UserPlus} />
 	</Dialog.Trigger>
 	<Dialog.Content class="flex h-[500px] overflow-hidden sm:max-w-[650px]">
