@@ -15,11 +15,13 @@
 	let { supabase } = data;
 	$: ({ supabase } = data);
 
+	let { session } = data;
+
 	const pedidos_caixa = {
 		num_pedido: 0,
 		datahora_pedido: '',
 		isOpen: true,
-		criado_por: 'BRENO',
+		criado_por: session?.user.email ?? 'Desconhecido',
 		valor_total: 0,
 	};
 

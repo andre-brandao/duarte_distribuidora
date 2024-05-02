@@ -95,6 +95,7 @@ export type Database = {
           created_at: string
           id: number
           meta_data: Json | null
+          observacao: string | null
           tipo: string
           total_in_cents: number
         }
@@ -103,6 +104,7 @@ export type Database = {
           created_at?: string
           id?: number
           meta_data?: Json | null
+          observacao?: string | null
           tipo: string
           total_in_cents: number
         }
@@ -111,6 +113,7 @@ export type Database = {
           created_at?: string
           id?: number
           meta_data?: Json | null
+          observacao?: string | null
           tipo?: string
           total_in_cents?: number
         }
