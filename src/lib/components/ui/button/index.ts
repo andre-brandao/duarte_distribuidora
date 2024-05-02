@@ -15,7 +15,8 @@ const buttonVariants = tv({
 			ghost: "hover:bg-accent hover:text-accent-foreground",
 			link: "text-primary underline-offset-4 hover:underline",
 			brenovar: "transition ease-in-out border border-gray-400 text-secondary-foreground shadow-sm hover:bg-yellow-400 bg-primary rounded-lg font-semibold bg-opacity-0",
-			brenosubmit:"transition ease-in-out border border-gray-400 text-secondary-foreground shadow-sm hover:bg-yellow-300 bg-primary rounded-lg font-semibold"
+			brenosubmit:"transition ease-in-out border border-gray-400 text-secondary-foreground shadow-sm hover:bg-yellow-300 bg-primary rounded-lg font-semibold",
+			btnproduct:"transition ease-in-out text-secondary-foreground shadow-sm hover:bg-yellow-300 bg-primary rounded-lg font-semibold w-full",
 		},
 		size: {
 			default: "h-9 px-4 py-2",

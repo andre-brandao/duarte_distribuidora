@@ -45,7 +45,7 @@
 			<Button
 				builders={[builder]}
 				variant="outline"
-				class="w-full justify-start"
+				class="w-full text-center"
 			>
 				{selectedStatus ? selectedStatus.label : '+ Selecionar Categoria'}
 			</Button>
@@ -69,10 +69,10 @@
 						{/each}
 					</Command.Group>
 				</Command.List>
-				<form action="nova_categoria" class="flex gap-1 p-1">
+				<form action="nova_categoria" class="flex gap-1 p-1 justify-center items-center">
 					<Input placeholder="Nova Categoria" bind:value={nomeNovaCategoria} />
 					<button
-						class="rounded-full bg-blue-200 px-1"
+						class="rounded-full bg-transparent p-2"
 						on:click={createNewCategoria}
 					>
 						<CirclePlus />

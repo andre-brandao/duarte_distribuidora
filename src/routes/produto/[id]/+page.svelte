@@ -112,27 +112,38 @@
 	}
 </script>
 
-<main class="container flex items-center justify-center">
-	<div>
-		<div class="flex items-center justify-center">
-			<Label>Produto</Label>
-			<Input bind:value={produto.nome} />
+<main class="flex items-center justify-center p-4 sm:ml-64">
+	<div class="container flex flex-col items-center justify-center">
+		<div
+			class="mb-4 flex flex-col items-center justify-center gap-2 sm:flex-row"
+		>
+			<Label class="">Produto</Label>
+			<Input
+				class="rounded border border-gray-300 px-4 py-2 focus:outline-none"
+				bind:value={produto.nome}
+			/>
+			<CategoriaPicker {supabase} {categorias} bind:value={idNovaCategoria} />
 		</div>
-		<div class="flex gap-3 border border-red-300 p-1">
+		<div
+			class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+		>
 			{#each var_produto as variacao}
-				<div
-					class="flex h-[75vh] flex-col justify-between border border-primary p-1"
-				>
+				<div class="flex flex-col justify-between rounded-lg border">
 					<div class="flex flex-col items-center justify-center">
-						<div>
-							<img src="/favicon.png" alt="" />
+						<div class="h-40 w-full">
+							<img
+								src="/favicon.png"
+								class="mb-2 h-full w-full object-cover"
+								alt=""
+							/>
+						</div>
+						<div class="w-full p-2">
 							<CategoriaPicker
 								{supabase}
 								{categorias}
 								value={variacao.categoria?.id.toString()}
 							/>
 						</div>
-
 						<div>
 							{#each variacao.preco as preco}
 								<PrecoInput {preco} {supabase} />
@@ -140,20 +151,29 @@
 						</div>
 					</div>
 					<!-- PARTE RESERVADA PARA O NOVO PRECO -->
-					<div class="bg-slate-200 p-1">
-						<Label>Tipo Preco</Label>
-						<Input bind:value={novo_preco.tipo} />
-						<Label>Preco</Label>
-						<NumberInput bind:value={novo_preco.preco_in_cents} />
-						<Button on:click={() => addPreco(variacao.id, novo_preco)}>
+					<div class="mt-3 bg-gray-100 p-2">
+						<Label class="mr-2">Tipo Preco</Label>
+						<Input
+							class="rounded border border-gray-300 px-4 py-2 focus:outline-none"
+							bind:value={novo_preco.tipo}
+						/>
+						<Label class="mr-2">Preco</Label>
+						<NumberInput
+							class="mb-2 border-gray-300 bg-white"
+							bind:value={novo_preco.preco_in_cents}
+						/>
+						<Button
+							variant="btnproduct"
+							on:click={() => addPreco(variacao.id, novo_preco)}
+						>
 							Adicionar Preco
 						</Button>
 					</div>
 				</div>
 			{/each}
-			<div class="flex items-center justify-center">
-				<CategoriaPicker {supabase} {categorias} bind:value={idNovaCategoria} />
-			</div>
 		</div>
+		<!-- <div class="flex items-center justify-center">
+			<CategoriaPicker {supabase} {categorias} bind:value={idNovaCategoria} />
+		</div> -->
 	</div>
 </main>
