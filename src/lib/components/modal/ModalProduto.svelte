@@ -50,8 +50,12 @@
 		>
 			<Dialog.Title class="pb-2 text-center text-2xl">Categorias:</Dialog.Title>
 			<div class="flex flex-col gap-2">
-				{#each produtosFiltrados as categoria}
-					<Button>{categoria.categoria?.nome}</Button>
+				{#each produtos as categoria}
+					<Button
+						on:click={() => {
+							search = categoria.categoria?.nome ?? '';
+						}}>{categoria.categoria?.nome}</Button
+					>
 				{/each}
 			</div>
 		</div>
