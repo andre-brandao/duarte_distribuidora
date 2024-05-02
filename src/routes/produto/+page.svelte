@@ -3,6 +3,7 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
+	import { Plus } from 'lucide-svelte';
 
 	export let data: PageData;
 
@@ -31,14 +32,26 @@
 	}
 </script>
 
-<main class="container">
-	<div class="flex flex-col items-center justify-center gap-3">
-		{#each produtos as produto}
-			<a class="hover:underline" href="/produto/{produto.id}">{produto.nome}</a>
-		{/each}
-		<div class="flex">
-			<Input placeholder="Nome Novo Produto" bind:value={nomeNovoProduto} />
-			<Button on:click={createNovoProduto}>Adicionar Produto</Button>
+<main class="p-4 sm:ml-64">
+	<div class="gap-0 py-1">
+		<div class="items-center gap-0 pb-7">
+			<h1 class="text-center text-4xl font-bold">Novo produto</h1>
+		</div>
+		<div class="flex justify-center gap-2">
+			<Input placeholder="Novo produto..." class="col-span-1 h-auto w-auto py-1" bind:value={nomeNovoProduto} />
+			<Button class="gap-2" on:click={createNovoProduto}>Adicionar produto <Plus /></Button>
+		</div>
+		<div class="container mx-auto p-4">
+			<div class="grid grid-cols-1 gap-3 md:grid-cols-3 lg:grid-cols-4">
+				{#each produtos as produto}
+					<a
+						class="rounded-lg bg-gray-100 p-6 text-center font-bold transition ease-in-out hover:bg-gray-50"
+						href="/produto/{produto.id}"
+					>
+						<span>{produto.nome}</span>
+					</a>
+				{/each}
+			</div>
 		</div>
 	</div>
 </main>
