@@ -57,7 +57,7 @@
 			<div class="grid pr-5">
 				<hr />
 				{#each clientesFiltrados as cliente (cliente.id)}
-					<CardCliente nome={cliente.nome} celular={cliente.celular} />
+					<CardCliente {cliente} on:cliente_selecionado />
 				{/each}
 			</div>
 		</div>

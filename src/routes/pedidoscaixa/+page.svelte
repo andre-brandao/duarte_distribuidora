@@ -12,28 +12,44 @@
 
 	const { clientes, produtos } = data;
 
+	let { supabase } = data;
+	$: ({ supabase } = data);
+
 	const pedidos_caixa = {
 		num_pedido: 0,
 		datahora_pedido: '',
 		isOpen: true,
 		criado_por: 'BRENO',
-		//itens_pedido: produtos,
-		valor_total: 0
+		valor_total: 0,
 	};
 
-	// pedidos_caixa.valor_total = pedidos_caixa.itens_pedido.reduce(
-	// 	(total, item) => total + item.preco,
-	// 	0
-	// );
+	let produtos_pedido: typeof produtos = [];
 
-	// onMount(() => {
-	// 	pedidos_caixa.datahora_pedido = new Date().toLocaleString('pt-BR', {
-	// 		day: '2-digit',
-	// 		month: '2-digit',
-	// 		hour: '2-digit',
-	// 		minute: '2-digit'
-	// 	});
-	// });
+	let cliente_selecionado: any = null;
+
+	async function realizarPedido() {
+		// TODO: VALIDAR DADOS
+
+		// inserir na tabela pedido
+		const pedidoToInsert = {
+			cliente_id: cliente_selecionado.id,
+			total_in_cents: pedidos_caixa.valor_total,
+			tipo: 'caixa',
+			meta_data: null,
+		};
+
+		// inserir na tabela produto_pedido
+		const produtosToInsert = produtos_pedido.map((p) => {
+			return {
+				var_produto_id: p.id,
+				quantidade: 1, // e isso
+				pedido_id: null, // mudar isso
+				unidade_em_cents: p.preco[0]?.preco_in_cents ?? 0,
+			};
+		});
+
+		// TODO validar erros
+	}
 </script>
 
 <div class="p-4 sm:ml-64">
@@ -45,7 +61,7 @@
 				</div>
 			</div>
 			<div class="flex flex-col justify-center xl:flex-row">
-				<div class="col-auto xl:mr-6 flex h-auto flex-col justify-between">
+				<div class="col-auto flex h-auto flex-col justify-between xl:mr-6">
 					<div class="">
 						<h2 class="text-3xl font-bold">Informações do pedido:</h2>
 						<div
@@ -61,33 +77,67 @@
 							</p>
 							<p>Pedido iniciado {pedidos_caixa.datahora_pedido}</p>
 							<p>
-								Criado por: <span class="font-bold text-primary">{pedidos_caixa.criado_por}</span>
+								Criado por: <span class="font-bold text-primary"
+									>{pedidos_caixa.criado_por}</span
+								>
 							</p>
 						</div>
 					</div>
 					<div>
-						<ModalCliente {clientes}/>
+						{#if !cliente_selecionado}
+							<ModalCliente
+								{clientes}
+								on:cliente_selecionado={(e) => {
+									const c = e.detail.cliente;
+									cliente_selecionado = c;
+								}}
+							/>
+						{:else}
+							<div class="flex justify-between">
+								<h1>{cliente_selecionado.nome}</h1>
+								<button on:click={() => (cliente_selecionado = null)}>
+									<span>Alterar cliente</span>
+								</button>
+							</div>
+						{/if}
 						<ButtonCardapio label={'CANCELAR'} Icon={Ban} href="/" />
 					</div>
 				</div>
 
 				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4 xl:my-3">
 					<ul class="mb-4 text-center text-lg">
-						<!-- {#each pedidos_caixa.itens_pedido as item (item.id)}
-							<li class="py-2 font-bold">{item.nome} - R${item.preco}</li>
+						{#each produtos_pedido as item}
+							<li class="py-2 font-bold">
+								{JSON.stringify(item)}
+							</li>
 							<hr />
-						{/each} -->
+						{/each}
 					</ul>
 					<h2 class="mx-10 flex justify-center text-3xl font-bold">
-						Preco total:&nbsp;<span class="text-green-500">R${pedidos_caixa.valor_total}</span>
+						Preco total:&nbsp;<span class="text-green-500"
+							>R${pedidos_caixa.valor_total}</span
+						>
 					</h2>
 				</div>
 
-				<div class="col-auto xl:ml-6 flex h-auto flex-col justify-between">
+				<div class="col-auto flex h-auto flex-col justify-between xl:ml-6">
 					<div>
-						<ModalProduto {produtos}/>
+						<ModalProduto
+							{produtos}
+							on:add_produtos={(e) => {
+								const p = e.detail;
+								produtos_pedido.push(p);
+								produtos_pedido = produtos_pedido;
+								// TODO CHANgE THIS
+								pedidos_caixa.valor_total += p.preco[0]?.preco_in_cents;
+							}}
+						/>
 						<p class="mb-2 mt-6">Observações sobre compra:</p>
-						<Textarea placeholder="Anotar observacões..." id="message" class="mb-5 h-36" />
+						<Textarea
+							placeholder="Anotar observacões..."
+							id="message"
+							class="mb-5 h-36"
+						/>
 					</div>
 					<div>
 						<div class="mb-4">

@@ -1,10 +1,26 @@
 <script lang="ts">
 	import { Plus } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 
-	export let nome: string;
-	export let preco_in_cents: number;
-	export let categoria: string;
+	export let produto: {
+		id: number;
+		produto: {
+			created_at: string;
+			id: number;
+			nome: string;
+		} | null;
+		preco: {
+			preco_in_cents: number;
+			tipo: string;
+		}[];
+		categoria: {
+			nome: string;
+		} | null;
+	};
+	const varejo =
+		produto.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0;
 	//export let img: string;
 </script>
 
@@ -19,13 +35,13 @@
 	</div>
 	<div class="flex-grow pl-4">
 		<div>
-			<h2 class="text-xl font-bold">{nome}</h2>
-			<h3 class="text-md text-gray-600">{categoria}</h3>
+			<h2 class="text-xl font-bold">{produto.produto?.nome}</h2>
+			<h3 class="text-md text-gray-600">{produto.categoria?.nome}</h3>
 		</div>
 	</div>
 	<div class="w-full text-right">
-		<span class="block pb-3 text-xl font-bold">R${preco_in_cents}</span>
-		<Button class="flex-none">
+		<span class="block pb-3 text-xl font-bold">R${varejo}</span>
+		<Button class="flex-none" on:click={() => dispatch('add_produtos', produto)}>
 			<p class="pr-2">Adicionar produto</p>
 			<Plus />
 		</Button>

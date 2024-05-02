@@ -9,7 +9,7 @@
 		href: string;
 		icon: ComponentType<Icon>;
 	}[] = [
-		{ label: 'Novo produto', href: '/test', icon: CirclePlus },
+		{ label: 'Novo produto', href: '/produto', icon: CirclePlus },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },

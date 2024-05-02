@@ -75,11 +75,7 @@
 				{#each produtosFiltrados as prod (prod.id)}
 					{@const varejo =
 						prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
-					<CardProduto
-						nome={prod.produto?.nome ?? 'Sem nome'}
-						categoria={prod.categoria?.nome ?? 'Sem categoria'}
-						preco_in_cents={varejo}
-					/>
+					<CardProduto produto={prod} on:add_produtos />
 				{/each}
 			</div>
 		</div>

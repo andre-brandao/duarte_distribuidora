@@ -1,4 +1,9 @@
 <script lang="ts">
+	import type { PageData } from './$types.js';
+	export let data: PageData;
+
+	const produto = data.produto
+
 	import CategoriaPicker from '$lib/components/CategoriaPicker.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import NumberInput from '$lib/components/ui/input/number_input.svelte';
@@ -13,54 +18,54 @@
 				precos: [
 					{
 						tipo: 'atacado',
-						preco: 3.5
+						preco: 3.5,
 					},
 					{
 						tipo: 'varejo',
-						preco: 5.0
-					}
-				]
+						preco: 5.0,
+					},
+				],
 			},
 			{
 				nome: 'Lata',
 				precos: [
 					{
 						tipo: 'atacado',
-						preco: 2.5
+						preco: 2.5,
 					},
 					{
 						tipo: 'varejo',
-						preco: 4.0
-					}
-				]
+						preco: 4.0,
+					},
+				],
 			},
 			{
 				nome: '600ml',
 				precos: [
 					{
 						tipo: 'atacado',
-						preco: 4.5
+						preco: 4.5,
 					},
 					{
 						tipo: 'varejo',
-						preco: 6.0
-					}
-				]
+						preco: 6.0,
+					},
+				],
 			},
 			{
 				nome: 'Emporio',
 				precos: [
 					{
 						tipo: 'atacado',
-						preco: 5.5
+						preco: 5.5,
 					},
 					{
 						tipo: 'varejo',
-						preco: 7.0
-					}
-				]
-			}
-		]
+						preco: 7.0,
+					},
+				],
+			},
+		],
 	};
 </script>
 
@@ -84,7 +89,7 @@
 								{ value: 'Longneck', label: 'Longneck' },
 								{ value: 'Lada', label: 'Lata' },
 								{ value: '600ml', label: '600ml' },
-								{ value: 'Emporio', label: 'Emporio' }
+								{ value: 'Emporio', label: 'Emporio' },
 							]}
 							value={variant.nome}
 						/>
