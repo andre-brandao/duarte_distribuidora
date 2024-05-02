@@ -2,10 +2,11 @@
 	import ModalCliente from '$lib/components/modal/ModalCliente.svelte';
 	import ButtonCliente from '$lib/components/buttons/ButtonCliente.svelte';
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	import { Ban, Printer, DollarSign } from 'lucide-svelte';
+	import { Ban, Printer, DollarSign,CircleX   } from 'lucide-svelte';
 
 	import type { PageData } from './$types.js';
 	export let data: PageData;
@@ -95,11 +96,11 @@
 								}}
 							/>
 						{:else}
-							<div class="flex justify-between">
-								<h1>{cliente_selecionado.nome}</h1>
-								<button on:click={() => (cliente_selecionado = null)}>
-									<span>Alterar cliente</span>
-								</button>
+							<div class="flex justify-between mb-3 text-center items-center">
+								<h1 class="border-2 rounded p-1 px-3">{cliente_selecionado.nome}</h1>
+								<Button on:click={() => (cliente_selecionado = null)}>
+									<span class="flex gap-3 text-center justify-center items-center">Remover cliente <CircleX  /></span>
+								</Button>
 							</div>
 						{/if}
 						<ButtonCardapio label={'CANCELAR'} Icon={Ban} href="/" />
