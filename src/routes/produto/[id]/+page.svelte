@@ -12,71 +12,51 @@
 
 	const produto = data.produto;
 
-	const var_produto = produto.var_produto;
+	let var_produto = produto.var_produto;
 
 	import CategoriaPicker from '$lib/components/CategoriaPicker.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import NumberInput from '$lib/components/ui/input/number_input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	let form = {
-		produto_base: 'Heineken',
-		preco_custo: 5.99,
 
-		variacoes: [
+	let idNovaCategoria = '';
+
+	$: {
+		addVariacao(idNovaCategoria);
+	}
+
+	function addVariacao(idNovaCategoria: string) {
+		const nova_categoria = categorias.find(
+			(categoria) => categoria.value === idNovaCategoria,
+		);
+
+		if (!nova_categoria) {
+			console.error('Categoria não encontrada');
+			return;
+		}
+
+		// check if any variacao already has this categoria
+		if (
+			var_produto.some(
+				(variacao) => variacao.categoria?.id === Number(nova_categoria.value),
+			)
+		) {
+			console.error('Categoria já existe');
+			return;
+		}
+
+		var_produto = [
+			...var_produto,
 			{
-				nome: 'Longneck',
-				precos: [
-					{
-						tipo: 'atacado',
-						preco: 3.5,
-					},
-					{
-						tipo: 'varejo',
-						preco: 5.0,
-					},
-				],
+				id: null,
+				categoria: {
+					id: Number(nova_categoria.value),
+					nome: nova_categoria.label,
+				},
+				preco: [],
 			},
-			{
-				nome: 'Lata',
-				precos: [
-					{
-						tipo: 'atacado',
-						preco: 2.5,
-					},
-					{
-						tipo: 'varejo',
-						preco: 4.0,
-					},
-				],
-			},
-			{
-				nome: '600ml',
-				precos: [
-					{
-						tipo: 'atacado',
-						preco: 4.5,
-					},
-					{
-						tipo: 'varejo',
-						preco: 6.0,
-					},
-				],
-			},
-			{
-				nome: 'Emporio',
-				precos: [
-					{
-						tipo: 'atacado',
-						preco: 5.5,
-					},
-					{
-						tipo: 'varejo',
-						preco: 7.0,
-					},
-				],
-			},
-		],
-	};
+		];
+	}
 </script>
 
 <main class="container flex items-center justify-center">
@@ -85,30 +65,41 @@
 			<Label>Produto</Label>
 			<Input bind:value={produto.nome} />
 		</div>
-		<div class="grid grid-cols-4 border border-red-300 p-1">
+		<div class="flex gap-3 border border-red-300 p-1">
 			{#each var_produto as variacao}
-				<div class="border border-primary p-1">
-					<img src="/favicon.png" alt="" />
-					<CategoriaPicker
-						{supabase}
-						{categorias}
-						value={variacao.categoria?.id.toString()}
-					/>
-					{#each variacao.preco as preco}
+				<div
+					class="flex h-[75vh] flex-col justify-between border border-primary p-1"
+				>
+					<div class="flex flex-col items-center justify-center">
 						<div>
-							<Label>{preco.tipo}</Label>
-							<NumberInput bind:value={preco.preco_in_cents} />
+							<img src="/favicon.png" alt="" />
+							<CategoriaPicker
+								{supabase}
+								{categorias}
+								value={variacao.categoria?.id.toString()}
+							/>
 						</div>
-					{/each}
+
+						<div>
+							{#each variacao.preco as preco}
+								<div>
+									<Label>{preco.tipo}</Label>
+									<NumberInput bind:value={preco.preco_in_cents} />
+								</div>
+							{/each}
+						</div>
+					</div>
 					<!-- PARTE RESERVADA PARA O NOVO PRECO -->
-					<div>
-						<Label>Novo Preco</Label>
+					<div class="bg-slate-200 p-1">
+						<Label>Tipo Preco</Label>
+						<Input />
+						<Label>Preco</Label>
 						<Input />
 					</div>
 				</div>
 			{/each}
 			<div class="flex items-center justify-center">
-				<CategoriaPicker {supabase} {categorias} value="" />
+				<CategoriaPicker {supabase} {categorias} bind:value={idNovaCategoria} />
 			</div>
 		</div>
 	</div>
