@@ -88,6 +88,7 @@
 		<div class="grid grid-cols-4 border border-red-300 p-1">
 			{#each var_produto as variacao}
 				<div class="border border-primary p-1">
+					<img src="/favicon.png" alt="" />
 					<CategoriaPicker
 						{supabase}
 						{categorias}
