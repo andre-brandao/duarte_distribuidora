@@ -1,8 +1,15 @@
 <script lang="ts">
 	import ButtonNav from './buttonnav.svelte';
-	import { CirclePlus, Package, ShoppingCart, UserPlus, SquareMenu } from 'lucide-svelte';
+	import {
+		CirclePlus,
+		Package,
+		ShoppingCart,
+		UserPlus,
+		SquareMenu,
+	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
+	import { LogOut } from 'lucide-svelte';
 
 	let itens: {
 		label: string;
@@ -13,7 +20,7 @@
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
-		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu }
+		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
 	];
 	let navseila: HTMLElement;
 
@@ -53,16 +60,22 @@
 	class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0"
 	aria-label="Sidebar"
 >
-	<div class="h-full overflow-y-auto border bg-gray-100 px-3 py-4">
-		<a href="/" class="mb-5 flex items-center ps-2.5">
-			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-				>Duarte Distribuidora</span
-			>
-		</a>
-		<ul class="space-y-2 font-medium">
-			{#each itens as item}
-				<ButtonNav href={item.href} label={item.label} Icon={item.icon} />
-			{/each}
-		</ul>
+	<div
+		class="flex h-full flex-col justify-between overflow-y-auto border bg-gray-100 px-3 py-4"
+	>
+		<div>
+			<a href="/" class="mb-5 flex items-center ps-2.5">
+				<span
+					class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+					>Duarte Distribuidora</span
+				>
+			</a>
+			<ul class="space-y-2 font-medium">
+				{#each itens as item}
+					<ButtonNav href={item.href} label={item.label} Icon={item.icon} />
+				{/each}
+			</ul>
+		</div>
+		<ButtonNav href={''} label={"Deslogar"} Icon={LogOut} />
 	</div>
 </aside>
