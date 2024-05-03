@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	import { Ban, Printer, DollarSign,CircleX   } from 'lucide-svelte';
+	import { Ban, Printer, DollarSign, CircleX } from 'lucide-svelte';
 
 	import type { PageData } from './$types.js';
 	export let data: PageData;
@@ -96,10 +96,15 @@
 								}}
 							/>
 						{:else}
-							<div class="flex justify-between mb-3 text-center items-center">
-								<h1 class="border-2 rounded p-1 px-3">{cliente_selecionado.nome}</h1>
+							<div class="mb-3 flex items-center justify-between text-center">
+								<h1 class="rounded border-2 p-1 px-3">
+									{cliente_selecionado.nome}
+								</h1>
 								<Button on:click={() => (cliente_selecionado = null)}>
-									<span class="flex gap-3 text-center justify-center items-center">Remover cliente <CircleX  /></span>
+									<span
+										class="flex items-center justify-center gap-3 text-center"
+										>Remover cliente <CircleX /></span
+									>
 								</Button>
 							</div>
 						{/if}
@@ -111,7 +116,11 @@
 					<ul class="mb-4 text-center text-lg">
 						{#each produtos_pedido as item}
 							<li class="py-2 font-bold">
-								{JSON.stringify(item)}
+								{item.produto?.nome}
+								{item.categoria?.nome} -
+								<span class="text-green-500"
+									>R${item.preco[0].preco_in_cents}</span
+								>
 							</li>
 							<hr />
 						{/each}
