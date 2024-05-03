@@ -96,10 +96,10 @@
 					<div>
 						<button
 							on:click={SignUp}
-							class="w-full rounded-lg bg-secondary px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary focus:outline-none focus:ring-4 focus:ring-primary"
+							class="w-full rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-semibold text-secondary-foreground shadow-sm transition ease-in-out hover:bg-yellow-300 focus:outline-none focus:ring-4 focus:ring-primary"
 							>Cadastrar</button
 						>
-						<p class="text-sm font-light text-gray-500">
+						<p class="text-sm font-light text-gray-500 mt-5">
 							Já possui uma conta? Faça <button
 								on:click={() => dispatch('login')}
 								class="font-medium text-primary hover:underline">Login!</button
