@@ -112,8 +112,8 @@
 	}
 </script>
 
-<main class="flex items-center justify-center p-4 sm:ml-64">
-	<div class="container flex flex-col items-center justify-center">
+<main class="flex items-center justify-center sm:ml-64">
+	<div class="p-2 flex flex-col items-center justify-center">
 		<div
 			class="mb-4 flex flex-col items-center justify-center gap-2 sm:flex-row"
 		>
@@ -137,14 +137,14 @@
 								alt=""
 							/>
 						</div>
-						<div class="w-full p-2">
+						<div class="w-full p-2	">
 							<CategoriaPicker
 								{supabase}
 								{categorias}
 								value={variacao.categoria?.id.toString()}
 							/>
 						</div>
-						<div>
+						<div class="p-2">
 							{#each variacao.preco as preco}
 								<PrecoInput {preco} {supabase} />
 							{/each}
@@ -152,7 +152,7 @@
 					</div>
 					<!-- PARTE RESERVADA PARA O NOVO PRECO -->
 					<div class="mt-3 bg-gray-100 p-2">
-						<Label class="mr-2">Tipo Preco</Label>
+						<Label>Tipo Preco</Label>
 						<Input
 							class="rounded border border-gray-300 px-4 py-2 focus:outline-none"
 							bind:value={novo_preco.tipo}
