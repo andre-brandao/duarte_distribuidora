@@ -1,7 +1,9 @@
 <script lang="ts">
+	import DropDownProduto from './../DropDownProduto.svelte';
 	import { Plus } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { createEventDispatcher } from 'svelte';
+	
 	const dispatch = createEventDispatcher();
 
 	export let produto: {
@@ -19,6 +21,7 @@
 			nome: string;
 		} | null;
 	};
+
 	const varejo =
 		produto.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0;
 	//export let img: string;
@@ -37,11 +40,15 @@
 		<div>
 			<h2 class="text-xl font-bold">{produto.produto?.nome}</h2>
 			<h3 class="text-md text-gray-600">{produto.categoria?.nome}</h3>
+			<DropDownProduto />
 		</div>
 	</div>
 	<div class="w-full text-right">
 		<span class="block pb-3 text-xl font-bold">R${varejo}</span>
-		<Button class="flex-none" on:click={() => dispatch('add_produtos', produto)}>
+		<Button
+			class="flex-none"
+			on:click={() => dispatch('add_produtos', produto)}
+		>
 			<p class="pr-2">Adicionar produto</p>
 			<Plus />
 		</Button>

@@ -17,6 +17,7 @@ const buttonVariants = tv({
 			brenovar: "transition ease-in-out border border-gray-400 text-secondary-foreground shadow-sm hover:bg-yellow-400 bg-primary rounded-lg font-semibold bg-opacity-0",
 			brenosubmit:"transition ease-in-out border border-gray-400 text-secondary-foreground shadow-sm hover:bg-yellow-300 bg-primary rounded-lg font-semibold",
 			btnproduct:"transition ease-in-out text-secondary-foreground shadow-sm hover:bg-yellow-300 bg-primary rounded-lg font-semibold w-full",
+			dropdown:""
 		},
 		size: {
 			default: "h-9 px-4 py-2",
