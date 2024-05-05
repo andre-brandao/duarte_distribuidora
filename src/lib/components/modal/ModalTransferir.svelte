@@ -12,7 +12,7 @@
 
 <main class="flex items-center justify-center">
 	<Dialog.Root>
-		<Dialog.Trigger>Transferir estoque</Dialog.Trigger>
+		<Dialog.Trigger>Transferir estoque entre unidades!</Dialog.Trigger>
 		<Dialog.Content class="sm:max-w-[500px]">
 			<Dialog.Header>
 				<Dialog.Title
