@@ -21,7 +21,6 @@
 		 href: '/produto', icon: CirclePlus },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
-		{ label: 'Trasnferir estoque', href: '/estoquetransfer', icon: ArchiveRestore },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
 		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
 	];

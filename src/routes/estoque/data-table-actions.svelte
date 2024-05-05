@@ -3,6 +3,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { goto } from '$app/navigation';
+	import ModalTransferir from '$lib/components/modal/ModalTransferir.svelte';
 
 	export let id: string;
 </script>
@@ -29,5 +30,10 @@
 			>Ver detalhes</DropdownMenu.Item
 		>
 		<!-- <DropdownMenu.Item>View payment details</DropdownMenu.Item> -->
+		<button
+			class="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-gray-100 data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50"
+		>
+			<ModalTransferir />
+		</button>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
