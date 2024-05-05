@@ -6,6 +6,7 @@
 		ShoppingCart,
 		UserPlus,
 		SquareMenu,
+		ArchiveRestore,
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
@@ -20,6 +21,7 @@
 		 href: '/produto', icon: CirclePlus },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
+		{ label: 'Trasnferir estoque', href: '/estoquetransfer', icon: ArchiveRestore },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
 		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
 	];
