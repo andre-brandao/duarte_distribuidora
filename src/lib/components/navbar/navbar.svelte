@@ -6,20 +6,20 @@
 		ShoppingCart,
 		UserPlus,
 		SquareMenu,
-		ArchiveRestore,
+		User,
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
 	import { LogOut } from 'lucide-svelte';
-	
+
 	let itens: {
 		label: string;
 		href: string;
 		icon: ComponentType<Icon>;
 	}[] = [
-		{ label: 'Novo produto',
-		 href: '/produto', icon: CirclePlus },
+		{ label: 'Novo produto', href: '/produto', icon: CirclePlus },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
+		{ label: 'Clientes', href: '/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
 		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },

@@ -171,9 +171,7 @@
 									<Table.Cell {...attrs}>
 										{#if cell.id === 'quantidade'}
 											<code
-												class={value < 1
-													? 'rounded-full bg-red-300 px-1'
-													: 'rounded-full bg-green-300 px-1'}
+												class="rounded-lg px-5 py-2 bg-gray-200"
 											>
 												<Render of={cell.render()} />
 											</code>
