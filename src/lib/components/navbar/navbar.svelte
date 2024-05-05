@@ -23,8 +23,8 @@
 		{ label: 'Clientes', href: '/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
-		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
 		{ label: 'Pedidos delivery', href: '/pedidos', icon: Truck  },
+		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
 	];
 	let navseila: HTMLElement;
 
