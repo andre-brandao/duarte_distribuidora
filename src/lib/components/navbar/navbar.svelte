@@ -7,6 +7,7 @@
 		UserPlus,
 		SquareMenu,
 		User,
+		Truck ,
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
@@ -23,6 +24,7 @@
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
 		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
+		{ label: 'Pedidos delivery', href: '/pedidos', icon: Truck  },
 	];
 	let navseila: HTMLElement;
 
