@@ -96,7 +96,7 @@
 				rg_ie,
 				telefone_fixo,
 			}),
-			header: '',
+			header: 'Detalhes do cliente',
 			cell: ({ value }) => {
 				return createRender(ModalShowInfo, {
 					id: value.id,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Button } from '$lib/components/ui/button';
-	import { Send } from 'lucide-svelte';
+	import { PencilLine } from 'lucide-svelte';
 
 	export let celular: string;
 	export let cpf_cnpj: string | null;
@@ -17,7 +17,7 @@
 <main class="flex items-center justify-center">
 	<Dialog.Root>
 		<Dialog.Trigger><Button>TODAS INFORMAÇÕES</Button></Dialog.Trigger>
-		<Dialog.Content class="sm:max-w-[1000px]">
+		<Dialog.Content style="max-width: 600px;">
 			<Dialog.Header>
 				<Dialog.Title
 					>Informações completas de <span class="font-bold text-primary"
@@ -25,29 +25,45 @@
 					></Dialog.Title
 				>
 			</Dialog.Header>
-			<div class="mt-3">
+			<div class="mt-3 text-center text-lg">
+				<hr />
 				<p><strong>ID:</strong> {id}</p>
+				<hr />
 				<p><strong>Nome:</strong> {nome || 'Não informada'}</p>
+				<hr />
 				<p><strong>CPF/CNPJ:</strong> {cpf_cnpj || 'Não informada'}</p>
+				<hr />
 				<p>
 					<strong>Data de Nascimento:</strong>
 					{data_nascimento || 'Não informada'}
 				</p>
+				<hr />
 				<p><strong>E-mail:</strong> {email || 'Não informado'}</p>
+				<hr />
 				<p><strong>Telefone Celular:</strong> {celular || 'Não informada'}</p>
+				<hr />
 				<p>
 					<strong>Telefone Fixo:</strong>
 					{telefone_fixo || 'Não informado'}
 				</p>
+				<hr />
 				<p><strong>RG/IE:</strong> {rg_ie || 'Não informado'}</p>
+				<hr />
 				<p><strong>Data de Criação:</strong> {created_at}</p>
 			</div>
 			<Dialog.Footer>
 				<Button type="submit" class="flex items-center">
-					<p class="pr-2">Transferir</p>
-					<Send />
+					<p class="pr-2">Alterar Informações</p>
+					<PencilLine />
 				</Button>
 			</Dialog.Footer>
 		</Dialog.Content>
 	</Dialog.Root>
 </main>
+
+<style>
+	p {
+		margin-bottom: 5px;
+		margin-top: 5px;
+	}
+</style>
