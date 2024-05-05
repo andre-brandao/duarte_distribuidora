@@ -1,8 +1,17 @@
 <script lang="ts">
-	import { createTable, Render, Subscribe } from 'svelte-headless-table';
+	import {
+		createTable,
+		Render,
+		Subscribe,
+		createRender,
+	} from 'svelte-headless-table';
 	import { readable } from 'svelte/store';
 	import * as Table from '$lib/components/ui/table';
 	import type { PageData } from './$types';
+	import ModalShowInfo from './ModalShowInfo.svelte';
+	import Ellipsis from 'lucide-svelte/icons/ellipsis';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { Button } from '$lib/components/ui/button';
 
 	export let clientes: {
 		celular: string;
@@ -53,7 +62,7 @@
 			accessor: 'nome',
 			header: 'Nome',
 		}),
-        table.column({
+		table.column({
 			accessor: 'email',
 			header: 'Email',
 		}),
@@ -61,11 +70,47 @@
 			accessor: 'cpf_cnpj',
 			header: 'CPF/CNPJ',
 		}),
-        table.column({
+		table.column({
 			accessor: 'rg_ie',
 			header: 'RG/IE',
 		}),
-        
+		table.column({
+			accessor: ({
+				id,
+				nome,
+				email,
+				celular,
+				cpf_cnpj,
+				created_at,
+				data_nascimento,
+				rg_ie,
+				telefone_fixo,
+			}) => ({
+				id,
+				nome,
+				email,
+				celular,
+				cpf_cnpj,
+				created_at,
+				data_nascimento,
+				rg_ie,
+				telefone_fixo,
+			}),
+			header: '',
+			cell: ({ value }) => {
+				return createRender(ModalShowInfo, {
+					id: value.id,
+					nome: value.nome,
+					email: value.email,
+					celular: value.celular,
+					cpf_cnpj: value.cpf_cnpj,
+					created_at: value.created_at,
+					data_nascimento: value.data_nascimento,
+					rg_ie: value.rg_ie,
+					telefone_fixo: value.telefone_fixo,
+				});
+			},
+		}),
 	]);
 
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } =
@@ -81,9 +126,15 @@
 						{#each headerRow.cells as cell (cell.id)}
 							<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
 								<Table.Head {...attrs}>
-                                    <div class="text-primary-foreground">
-                                        <Render of={cell.render()} />
-                                    </div>
+									<div class="text-primary-foreground">
+										{#if cell.id === 'amount'}
+											<div class="text-right">
+												<Render of={cell.render()} />
+											</div>
+										{:else}
+											<Render of={cell.render()} />
+										{/if}
+									</div>
 								</Table.Head>
 							</Subscribe>
 						{/each}
@@ -98,7 +149,17 @@
 						{#each row.cells as cell (cell.id)}
 							<Subscribe attrs={cell.attrs()} let:attrs>
 								<Table.Cell {...attrs}>
-									<Render of={cell.render()} />
+									{#if cell.id === 'amount'}
+										<div class="text-right font-medium">
+											<Render of={cell.render()} />
+										</div>
+									{:else if cell.id === 'status'}
+										<div class="capitalize">
+											<Render of={cell.render()} />
+										</div>
+									{:else}
+										<Render of={cell.render()} />
+									{/if}
 								</Table.Cell>
 							</Subscribe>
 						{/each}
