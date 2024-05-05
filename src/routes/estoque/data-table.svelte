@@ -1,13 +1,17 @@
 <script lang="ts">
-	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
+	import {
+		createTable,
+		Render,
+		Subscribe,
+		createRender,
+	} from 'svelte-headless-table';
 	import {
 		addPagination,
 		addSortBy,
 		addTableFilter,
-		addHiddenColumns
+		addHiddenColumns,
 	} from 'svelte-headless-table/plugins';
 
-	
 	import { readable } from 'svelte/store';
 	import * as Table from '$lib/components/ui/table';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
@@ -29,9 +33,10 @@
 
 	const table = createTable(readable(data), {
 		filter: addTableFilter({
-			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
+			fn: ({ filterValue, value }) =>
+				value.toLowerCase().includes(filterValue.toLowerCase()),
 		}),
-		hide: addHiddenColumns()
+		hide: addHiddenColumns(),
 	});
 
 	const columns = table.createColumns([
@@ -41,13 +46,13 @@
 
 			plugins: {
 				filter: {
-					exclude: true
-				}
-			}
+					exclude: true,
+				},
+			},
 		}),
 		table.column({
 			accessor: 'nome',
-			header: 'Nome'
+			header: 'Nome',
 		}),
 		table.column({
 			accessor: 'quantidade',
@@ -55,9 +60,9 @@
 
 			plugins: {
 				filter: {
-					exclude: true
-				}
-			}
+					exclude: true,
+				},
+			},
 			// cell: ({ value }) =>
 			// 	`<code class="${value > 0 ? 'bg-green-300' : 'bg-red-300'}"> ${value} </code>`
 		}),
@@ -67,22 +72,32 @@
 
 			plugins: {
 				filter: {
-					exclude: true
-				}
-			}
+					exclude: true,
+				},
+			},
 		}),
 
 		table.column({
-			accessor: ({ id }) => id,
+			accessor: ({ id, nome, quantidade }) => ({ id, nome, quantidade }),
 			header: '',
 			cell: ({ value }) => {
-				return createRender(DataTableActions, { id: value.toString() });
-			}
-		})
+				return createRender(DataTableActions, {
+					id: value.toString(),
+					nome: value.nome,
+					quantidade: value.quantidade,
+				});
+			},
+		}),
 	]);
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates, flatColumns } =
-		table.createViewModel(columns);
+	const {
+		headerRows,
+		pageRows,
+		tableAttrs,
+		tableBodyAttrs,
+		pluginStates,
+		flatColumns,
+	} = table.createViewModel(columns);
 	const { filterValue } = pluginStates.filter;
 	const { hiddenColumnIds } = pluginStates.hide;
 

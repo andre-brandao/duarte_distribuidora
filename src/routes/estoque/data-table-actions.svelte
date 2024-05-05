@@ -6,6 +6,8 @@
 	import ModalTransferir from '$lib/components/modal/ModalTransferir.svelte';
 
 	export let id: string;
+	export let nome:string;
+	export let quantidade:number;
 </script>
 
 <DropdownMenu.Root>
@@ -33,7 +35,7 @@
 		<button
 			class="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-gray-100 data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50"
 		>
-			<ModalTransferir />
+			<ModalTransferir {nome} {quantidade}/>
 		</button>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
