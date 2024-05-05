@@ -10,13 +10,14 @@
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
 	import { LogOut } from 'lucide-svelte';
-
+	
 	let itens: {
 		label: string;
 		href: string;
 		icon: ComponentType<Icon>;
 	}[] = [
-		{ label: 'Novo produto', href: '/produto', icon: CirclePlus },
+		{ label: 'Novo produto',
+		 href: '/produto', icon: CirclePlus },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
@@ -27,6 +28,14 @@
 	function openNav() {
 		navseila.classList.remove('-translate-x-full');
 		navseila.classList.add('translate-x-0');
+	}
+
+	async function signOut() {
+		console.log('singOut');
+
+		//Implementar
+
+		window.location.reload();
 	}
 </script>
 
@@ -76,6 +85,8 @@
 				{/each}
 			</ul>
 		</div>
-		<ButtonNav href={''} label={"Deslogar"} Icon={LogOut} />
+		<button on:click={signOut}>
+			<ButtonNav label={'Deslogar'} Icon={LogOut} />
+		</button>
 	</div>
 </aside>
