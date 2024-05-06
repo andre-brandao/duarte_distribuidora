@@ -9,9 +9,14 @@
 	import * as Table from '$lib/components/ui/table';
 	import type { PageData } from './$types';
 	import ModalShowInfo from './ModalShowInfo.svelte';
-	import Ellipsis from 'lucide-svelte/icons/ellipsis';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { Button } from '$lib/components/ui/button';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import {
+		addTableFilter,
+		addPagination,
+		addSortBy,
+	} from 'svelte-headless-table/plugins';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
 
 	export let clientes: {
 		celular: string;
@@ -51,28 +56,74 @@
 		telefone_fixo: cliente.telefone_fixo,
 	}));
 
-	const table = createTable(data);
+	const table = createTable(data, {
+		sort: addSortBy(),
+		filter: addTableFilter({
+			fn: ({ filterValue, value }) =>
+				value.toLowerCase().includes(filterValue.toLowerCase()),
+		}),
+	});
 
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
 			header: 'ID',
+			plugins: {
+				sort: {
+					disable: false,
+				},
+				filter: {
+					exclude: true,
+				},
+			},
 		}),
 		table.column({
 			accessor: 'nome',
 			header: 'Nome',
+			plugins: {
+				sort: {
+					disable: true,
+				},
+				filter: {
+					exclude: false,
+				},
+			},
 		}),
 		table.column({
 			accessor: 'email',
 			header: 'Email',
+			plugins: {
+				sort: {
+					disable: true,
+				},
+				filter: {
+					exclude: true,
+				},
+			},
 		}),
 		table.column({
 			accessor: 'cpf_cnpj',
 			header: 'CPF/CNPJ',
+			plugins: {
+				sort: {
+					disable: true,
+				},
+				filter: {
+					exclude: true,
+				},
+			},
 		}),
 		table.column({
 			accessor: 'rg_ie',
 			header: 'RG/IE',
+			plugins: {
+				sort: {
+					disable: true,
+				},
+				filter: {
+					exclude: true,
+				},
+			},
 		}),
 		table.column({
 			accessor: ({
@@ -113,10 +164,19 @@
 		}),
 	]);
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } =
+	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
 		table.createViewModel(columns);
+	const { filterValue } = pluginStates.filter;
 </script>
 
+<div class="flex items-center py-4">
+	<Input
+		class="max-w-sm"
+		placeholder="Buscar clientes pelo nome..."
+		type="text"
+		bind:value={$filterValue}
+	/>
+</div>
 <div class="rounded-md border">
 	<Table.Root {...$tableAttrs}>
 		<Table.Header class="bg-primary ">
@@ -124,13 +184,23 @@
 				<Subscribe rowAttrs={headerRow.attrs()}>
 					<Table.Row>
 						{#each headerRow.cells as cell (cell.id)}
-							<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
+							<Subscribe
+								attrs={cell.attrs()}
+								let:attrs
+								props={cell.props()}
+								let:props
+							>
 								<Table.Head {...attrs}>
 									<div class="text-primary-foreground">
 										{#if cell.id === 'amount'}
 											<div class="text-right">
 												<Render of={cell.render()} />
 											</div>
+										{:else if cell.id === 'id'}
+											<Button variant="ghost" on:click={props.sort.toggle}>
+												<Render of={cell.render()} />
+												<ArrowUpDown class={'ml-2 h-4 w-4'} />
+											</Button>
 										{:else}
 											<Render of={cell.render()} />
 										{/if}

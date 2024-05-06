@@ -7,7 +7,7 @@
 	let clientes = data.clientes;
 </script>
 
-<main class="p-4 sm:ml-64">
+<main class="p-4 sm:ml-64 mx-auto">
 	<div class="gap-0 py-1">
 		<div class="items-center gap-0 pb-7">
 			<h1 class="text-center text-4xl font-bold">Informações de clientes</h1>
