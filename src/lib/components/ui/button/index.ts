@@ -21,6 +21,7 @@ const buttonVariants = tv({
 				'transition ease-in-out border border-gray-400 text-secondary-foreground shadow-sm hover:bg-yellow-300 bg-primary rounded-lg font-semibold',
 			btnproduct:
 				'transition ease-in-out text-secondary-foreground shadow-sm hover:bg-yellow-300 bg-primary rounded-lg font-semibold w-full',
+			sorting: 'hover:bg-yellow-400 hover:text-accent-foreground',
 		},
 		size: {
 			default: 'h-9 px-4 py-2',

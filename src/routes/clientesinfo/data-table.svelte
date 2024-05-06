@@ -179,7 +179,7 @@
 </div>
 <div class="rounded-md border">
 	<Table.Root {...$tableAttrs}>
-		<Table.Header class="bg-primary ">
+		<Table.Header class="bg-primary">
 			{#each $headerRows as headerRow}
 				<Subscribe rowAttrs={headerRow.attrs()}>
 					<Table.Row>
@@ -197,7 +197,7 @@
 												<Render of={cell.render()} />
 											</div>
 										{:else if cell.id === 'id'}
-											<Button variant="ghost" on:click={props.sort.toggle}>
+											<Button variant="sorting" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
 												<ArrowUpDown class={'ml-2 h-4 w-4'} />
 											</Button>
