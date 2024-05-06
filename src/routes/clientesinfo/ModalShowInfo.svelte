@@ -27,27 +27,30 @@
 			</Dialog.Header>
 			<div class="mt-3 text-center text-lg">
 				<hr />
-				<p><strong>ID:</strong> {id}</p>
+				<p>
+					<strong>ID:</strong>
+					{id} - <strong>Nome:</strong>
+					{nome || 'Não informada'}
+				</p>
 				<hr />
-				<p><strong>Nome:</strong> {nome || 'Não informada'}</p>
+				<p>
+					<strong>CPF/CNPJ:</strong>
+					{cpf_cnpj || 'Não informada'} - <strong>RG/IE:</strong>
+					{rg_ie || 'Não informado'}
+				</p>
 				<hr />
-				<p><strong>CPF/CNPJ:</strong> {cpf_cnpj || 'Não informada'}</p>
+				<p><strong>E-mail:</strong> {email || 'Não informado'}</p>
+				<hr />
+				<p>
+					<strong>Celular:</strong>
+					{celular || 'Não informada'} - <strong>Fixo:</strong>
+					{telefone_fixo || 'Não informado'}
+				</p>
 				<hr />
 				<p>
 					<strong>Data de Nascimento:</strong>
 					{data_nascimento || 'Não informada'}
 				</p>
-				<hr />
-				<p><strong>E-mail:</strong> {email || 'Não informado'}</p>
-				<hr />
-				<p><strong>Telefone Celular:</strong> {celular || 'Não informada'}</p>
-				<hr />
-				<p>
-					<strong>Telefone Fixo:</strong>
-					{telefone_fixo || 'Não informado'}
-				</p>
-				<hr />
-				<p><strong>RG/IE:</strong> {rg_ie || 'Não informado'}</p>
 				<hr />
 				<p><strong>Data de Criação:</strong> {created_at}</p>
 			</div>
