@@ -12,6 +12,9 @@
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
 	import { LogOut } from 'lucide-svelte';
+	import type { SupabaseClient } from '@supabase/supabase-js';
+
+	export let supabase:SupabaseClient
 
 	let itens: {
 		label: string;
@@ -36,8 +39,13 @@
 	async function signOut() {
 		console.log('singOut');
 
-		//Implementar
 
+		const {error}= await supabase.auth.signOut()
+
+		if(error){
+		console.error(error)
+		return
+		}
 		window.location.reload();
 	}
 </script>

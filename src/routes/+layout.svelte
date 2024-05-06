@@ -16,7 +16,7 @@
 	<LoginPage {supabase} />
 {:else}
 	<main>
-		<Navbar />
+		<Navbar {supabase}/>
 		<slot>Empty layout</slot>
 	</main>
 {/if}
