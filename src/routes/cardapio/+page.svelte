@@ -27,21 +27,13 @@
 
 <div class="p-4 sm:ml-64">
 	<div class="">
-		<div class="gap-0 py-1">
-			<div class="items-center gap-0 pb-7">
+		<div class="flex mb-2 mt-5 justify-between mx-10">
+			<div class="items-center gap-0">
 				<h1 class="text-center text-4xl font-bold">Cardapio</h1>
 			</div>
-		</div>
-		<div class="flex justify-center gap-2">
-			<Input
-				id="name"
-				placeholder="Pesquisar produto..."
-				class="col-span-1 h-auto w-auto py-1"
-				bind:value={search}
-			/>
-			<!-- {#each $categoriasUnicas as categoria}
-				<Button on:click={() => setFilter(categoria)}>{categoria}</Button>
-			{/each} -->
+			<div class="flex justify-center gap-2">
+				<Input placeholder="Pesquisar produto..." class="col-span-2 h-auto w-auto py-1" bind:value={search} />
+			</div>
 		</div>
 		<div
 			class="grid grid-cols-1 gap-3 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3"
