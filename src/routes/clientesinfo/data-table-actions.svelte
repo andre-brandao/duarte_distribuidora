@@ -15,7 +15,7 @@
 	export let telefone_fixo: string | null;
 </script>
 
-<DropdownMenu.Root>
+<!-- <DropdownMenu.Root>
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button
 			variant="ghost"
@@ -30,9 +30,7 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Actions</DropdownMenu.Label>
-			<DropdownMenu.Item>
-				Copy payment ID
-			</DropdownMenu.Item>
+			<DropdownMenu.Item>Copy payment ID</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item>View customer</DropdownMenu.Item>
@@ -51,5 +49,44 @@
 				/>
 			</button>
 		</DropdownMenu.Item>
+	</DropdownMenu.Content>
+</DropdownMenu.Root> -->
+
+<DropdownMenu.Root>
+	<DropdownMenu.Trigger asChild let:builder>
+		<Button
+			variant="ghost"
+			builders={[builder]}
+			size="icon"
+			class="relative h-8 w-8 p-0"
+		>
+			<span class="sr-only">Open menu</span>
+			<Ellipsis class="h-4 w-4" />
+		</Button>
+	</DropdownMenu.Trigger>
+	<DropdownMenu.Content>
+		<DropdownMenu.Group>
+			<DropdownMenu.Label>Opções</DropdownMenu.Label>
+			<DropdownMenu.Item>Entrada Estoque</DropdownMenu.Item>
+		</DropdownMenu.Group>
+		<DropdownMenu.Separator />
+		<DropdownMenu.Item
+			>Ver detalhes</DropdownMenu.Item
+		>
+		<!-- <DropdownMenu.Item>View payment details</DropdownMenu.Item> -->
+		<button
+			class="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-gray-100 data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50"
+			><ModalShowInfo
+				{id}
+				{nome}
+				{email}
+				{celular}
+				{cpf_cnpj}
+				{created_at}
+				{data_nascimento}
+				{rg_ie}
+				{telefone_fixo}
+			/>
+		</button>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
