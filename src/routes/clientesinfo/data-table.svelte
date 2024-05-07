@@ -17,6 +17,7 @@
 	} from 'svelte-headless-table/plugins';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
+	import DataTableActions from './data-table-actions.svelte';
 
 	export let clientes: {
 		celular: string;
@@ -147,9 +148,9 @@
 				rg_ie,
 				telefone_fixo,
 			}),
-			header: 'Detalhes do cliente',
+			header: '',
 			cell: ({ value }) => {
-				return createRender(ModalShowInfo, {
+				return createRender(DataTableActions, {
 					id: value.id,
 					nome: value.nome,
 					email: value.email,

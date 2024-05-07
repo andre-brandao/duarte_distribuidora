@@ -16,7 +16,7 @@
 
 <main class="flex items-center justify-center">
 	<Dialog.Root>
-		<Dialog.Trigger><Button>TODAS INFORMAÇÕES</Button></Dialog.Trigger>
+		<Dialog.Trigger>infos</Dialog.Trigger>
 		<Dialog.Content style="max-width: 600px;">
 			<Dialog.Header>
 				<Dialog.Title
