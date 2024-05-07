@@ -35,21 +35,44 @@
 
 		// inserir na tabela pedido
 		const pedidoToInsert = {
-			cliente_id: cliente_selecionado.id,
+			cliente_id: cliente_selecionado?.id ?? null,
 			total_in_cents: pedidos_caixa.valor_total,
 			tipo: 'caixa',
 			meta_data: null,
 		};
+
+		const { data: result_pedido, error: err_pedido } = await supabase
+			.from('pedido')
+			.insert(pedidoToInsert)
+			.select('*')
+			.single();
+
+		if (err_pedido) {
+			console.log(err_pedido);
+			console.error(err_pedido);
+			return;
+		}
 
 		// inserir na tabela produto_pedido
 		const produtosToInsert = produtos_pedido.map((p) => {
 			return {
 				var_produto_id: p.id,
 				quantidade: 1, // e isso
-				pedido_id: null, // mudar isso
+				pedido_id: result_pedido?.id, // mudar isso
 				unidade_em_cents: p.preco[0]?.preco_in_cents ?? 0,
+				total_in_cents: 1000,
 			};
 		});
+
+		const { error: err_pp } = await supabase
+			.from('produto_pedido')
+			.insert(produtosToInsert);
+		//ERRO AQUI (MUDAR)
+		if (err_pp) {
+			console.log(err_pp);
+			console.error(err_pp);
+			return;
+		}
 
 		// TODO validar erros
 	}
@@ -155,7 +178,9 @@
 						<div class="mb-4">
 							<ButtonCardapio label={'IMPRIMIR'} Icon={Printer} />
 						</div>
-						<ButtonCardapio label={'PAGAMENTO'} Icon={DollarSign} />
+						<button on:click={realizarPedido}>
+							<ButtonCardapio label={'PAGAMENTO'} Icon={DollarSign} />
+						</button>
 					</div>
 				</div>
 			</div>
