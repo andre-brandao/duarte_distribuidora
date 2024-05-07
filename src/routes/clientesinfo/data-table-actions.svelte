@@ -29,8 +29,8 @@
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
-			<DropdownMenu.Label>Opções</DropdownMenu.Label>
-			<DropdownMenu.Item>Entrada Estoque</DropdownMenu.Item>
+			<!-- <DropdownMenu.Label>Opções</DropdownMenu.Label>
+			<DropdownMenu.Item>Alterar informacoes</DropdownMenu.Item> -->
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item>Ver detalhes</DropdownMenu.Item>

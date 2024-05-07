@@ -113,7 +113,7 @@
 </script>
 
 <main class="flex items-center justify-center sm:ml-64">
-	<div class="p-2 flex flex-col items-center justify-center">
+	<div class="flex flex-col items-center justify-center p-2">
 		<div
 			class="mb-4 flex flex-col items-center justify-center gap-2 sm:flex-row"
 		>
@@ -137,7 +137,7 @@
 								alt=""
 							/>
 						</div>
-						<div class="w-full p-2	">
+						<div class="w-full p-2">
 							<CategoriaPicker
 								{supabase}
 								{categorias}
@@ -151,13 +151,18 @@
 						</div>
 					</div>
 					<!-- PARTE RESERVADA PARA O NOVO PRECO -->
-					<div class="mt-3 bg-gray-100 p-2">
-						<Label>Tipo Preco</Label>
-						<Input
-							class="rounded border border-gray-300 px-4 py-2 focus:outline-none"
+					<div class="mt-3 flex flex-col bg-gray-100 p-2">
+						<Label class="mb-1">Tipo Preco</Label>
+						<select
+							class="mb-2 rounded border border-gray-300 px-4 py-2 focus:outline-none"
 							bind:value={novo_preco.tipo}
-						/>
-						<Label class="mr-2">Preco</Label>
+						>
+							<option value="Atacado 10un">Atacado 10un</option>
+							<option value="Atacado 1un">Atacado 1un</option>
+							<option value="Atacado caixa">Atacado caixa</option>
+							<option value="Varejo">Varejo</option>
+						</select>
+						<Label class="mb-1 mr-2">Preco</Label>
 						<NumberInput
 							class="mb-2 border-gray-300 bg-white"
 							bind:value={novo_preco.preco_in_cents}

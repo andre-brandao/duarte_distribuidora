@@ -2,6 +2,7 @@
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import type { Database } from '../supabase-types';
 	import { createEventDispatcher } from 'svelte';
+	import { Key } from 'lucide-svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -79,7 +80,13 @@
 					<button
 						type="button"
 						class="w-full rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-semibold text-secondary-foreground shadow-sm transition ease-in-out hover:bg-yellow-300 focus:outline-none focus:ring-4 focus:ring-primary"
-						on:click={signIn}>Login</button
+						on:click={signIn}
+						on:keydown={(e) => {
+							console.log(e);
+							if (e.key == 'Enter') {
+								signIn();
+							}
+						}}>Login</button
 					>
 					<p class="text-sm font-light text-gray-500">
 						Não possui uma conta, <button
