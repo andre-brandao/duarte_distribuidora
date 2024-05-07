@@ -34,12 +34,14 @@
 
 <main class="p-4 sm:ml-64">
 	<div class="gap-0 py-1">
-		<div class="items-center gap-0 pb-7">
-			<h1 class="text-center text-4xl font-bold">Novo produto</h1>
-		</div>
-		<div class="flex justify-center gap-2">
-			<Input placeholder="Novo produto..." class="col-span-1 h-auto w-auto py-1" bind:value={nomeNovoProduto} />
-			<Button class="gap-2" on:click={createNovoProduto}>Adicionar produto <Plus /></Button>
+		<div class="flex mb-2 justify-between mx-10">
+			<div class="items-center gap-0">
+				<h1 class="text-center text-4xl font-bold">Produtos</h1>
+			</div>
+			<div class="flex justify-center gap-2">
+				<Input placeholder="Novo produto..." class="col-span-2 h-auto w-auto py-1" bind:value={nomeNovoProduto} />
+				<Button class="gap-2 w-auto h-auto" on:click={createNovoProduto}>Adicionar produto <Plus /></Button>
+			</div>
 		</div>
 		<div class="container mx-auto p-4">
 			<div class="grid grid-cols-1 gap-3 md:grid-cols-3 lg:grid-cols-4">

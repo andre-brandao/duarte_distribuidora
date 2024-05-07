@@ -1,32 +1,32 @@
 <script lang="ts">
 	import ButtonNav from './buttonnav.svelte';
 	import {
-		CirclePlus,
+		Beer,
 		Package,
 		ShoppingCart,
 		UserPlus,
 		SquareMenu,
 		User,
-		Truck ,
+		Truck,
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
 	import { LogOut } from 'lucide-svelte';
 	import type { SupabaseClient } from '@supabase/supabase-js';
 
-	export let supabase:SupabaseClient
+	export let supabase: SupabaseClient;
 
 	let itens: {
 		label: string;
 		href: string;
 		icon: ComponentType<Icon>;
 	}[] = [
-		{ label: 'Novo produto', href: '/produto', icon: CirclePlus },
+		{ label: 'Produtos', href: '/produto', icon: Beer },
 		{ label: 'Novo cliente', href: '/cliente', icon: UserPlus },
 		{ label: 'Clientes', href: '/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
-		{ label: 'Pedidos delivery', href: '/pedidos', icon: Truck  },
+		{ label: 'Pedidos delivery', href: '/pedidos', icon: Truck },
 		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
 	];
 	let navseila: HTMLElement;
@@ -39,12 +39,11 @@
 	async function signOut() {
 		console.log('singOut');
 
+		const { error } = await supabase.auth.signOut();
 
-		const {error}= await supabase.auth.signOut()
-
-		if(error){
-		console.error(error)
-		return
+		if (error) {
+			console.error(error);
+			return;
 		}
 		window.location.reload();
 	}
