@@ -10,6 +10,7 @@
 		addSortBy,
 		addTableFilter,
 		addHiddenColumns,
+		addSelectedRows,
 	} from 'svelte-headless-table/plugins';
 
 	import { readable } from 'svelte/store';
@@ -21,6 +22,7 @@
 	import DataTableActions from './data-table-actions.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
+	import DataTableCheckbox from './data-table-checkbox.svelte';
 
 	type Estoque = {
 		id: number;
@@ -37,13 +39,26 @@
 				value.toLowerCase().includes(filterValue.toLowerCase()),
 		}),
 		hide: addHiddenColumns(),
+		select: addSelectedRows(),
 	});
 
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
-			header: 'ID',
+			header: (_, { pluginStates }) => {
+				const { allPageRowsSelected } = pluginStates.select;
+				return createRender(DataTableCheckbox, {
+					checked: allPageRowsSelected,
+				});
+			},
+			cell: ({ row }, { pluginStates }) => {
+				const { getRowState } = pluginStates.select;
+				const { isSelected } = getRowState(row);
 
+				return createRender(DataTableCheckbox, {
+					checked: isSelected,
+				});
+			},
 			plugins: {
 				filter: {
 					exclude: true,
@@ -97,9 +112,11 @@
 		tableBodyAttrs,
 		pluginStates,
 		flatColumns,
+		rows,
 	} = table.createViewModel(columns);
 	const { filterValue } = pluginStates.filter;
 	const { hiddenColumnIds } = pluginStates.hide;
+	const { selectedDataIds } = pluginStates.select;
 
 	const ids = flatColumns.map((col) => col.id);
 	let hideForId = Object.fromEntries(ids.map((id) => [id, true]));
@@ -144,7 +161,7 @@
 						<Table.Row>
 							{#each headerRow.cells as cell (cell.id)}
 								<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()}>
-									<Table.Head {...attrs}>
+									<Table.Head {...attrs} class="[&:has([role=checkbox])]:pl-3">
 										<div class="text-primary-foreground">
 											{#if cell.id == 'tipo'}
 												<div class="text-right">
@@ -164,15 +181,16 @@
 			<Table.Body {...$tableBodyAttrs}>
 				{#each $pageRows as row (row.id)}
 					<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-						<Table.Row {...rowAttrs}>
+						<Table.Row
+							{...rowAttrs}
+							data-state={$selectedDataIds[row.id] && 'selected'}
+						>
 							{#each row.cells as cell (cell.id)}
 								{@const value = cell.value}
 								<Subscribe attrs={cell.attrs()} let:attrs>
 									<Table.Cell {...attrs}>
 										{#if cell.id === 'quantidade'}
-											<code
-												class="rounded-lg px-5 py-2 bg-gray-200"
-											>
+											<code class="rounded-lg bg-gray-200 px-5 py-2">
 												<Render of={cell.render()} />
 											</code>
 										{:else if cell.id === 'tipo'}
