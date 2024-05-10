@@ -159,7 +159,7 @@
 						>
 							<option value="Atacado 10un">Atacado 10un</option>
 							<option value="Atacado 1un">Atacado 1un</option>
-							<option value="Atacado caixa">Atacado caixa</option>
+							<option value="Atacado 1caixa">Atacado 1caixa</option>
 							<option value="Varejo">Varejo</option>
 						</select>
 						<Label class="mb-1 mr-2">Preco</Label>
