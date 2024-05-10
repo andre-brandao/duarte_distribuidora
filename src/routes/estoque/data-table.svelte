@@ -44,28 +44,6 @@
 
 	const columns = table.createColumns([
 		table.column({
-			accessor: 'id',
-			header: (_, { pluginStates }) => {
-				const { allPageRowsSelected } = pluginStates.select;
-				return createRender(DataTableCheckbox, {
-					checked: allPageRowsSelected,
-				});
-			},
-			cell: ({ row }, { pluginStates }) => {
-				const { getRowState } = pluginStates.select;
-				const { isSelected } = getRowState(row);
-
-				return createRender(DataTableCheckbox, {
-					checked: isSelected,
-				});
-			},
-			plugins: {
-				filter: {
-					exclude: true,
-				},
-			},
-		}),
-		table.column({
 			accessor: 'nome',
 			header: 'Nome',
 		}),
