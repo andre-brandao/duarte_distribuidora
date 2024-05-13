@@ -1,9 +1,21 @@
 <script lang="ts">
-	import { Plus } from 'lucide-svelte';
+	import { Plus, Minus } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
+
+	let quantidade = 1;
+
+	function increase() {
+		quantidade += 1;
+	}
+
+	function decrease() {
+		if (quantidade > 1) {
+			quantidade -= 1;
+		}
+	}
 
 	export let produto: {
 		id: number;
@@ -58,16 +70,24 @@
 	</div>
 	<div class="w-full text-right">
 		<span class="block pb-3 text-xl font-bold"
-			>R${selectedPrice
-				? selectedPrice.preco_in_cents
-				: '0.00'}</span
+			>R${selectedPrice ? selectedPrice.preco_in_cents : '0.00'}</span
 		>
-		<Button
-			class="flex-none"
-			on:click={() => dispatch('add_produtos', produto)}
-		>
-			<p class="pr-2">Adicionar produto</p>
-			<Plus />
-		</Button>
+		<div class="flex items-center justify-end gap-3 text-center">
+			<Button on:click={decrease}><Minus /></Button>
+			<input
+				min="1"
+				style="width: {String(quantidade).length * 0.75}rem;"
+				class="text-xl font-bold"
+				value={quantidade}
+			/>
+			<Button on:click={increase}><Plus /></Button>
+			<Button
+				class="flex-none"
+				on:click={() => dispatch('add_produtos', produto)}
+			>
+				<p class="pr-2">Adicionar produto</p>
+				<Plus />
+			</Button>
+		</div>
 	</div>
 </div>

@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	import { Ban, Printer, DollarSign, CircleX } from 'lucide-svelte';
+	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
 
 	import type { PageData } from './$types.js';
 	export let data: PageData;
@@ -76,6 +76,10 @@
 
 		// TODO validar erros
 	}
+
+	async function removerPedido() {
+		
+	}
 </script>
 
 <div class="p-4 sm:ml-64">
@@ -138,13 +142,18 @@
 				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4 xl:my-3">
 					<ul class="mb-4 text-center text-lg">
 						{#each produtos_pedido as item}
-							<li class="py-2 font-bold">
-								{item.produto?.nome}
-								{item.categoria?.nome} -
-								<span class="text-green-500"
-									>R${item.preco[0].preco_in_cents}</span
-								>
-							</li>
+							<div class="flex justify-center">
+								<li class="py-2 font-bold">
+									<!--Colocar quantidade-->
+									(QNTx)
+									{item.produto?.nome}
+									{item.categoria?.nome} -
+									<span class="text-green-500"
+										>R${item.preco[0].preco_in_cents}</span
+									>
+								</li>
+								<button class="px-2" on:click={removerPedido}><X /></button>
+							</div>
 							<hr />
 						{/each}
 					</ul>

@@ -73,7 +73,7 @@
 		</div>
 		
 
-		<div class="sticky top-2 z-10 bg-primary border rounded-lg">
+		<div class="sticky top-2 z-10 bg-primary rounded-lg">
 			<div
 				bind:this={scrollContainer}
 				class=" flex flex-row gap-1 overflow-auto p-2"
