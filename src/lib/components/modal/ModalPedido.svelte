@@ -5,6 +5,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { Plus, Minus } from 'lucide-svelte';
+	import { pedidoStore } from '$lib/stores/pedidoStore';
 
 	let quantidade = 1;
 

@@ -2,19 +2,31 @@
 	import { Plus, Minus } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { createEventDispatcher } from 'svelte';
+	import { pedidoStore } from '$lib/stores/pedidoStore';
+	import { derived } from 'svelte/store';
 
 	const dispatch = createEventDispatcher();
 
-	let quantidade = 1;
+	let quantidade = derived(
+		pedidoStore,
+		() =>
+			$pedidoStore.find((p) =>( p.var_produto_id === produto.produto?.id))
+				?.quantidade ?? 0,
+	);
 
 	function increase() {
-		quantidade += 1;
+		if (!selectedPrice) {
+			return;
+		}
+		pedidoStore.addItemPedido({
+			var_produto_id: produto.id,
+			unidade_em_cents: selectedPrice,
+			nome: `${produto.produto?.nome}  ${produto.categoria?.nome}`,
+		});
 	}
 
 	function decrease() {
-		if (quantidade > 1) {
-			quantidade -= 1;
-		}
+		pedidoStore.removeUmItemPedido(produto.id);
 	}
 
 	export let produto: {
@@ -32,14 +44,8 @@
 			nome: string;
 		} | null;
 	};
-	let selectedPrice: { preco_in_cents: number; tipo: string } | null = null;
-	let selectedPriceInCents: string | number = '';
 
-	$: {
-		selectedPrice =
-			produto.preco.find((p) => p.preco_in_cents === selectedPriceInCents) ??
-			null;
-	}
+	let selectedPrice: number;
 </script>
 
 <hr />
@@ -56,7 +62,8 @@
 			<h2 class="text-xl font-bold">{produto.produto?.nome}</h2>
 			<h3 class="text-md text-gray-600">{produto.categoria?.nome}</h3>
 			<select
-				bind:value={selectedPriceInCents}
+				bind:value={selectedPrice}
+				disabled={$quantidade > 1}
 				name="preco"
 				id="precos"
 				class="mt-2 bg-transparent"
@@ -70,24 +77,17 @@
 	</div>
 	<div class="w-full text-right">
 		<span class="block pb-3 text-xl font-bold"
-			>R${selectedPrice ? selectedPrice.preco_in_cents : '0.00'}</span
+			>R${selectedPrice ? selectedPrice : '0.00'}</span
 		>
 		<div class="flex items-center justify-end gap-3 text-center">
 			<Button on:click={decrease}><Minus /></Button>
 			<input
 				min="1"
-				style="width: {String(quantidade).length * 0.75}rem;"
+				style="width: {String($quantidade).length * 0.75}rem;"
 				class="text-xl font-bold"
-				value={quantidade}
+				value={$quantidade}
 			/>
 			<Button on:click={increase}><Plus /></Button>
-			<Button
-				class="flex-none"
-				on:click={() => dispatch('add_produtos', produto)}
-			>
-				<p class="pr-2">Adicionar produto</p>
-				<Plus />
-			</Button>
 		</div>
 	</div>
 </div>

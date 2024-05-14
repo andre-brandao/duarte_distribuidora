@@ -7,6 +7,7 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
+	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 
 	import type { PageData } from './$types.js';
 	export let data: PageData;
@@ -77,12 +78,10 @@
 		// TODO validar erros
 	}
 
-	async function removerPedido() {
-		
-	}
+	async function removerPedido() {}
 </script>
 
-<div class="p-4 sm:ml-64">
+<div class="">
 	<div class="">
 		<div class="">
 			<div class="gap-0 py-1">
@@ -141,18 +140,19 @@
 
 				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4 xl:my-3">
 					<ul class="mb-4 text-center text-lg">
-						{#each produtos_pedido as item}
+						{#each $pedidoStore as item}
+
 							<div class="flex justify-center">
 								<li class="py-2 font-bold">
 									<!--Colocar quantidade-->
-									(QNTx)
-									{item.produto?.nome}
-									{item.categoria?.nome} -
+									({item.quantidade}x)
+									{item.nome}
+									
 									<span class="text-green-500"
-										>R${item.preco[0].preco_in_cents}</span
+										>R${item.unidade_em_cents * item.quantidade}</span
 									>
 								</li>
-								<button class="px-2" on:click={removerPedido}><X /></button>
+								<button class="px-2" on:click={(e)=>pedidoStore.removeTodosItemPedido(item.var_produto_id)}><X /></button>
 							</div>
 							<hr />
 						{/each}
@@ -195,7 +195,11 @@
 			</div>
 		</div>
 	</div>
+	<pre>
+		{JSON.stringify($pedidoStore, null, 2)}
+	</pre>
 </div>
+
 
 <style>
 	.success-bg {

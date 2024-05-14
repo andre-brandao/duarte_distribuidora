@@ -17,6 +17,8 @@
 {:else}
 	<main>
 		<Navbar {supabase}/>
-		<slot>Empty layout</slot>
+		<div class="p-4 sm:ml-64">
+			<slot>Empty layout</slot>
+		</div>
 	</main>
 {/if}
