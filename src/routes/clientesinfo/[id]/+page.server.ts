@@ -12,10 +12,11 @@ export const load = (async ({ locals, params }) => {
 		supabase.from('cliente').select('*').eq('id', cliente_id).single(),
 		supabase
 			.from('pedido')
-			.select('* , produto_pedido(*)')
-			.eq('id', cliente_id),
+			.select('* , produto_pedido(*, var_produto(*, produto(nome), categoria(nome)))')
+			.eq('cliente_id', cliente_id),
 	]);
-
+	console.log(pedido);
+	
 	if (err_cliente) {
 		console.log(err_cliente);
 		console.error(err_cliente);

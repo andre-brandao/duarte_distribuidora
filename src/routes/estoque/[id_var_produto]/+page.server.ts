@@ -7,9 +7,9 @@ export const load = (async ({ locals, params }) => {
 	const estoqueID = params.id_var_produto;
 
 	const { data: estoque, error: err_estoque } = await supabase
-		.from('var_produto')
+		.from('estoque')
 		.select(
-			'*, estoque(quantidade, transacao_estoque(*)), categoria(nome), produto(nome)',
+		"*, transacao_estoque(*), var_produto(*, produto(nome), categoria(nome))"
 		)
 		.eq('id', estoqueID)
 		.single();

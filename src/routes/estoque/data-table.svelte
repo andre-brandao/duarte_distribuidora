@@ -75,7 +75,7 @@
 			header: '',
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
-					id: value.toString(),
+					id: value.id.toString(),
 					nome: value.nome,
 					quantidade: value.quantidade,
 				});

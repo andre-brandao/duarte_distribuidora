@@ -11,7 +11,7 @@ export const load = (async ({ locals, params }) => {
 	] = await Promise.all([
 		supabsae
 			.from('produto')
-			.select('*, var_produto(id,categoria(id,nome),preco(*))')
+			.select('*, var_produto(id, img_url, categoria(id,nome),preco(*), produto(nome))')
 			.eq('id', produtoId)
 			.single(),
 		supabsae.from('categoria').select('*'),

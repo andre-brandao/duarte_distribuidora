@@ -25,7 +25,7 @@
 	<DropdownMenu.Content>
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Opções</DropdownMenu.Label>
-			<DropdownMenu.Item>Entrada Estoque</DropdownMenu.Item>
+			<!-- <DropdownMenu.Item>Entrada Estoque</DropdownMenu.Item> -->
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item on:click={() => goto('/estoque/' + id)}

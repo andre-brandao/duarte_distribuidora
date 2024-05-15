@@ -7,7 +7,7 @@
 	let pedido = data.pedido;
 </script>
 
-<main class="p-4 sm:ml-64">
+<main class="">
 	<div class="gap-0 py-1">
 		<div
 			class="m-3 mx-auto w-auto overflow-hidden rounded-xl bg-white shadow-md md:max-w-fit"
@@ -38,13 +38,23 @@
 			</div>
 		</div>
 
-		{#each pedido as item}
+		{#each pedido as ped}
+		<div class="bg-slate-300">
+
 			<div class="ml-100 mt-3 text-center text-lg">
-				<h1>{item.total_in_cents}</h1>
-				<h1>{item.tipo}</h1>
-				<h1>{item.id}</h1>
-				<h1>{item.cliente_id}</h1>
+				<h1>Total: {ped.total_in_cents}</h1>
+				<h1>Tipo Pedido: {ped.tipo}</h1>
+				<h1>Numero Pedido: {ped.id}</h1>
 			</div>
+			Produtos:
+			<div class="flex flex-col">
+				{#each ped.produto_pedido as produto}
+					<div class="flex">
+						produto: {produto.var_produto?.produto?.nome}
+					</div>
+				{/each}
+			</div>
+		</div>
 		{/each}
 	</div>
 </main>

@@ -14,7 +14,7 @@
 </script>
 
 <div class="mx-auto">
-	<div class="p-4 sm:ml-64">
+	<div class="">
 		<div class="">
 			<DataTable data={estoque} />
 		</div>

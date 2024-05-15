@@ -56,7 +56,7 @@
 					</div>
 					<div class="column">
 						<img
-							src={img}
+							src={img ?? 'favicon.png'}
 							alt=""
 							class="ml-auto h-52 w-48 rounded-r-xl object-cover"
 						/>

@@ -5,10 +5,10 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import PrecoInput from './PrecoInput.svelte';
-	import { toast } from "svelte-sonner";
-
+	import { toast } from 'svelte-sonner';
 
 	import type { PageData } from './$types.js';
+	import { type FormInputEvent } from '$lib/components/ui/input';
 	export let data: PageData;
 
 	let { supabase } = data;
@@ -59,11 +59,11 @@
 				produto_id: produto.id,
 				categoria_id: Number(nova_categoria.value),
 			})
-			.select('id,categoria(id,nome),preco(*)')
+			.select('id,img_url,categoria(id,nome),preco(*),produto(nome)')
 			.single();
 
 		if (err_var_prod_c) {
-			toast.error(err_var_prod_c.message)
+			toast.error(err_var_prod_c.message);
 			console.error(err_var_prod_c);
 			return;
 		}
@@ -85,16 +85,6 @@
 			console.error('Tipo e Preco são obrigatórios');
 			return;
 		}
-		// check if a preco of this tipo already existis
-
-		// if (
-		// 	var_produto.some((var_prod) =>
-		// 		var_prod.preco.some((preco) => preco.tipo === novo_preco.tipo),
-		// 	)
-		// ) {
-		// 	console.error('Preco já existe');
-		// 	return;
-		// }
 
 		const { data: preco_resp, error: err_preco } = await supabase
 			.from('preco')
@@ -107,7 +97,7 @@
 			.single();
 
 		if (err_preco) {
-			toast.error(err_preco.message)
+			toast.error(err_preco.message);
 			console.error(err_preco);
 			return;
 		}
@@ -119,6 +109,55 @@
 			}
 			return var_prod;
 		});
+	}
+
+	async function updateProdutctPicture(
+		e: FormInputEvent<Event>,
+		prod: {
+			id: number;
+			nome: string;
+		},
+	) {
+		// @ts-ignore
+		const file = e.target?.files[0];
+		console.log(file);
+		if (!file) {
+			toast.error('Selecione uma imagem');
+			return;
+		}
+		const { error: err_img } = await supabase.storage
+			.from('produto_imgs')
+			.upload(prod.id.toString(), file);
+
+		if (err_img) {
+			toast.error(err_img.message);
+			console.error(err_img);
+			return;
+		}
+		const {
+			data: { publicUrl },
+		} = supabase.storage.from('produto_imgs').getPublicUrl(prod.id.toString());
+
+		const { data: new_prod, error: erro_var_prod } = await supabase
+			.from('var_produto')
+			.update({ img_url: publicUrl })
+			.eq('id', prod.id)
+			.single();
+
+		if (erro_var_prod) {
+			toast.error(erro_var_prod.message);
+			console.error(erro_var_prod);
+			return;
+		}
+
+		var_produto = var_produto.map((var_prod) => {
+			if (var_prod.id === prod.id) {
+				var_prod.img_url = publicUrl;
+			}
+			return var_prod;
+		});
+
+		toast.success('Imagem adicionada');
 	}
 </script>
 
@@ -142,17 +181,23 @@
 					<div class="flex flex-col items-center justify-center">
 						<div class="h-40 w-full">
 							<img
-								src="/favicon.png"
+								src={variacao.img_url ?? "/favicon.png"}
 								class="mb-2 h-full w-full object-cover"
 								alt=""
 							/>
 						</div>
+						<Input
+							type="file"
+							on:change={(e) =>
+								updateProdutctPicture(e, {
+									id: variacao.id,
+									nome: `${variacao.categoria?.nome}_${variacao.produto?.nome}`,
+								})}
+						/>
 						<div class="w-full p-2">
-							<CategoriaPicker
-								{supabase}
-								{categorias}
-								value={variacao.categoria?.id.toString()}
-							/>
+							<p class="text-center font-bold underline">
+								{variacao.categoria?.nome} - {variacao.produto?.nome}
+							</p>
 						</div>
 						<div class="p-2">
 							{#each variacao.preco as preco}

@@ -5,3 +5,7 @@
 
 	const pedidos = data.pedidos;
 </script>
+
+<pre>
+	{JSON.stringify(pedidos,null,2)}
+</pre>

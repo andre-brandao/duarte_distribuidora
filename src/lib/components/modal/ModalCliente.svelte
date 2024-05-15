@@ -5,6 +5,11 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import CardCliente from '$lib/components/breninteste/card/CardCliente.svelte';
 	import { UserPlus } from 'lucide-svelte';
+	import type { SupabaseClient } from '@supabase/supabase-js';
+	import type { Database } from '$lib/supabase-types';
+	import { toast } from 'svelte-sonner';
+
+	export let supabase: SupabaseClient<Database>;
 
 	export let clientes: {
 		celular: string;
@@ -31,6 +36,45 @@
 		}
 		return false;
 	});
+
+	let formNovoCliente = {
+		nome: '',
+		email: '',
+		celular: '',
+	};
+
+	async function cadastrarCliente() {
+		console.log('cadastrar cliente');
+		if (formNovoCliente.nome.length < 3) {
+			toast.error('Nome do cliente deve ter no mínimo 3 caracteres');
+		}
+
+		if (formNovoCliente.celular.length < 3) {
+			toast.error('Celular do cliente é obrigatorio');
+		}
+
+		const { data, error } = await supabase
+			.from('cliente')
+			.insert({
+				nome: formNovoCliente.nome,
+				email: formNovoCliente.email,
+				celular: formNovoCliente.celular,
+			})
+			.select('*')
+			.single();
+
+		if (error) {
+			toast.error(error.message);
+			return;
+		}
+
+		clientes = [...clientes, data];
+		formNovoCliente = {
+			nome: '',
+			email: '',
+			celular: '',
+		};
+	}
 </script>
 
 <Dialog.Root>
@@ -59,6 +103,16 @@
 				{#each clientesFiltrados as cliente (cliente.id)}
 					<CardCliente {cliente} on:cliente_selecionado />
 				{/each}
+			</div>
+
+			<div class="mt-2 p-2 bg-slate-300">
+				<h1>
+					Novo Cliente:
+				</h1>
+				<Input placeholder="Nome" bind:value={formNovoCliente.nome} />
+				<Input placeholder="Email" bind:value={formNovoCliente.email} />
+				<Input placeholder="Celular" bind:value={formNovoCliente.celular} />
+				<Button on:click={cadastrarCliente}>Cadastrar cliente</Button>
 			</div>
 		</div>
 	</Dialog.Content>

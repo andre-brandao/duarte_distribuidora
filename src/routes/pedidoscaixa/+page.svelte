@@ -28,12 +28,10 @@
 		valor_total: 0,
 	};
 
-	let produtos_pedido: typeof produtos = [];
-
 	let cliente_selecionado: any = null;
 
 	async function realizarPedido() {
-		// TODO: VALIDAR DADOS
+		console.log(cliente_selecionado);
 
 		// inserir na tabela pedido
 		const pedidoToInsert = {
@@ -79,9 +77,10 @@
 			console.error(err_pp);
 			return;
 		}
-		toast.success('Pedido realizado com sucesso');
 
-		// TODO validar erros
+		toast.success('Pedido realizado com sucesso');
+		$pedidoStore = [];
+		cliente_selecionado = null;
 	}
 </script>
 
@@ -119,6 +118,7 @@
 					<div>
 						{#if !cliente_selecionado}
 							<ModalCliente
+								{supabase}
 								{clientes}
 								on:cliente_selecionado={(e) => {
 									const c = e.detail.cliente;
@@ -167,7 +167,10 @@
 					</ul>
 					<h2 class="mx-10 flex justify-center text-3xl font-bold">
 						Preco total:&nbsp;<span class="text-green-500"
-							>R${pedidos_caixa.valor_total}</span
+							>R${$pedidoStore.reduce(
+								(acc, p) => acc + p.unidade_em_cents * p.quantidade,
+								0,
+							)}</span
 						>
 					</h2>
 				</div>
