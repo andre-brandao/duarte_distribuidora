@@ -10,6 +10,7 @@
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 
 	import type { PageData } from './$types.js';
+	import { toast } from 'svelte-sonner';
 	export let data: PageData;
 
 	const { clientes, produtos } = data;
@@ -37,7 +38,10 @@
 		// inserir na tabela pedido
 		const pedidoToInsert = {
 			cliente_id: cliente_selecionado?.id ?? null,
-			total_in_cents: pedidos_caixa.valor_total,
+			total_in_cents: $pedidoStore.reduce(
+				(acc, p) => acc + p.unidade_em_cents * p.quantidade,
+				0,
+			),
 			tipo: 'caixa',
 			meta_data: null,
 		};
@@ -49,19 +53,19 @@
 			.single();
 
 		if (err_pedido) {
-			console.log(err_pedido);
+			toast.error(err_pedido.message);
 			console.error(err_pedido);
 			return;
 		}
 
 		// inserir na tabela produto_pedido
-		const produtosToInsert = produtos_pedido.map((p) => {
+		const produtosToInsert = $pedidoStore.map((p) => {
 			return {
-				var_produto_id: p.id,
-				quantidade: 1, // e isso
 				pedido_id: result_pedido?.id, // mudar isso
-				unidade_em_cents: p.preco[0]?.preco_in_cents ?? 0,
-				total_in_cents: 1000,
+				var_produto_id: p.var_produto_id,
+				quantidade: p.quantidade, // e isso
+				unidade_in_cents: p.unidade_em_cents,
+				total_in_cents: p.quantidade * p.unidade_em_cents,
 			};
 		});
 
@@ -70,15 +74,15 @@
 			.insert(produtosToInsert);
 		//ERRO AQUI (MUDAR)
 		if (err_pp) {
+			toast.error(err_pp.message);
 			console.log(err_pp);
 			console.error(err_pp);
 			return;
 		}
+		toast.success('Pedido realizado com sucesso');
 
 		// TODO validar erros
 	}
-
-	async function removerPedido() {}
 </script>
 
 <div class="">
@@ -141,18 +145,22 @@
 				<div class="col-auto rounded-lg border-4 border-opacity-50 p-4 xl:my-3">
 					<ul class="mb-4 text-center text-lg">
 						{#each $pedidoStore as item}
-
 							<div class="flex justify-center">
 								<li class="py-2 font-bold">
 									<!--Colocar quantidade-->
 									({item.quantidade}x)
 									{item.nome}
-									
+
 									<span class="text-green-500"
 										>R${item.unidade_em_cents * item.quantidade}</span
 									>
 								</li>
-								<button class="px-2" on:click={(e)=>pedidoStore.removeTodosItemPedido(item.var_produto_id)}><X /></button>
+								<button
+									class="px-2"
+									on:click={(e) =>
+										pedidoStore.removeTodosItemPedido(item.var_produto_id)}
+									><X /></button
+								>
 							</div>
 							<hr />
 						{/each}
@@ -166,16 +174,7 @@
 
 				<div class="col-auto flex h-auto flex-col justify-between xl:ml-6">
 					<div>
-						<ModalProduto
-							{produtos}
-							on:add_produtos={(e) => {
-								const p = e.detail;
-								produtos_pedido.push(p);
-								produtos_pedido = produtos_pedido;
-								// TODO CHANgE THIS
-								pedidos_caixa.valor_total += p.preco[0]?.preco_in_cents;
-							}}
-						/>
+						<ModalProduto {produtos} />
 						<p class="mb-2 mt-6">Observações sobre compra:</p>
 						<Textarea
 							placeholder="Anotar observacões..."
@@ -199,7 +198,6 @@
 		{JSON.stringify($pedidoStore, null, 2)}
 	</pre>
 </div>
-
 
 <style>
 	.success-bg {

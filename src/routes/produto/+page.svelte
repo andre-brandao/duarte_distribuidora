@@ -32,7 +32,7 @@
 	}
 </script>
 
-<main class="p-4 sm:ml-64">
+<main class="">
 	<div class="gap-0 py-1">
 		<div class="flex mb-2 justify-between mx-10">
 			<div class="items-center gap-0">

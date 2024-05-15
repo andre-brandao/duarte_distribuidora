@@ -1,33 +1,8 @@
 <script lang="ts">
 	import { Plus, Minus } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { createEventDispatcher } from 'svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore';
 	import { derived } from 'svelte/store';
-
-	const dispatch = createEventDispatcher();
-
-	let quantidade = derived(
-		pedidoStore,
-		() =>
-			$pedidoStore.find((p) =>( p.var_produto_id === produto.produto?.id))
-				?.quantidade ?? 0,
-	);
-
-	function increase() {
-		if (!selectedPrice) {
-			return;
-		}
-		pedidoStore.addItemPedido({
-			var_produto_id: produto.id,
-			unidade_em_cents: selectedPrice,
-			nome: `${produto.produto?.nome}  ${produto.categoria?.nome}`,
-		});
-	}
-
-	function decrease() {
-		pedidoStore.removeUmItemPedido(produto.id);
-	}
 
 	export let produto: {
 		id: number;
@@ -45,6 +20,29 @@
 		} | null;
 	};
 
+	let quantidade = derived(
+		pedidoStore,
+		() =>
+			$pedidoStore.find((p) => p.var_produto_id === produto?.id)?.quantidade ??
+			0,
+	);
+
+	function increase() {
+		if (!selectedPrice) {
+			return;
+		}
+		pedidoStore.addItemPedido({
+			var_produto_id: produto.id,
+			unidade_em_cents: selectedPrice,
+			nome: `${produto.produto?.nome}  ${produto.categoria?.nome}`,
+		});
+	}
+
+	function decrease() {
+		pedidoStore.removeUmItemPedido(produto.id);
+	}
+
+
 	let selectedPrice: number;
 </script>
 
@@ -53,7 +51,7 @@
 	<div class="w-full flex-none md:w-auto">
 		<img
 			alt="imagem"
-			src={'t'}
+			src={'favicon.png'}
 			class="h-16 w-16 rounded-lg object-cover md:h-20 md:w-20"
 		/>
 	</div>
@@ -80,7 +78,9 @@
 			>R${selectedPrice ? selectedPrice : '0.00'}</span
 		>
 		<div class="flex items-center justify-end gap-3 text-center">
-			<Button on:click={decrease}><Minus /></Button>
+			{#if $quantidade > 0}
+				<Button on:click={decrease}><Minus /></Button>
+			{/if}
 			<input
 				min="1"
 				style="width: {String($quantidade).length * 0.75}rem;"

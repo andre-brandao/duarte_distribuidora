@@ -79,7 +79,7 @@
 				{#each produtosFiltrados as prod (prod.id)}
 					{@const varejo =
 						prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
-					<CardProduto produto={prod} on:add_produtos />
+					<CardProduto produto={prod} />
 				{/each}
 			</div>
 		</div>

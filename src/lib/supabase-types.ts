@@ -63,27 +63,61 @@ export type Database = {
         }
         Relationships: []
       }
-      estoque: {
+      distribuidora: {
         Row: {
           created_at: string
+          endereco: string
           id: number
-          quantidade: number
+          nome: string
         }
         Insert: {
           created_at?: string
+          endereco: string
           id?: number
-          quantidade: number
+          nome: string
         }
         Update: {
           created_at?: string
+          endereco?: string
+          id?: number
+          nome?: string
+        }
+        Relationships: []
+      }
+      estoque: {
+        Row: {
+          created_at: string
+          distribuidora_id: number
+          id: number
+          quantidade: number
+          var_produto_id: number
+        }
+        Insert: {
+          created_at?: string
+          distribuidora_id: number
           id?: number
           quantidade?: number
+          var_produto_id: number
+        }
+        Update: {
+          created_at?: string
+          distribuidora_id?: number
+          id?: number
+          quantidade?: number
+          var_produto_id?: number
         }
         Relationships: [
           {
-            foreignKeyName: "public_estoque_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
+            foreignKeyName: "estoque_distribuidora_id_fkey"
+            columns: ["distribuidora_id"]
+            isOneToOne: false
+            referencedRelation: "distribuidora"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "estoque_var_produto_id_fkey"
+            columns: ["var_produto_id"]
+            isOneToOne: false
             referencedRelation: "var_produto"
             referencedColumns: ["id"]
           },
@@ -226,6 +260,7 @@ export type Database = {
           id: number
           meta_data: Json | null
           quantidade: number
+          transacao_estoque: number
         }
         Insert: {
           created_at?: string
@@ -233,6 +268,7 @@ export type Database = {
           id?: number
           meta_data?: Json | null
           quantidade: number
+          transacao_estoque: number
         }
         Update: {
           created_at?: string
@@ -240,10 +276,11 @@ export type Database = {
           id?: number
           meta_data?: Json | null
           quantidade?: number
+          transacao_estoque?: number
         }
         Relationships: [
           {
-            foreignKeyName: "public_transacao_estoque_estoque_id_fkey"
+            foreignKeyName: "transacao_estoque_estoque_id_fkey"
             columns: ["estoque_id"]
             isOneToOne: false
             referencedRelation: "estoque"
@@ -298,7 +335,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_estoque_for_distribuidora: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

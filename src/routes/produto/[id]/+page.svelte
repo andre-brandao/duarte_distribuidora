@@ -5,6 +5,8 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import PrecoInput from './PrecoInput.svelte';
+	import { toast } from "svelte-sonner";
+
 
 	import type { PageData } from './$types.js';
 	export let data: PageData;
@@ -24,7 +26,9 @@
 	let idNovaCategoria = '';
 
 	$: {
-		addVariacao(idNovaCategoria);
+		if (idNovaCategoria) {
+			addVariacao(idNovaCategoria);
+		}
 	}
 
 	async function addVariacao(idNovaCategoria: string) {
@@ -33,6 +37,7 @@
 		);
 
 		if (!nova_categoria) {
+			toast.error('Categoria não encontrada');
 			console.error('Categoria não encontrada');
 			return;
 		}
@@ -43,6 +48,7 @@
 				(variacao) => variacao.categoria?.id === Number(nova_categoria.value),
 			)
 		) {
+			toast.error('Categoria já existe');
 			console.error('Categoria já existe');
 			return;
 		}
@@ -57,6 +63,7 @@
 			.single();
 
 		if (err_var_prod_c) {
+			toast.error(err_var_prod_c.message)
 			console.error(err_var_prod_c);
 			return;
 		}
@@ -74,19 +81,20 @@
 		novo_preco: { tipo: string; preco_in_cents: number },
 	) {
 		if (!novo_preco.tipo || !novo_preco.preco_in_cents) {
+			toast.error('Tipo e Preco são obrigatórios');
 			console.error('Tipo e Preco são obrigatórios');
 			return;
 		}
 		// check if a preco of this tipo already existis
 
-		if (
-			var_produto.some((var_prod) =>
-				var_prod.preco.some((preco) => preco.tipo === novo_preco.tipo),
-			)
-		) {
-			console.error('Preco já existe');
-			return;
-		}
+		// if (
+		// 	var_produto.some((var_prod) =>
+		// 		var_prod.preco.some((preco) => preco.tipo === novo_preco.tipo),
+		// 	)
+		// ) {
+		// 	console.error('Preco já existe');
+		// 	return;
+		// }
 
 		const { data: preco_resp, error: err_preco } = await supabase
 			.from('preco')
@@ -99,12 +107,14 @@
 			.single();
 
 		if (err_preco) {
+			toast.error(err_preco.message)
 			console.error(err_preco);
 			return;
 		}
 		var_produto = var_produto.map((var_prod) => {
 			if (var_prod.id === var_id) {
 				var_prod.preco = [...var_prod.preco, preco_resp];
+				toast.success('Preco adicionado');
 				console.log('preco adicionado');
 			}
 			return var_prod;
