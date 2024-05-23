@@ -21,7 +21,7 @@
 {:else}
 	<main>
 		<Navbar {supabase} />
-		<div class="p-4 sm:ml-64">
+		<div class="sm:ml-64">
 			<slot>Empty layout</slot>
 		</div>
 	</main>

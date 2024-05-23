@@ -14,9 +14,9 @@
 	import { toast } from 'svelte-sonner';
 	export let data: PageData;
 
-	const { clientes, produtos:prod_temp } = data;
+	const { clientes, produtos: prod_temp } = data;
 
-	const produtos = prod_temp.filter((p)=>p.preco.length !==0)
+	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
 
 	let { supabase } = data;
 	$: ({ supabase } = data);
