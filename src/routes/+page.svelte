@@ -33,7 +33,7 @@
 	<div>
 		<a href="/pedidoscaixa" class={buttonVariants({ variant: 'brenovar' })}>Pedidos no caixa</a>
 	</div> -->
-	<div class="sm:ml-64 w-1/3">
+	<div class=" w-1/3">
 		<img src="{logo}" alt="LOGO">
 	</div>
 </main>

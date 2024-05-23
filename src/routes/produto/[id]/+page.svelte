@@ -161,7 +161,7 @@
 	}
 </script>
 
-<main class="flex items-center justify-center sm:ml-64">
+<main class="flex items-center justify-center">
 	<div class="flex flex-col items-center justify-center p-2">
 		<div
 			class="mb-4 flex flex-col items-center justify-center gap-2 sm:flex-row"

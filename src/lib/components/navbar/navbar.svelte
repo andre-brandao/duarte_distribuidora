@@ -55,7 +55,7 @@
 	data-drawer-toggle="logo-sidebar"
 	aria-controls="logo-sidebar"
 	type="button"
-	class="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 sm:hidden"
+	class="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 sm:hidden"
 >
 	<span class="sr-only">Open sidebar</span>
 	<svg
@@ -85,7 +85,7 @@
 		<div>
 			<a href="/" class="mb-5 flex items-center ps-2.5">
 				<span
-					class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
+					class="self-center whitespace-nowrap text-xl font-semibold "
 					>Duarte Distribuidora</span
 				>
 			</a>

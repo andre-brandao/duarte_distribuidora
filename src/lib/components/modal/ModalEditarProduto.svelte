@@ -19,16 +19,16 @@
 					<div class="column">
 						<Card.Header>
 							<Card.Title
-								class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+								class="mb-2 text-2xl font-bold tracking-tight text-gray-900"
 								>{nome}</Card.Title
 							>
 						</Card.Header>
 						<Card.Content class="flex items-center">
 							<div class="flex-grow">
-								<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
+								<p class="mb-3 font-normal leading-tight text-gray-700">
 									Categoria: {categoria}
 								</p>
-								<p class="text-2xl font-bold text-gray-900 dark:text-white">R${preco}</p>
+								<p class="text-2xl font-bold text-gray-900">R${preco}</p>
 							</div>
 						</Card.Content>
 					</div>

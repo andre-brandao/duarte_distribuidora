@@ -11,7 +11,8 @@ export const load = (async ({ locals }) => {
 		supabase.from('cliente').select('*'),
 		supabase
 			.from('var_produto')
-			.select('id, produto(*), preco(preco_in_cents,tipo), categoria(nome)'),
+			.select('id, produto(*), preco(preco_in_cents,tipo), categoria(nome)')
+			
 	]);
 
 	if (err_cliente) {

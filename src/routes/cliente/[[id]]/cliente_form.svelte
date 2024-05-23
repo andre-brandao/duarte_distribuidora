@@ -45,7 +45,7 @@
 <form method="POST" use:enhance class="m-8 w-[500px]">
 	<div class="rounded-lg border border-gray-400 bg-gray-100 p-10 shadow-sm">
 		<!-- <h1
-			class="self-center whitespace-nowrap pb-8 text-center text-2xl font-semibold dark:text-white"
+			class="self-center whitespace-nowrap pb-8 text-center text-2xl font-semibold"
 		>
 			Formulário cadastro
 		</h1> -->
