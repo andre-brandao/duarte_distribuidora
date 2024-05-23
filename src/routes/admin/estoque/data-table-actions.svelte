@@ -28,7 +28,7 @@
 			<!-- <DropdownMenu.Item>Entrada Estoque</DropdownMenu.Item> -->
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item on:click={() => goto('/estoque/' + id)}
+		<DropdownMenu.Item on:click={() => goto('/admin/estoque/' + id)}
 			>Ver detalhes</DropdownMenu.Item
 		>
 		<!-- <DropdownMenu.Item>View payment details</DropdownMenu.Item> -->

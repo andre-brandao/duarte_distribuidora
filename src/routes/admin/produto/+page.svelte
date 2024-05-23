@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import type { PageData } from './$types';
+	import type { PageData } from '../../produto/$types';
 	import { goto } from '$app/navigation';
 	import { Plus } from 'lucide-svelte';
 
@@ -28,7 +28,7 @@
 			console.error(error);
 			return;
 		}
-		goto(`/produto/${produto.id}`);
+		goto(`/admin/produto/${produto.id}`);
 	}
 </script>
 
@@ -48,7 +48,7 @@
 				{#each produtos as produto}
 					<a
 						class="rounded-lg bg-gray-100 p-6 text-center font-bold transition ease-in-out hover:bg-gray-50"
-						href="/produto/{produto.id}"
+						href="/admin/produto/{produto.id}"
 					>
 						<span>{produto.nome}</span>
 					</a>

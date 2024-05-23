@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData } from '../../clientesinfo/$types';
 
 
 	export let data: PageData;
@@ -22,7 +22,7 @@
 
 	<div class="feed">
 		{#each clientes as cliente}
-			<a href="/clientesinfo/{cliente.id}" class="hover:underline">
+			<a href="/admin/clientesinfo/{cliente.id}" class="hover:underline">
 				<h1>{cliente.nome}</h1>
 			</a>
 		{/each}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Label from './../../../lib/components/ui/label/label.svelte';
+	import Label from '$lib/components/ui/label/label.svelte';
 	import DatePicker from '$lib/components/ui/DatePicker.svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';

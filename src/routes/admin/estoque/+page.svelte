@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData } from '../../estoque/$types';
 	import DataTable from './data-table.svelte';
 	export let data: PageData;
 
