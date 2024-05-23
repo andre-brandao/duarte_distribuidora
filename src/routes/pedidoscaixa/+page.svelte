@@ -109,10 +109,8 @@
 		const { error: err_pp } = await supabase
 			.from('produto_pedido')
 			.insert(produtosToInsert);
-		//ERRO AQUI (MUDAR)
 		if (err_pp) {
 			toast.error(err_pp.message);
-			console.log(err_pp);
 			console.error(err_pp);
 			return;
 		}

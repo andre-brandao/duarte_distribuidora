@@ -105,10 +105,10 @@
 				{/each}
 			</div>
 
-			<div class="mt-2 p-2 bg-slate-300">
-				<h1>
+			<div class="flex flex-col gap-3 mt-2 p-2 bg-slate-100 rounded justify-center items-center">
+				<p class="font-bold">
 					Novo Cliente:
-				</h1>
+				</p>
 				<Input placeholder="Nome" bind:value={formNovoCliente.nome} />
 				<Input placeholder="Email" bind:value={formNovoCliente.email} />
 				<Input placeholder="Celular" bind:value={formNovoCliente.celular} />
