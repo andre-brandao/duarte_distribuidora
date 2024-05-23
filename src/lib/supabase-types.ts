@@ -32,6 +32,8 @@ export type Database = {
           celular: string
           cpf_cnpj: string | null
           created_at: string
+          credito_maximo: number
+          credito_usado: number
           data_nascimento: string | null
           email: string | null
           id: number
@@ -43,6 +45,8 @@ export type Database = {
           celular: string
           cpf_cnpj?: string | null
           created_at?: string
+          credito_maximo?: number
+          credito_usado?: number
           data_nascimento?: string | null
           email?: string | null
           id?: number
@@ -54,6 +58,8 @@ export type Database = {
           celular?: string
           cpf_cnpj?: string | null
           created_at?: string
+          credito_maximo?: number
+          credito_usado?: number
           data_nascimento?: string | null
           email?: string | null
           id?: number

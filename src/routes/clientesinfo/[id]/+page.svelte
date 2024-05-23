@@ -34,27 +34,33 @@
 					<p class="mt-2 text-gray-500">
 						Data de Criação: {clientes.created_at}
 					</p>
+
+					<div class="flex items-center bg-primary rounded-lg justify-center">
+						Credito:
+						<div class="flex">
+							{clientes.credito_usado}/ {clientes.credito_maximo}
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		{#each pedido as ped}
-		<div class="bg-slate-300">
-
-			<div class="ml-100 mt-3 text-center text-lg">
-				<h1>Total: {ped.total_in_cents}</h1>
-				<h1>Tipo Pedido: {ped.tipo}</h1>
-				<h1>Numero Pedido: {ped.id}</h1>
-			</div>
-			Produtos:
-			<div class="flex flex-col">
-				{#each ped.produto_pedido as produto}
-					<div class="flex">
-						produto: {produto.var_produto?.produto?.nome}
+			{#each pedido as ped}
+				<div class="bg-slate-300">
+					<div class="ml-100 mt-3 text-center text-lg">
+						<h1>Total: {ped.total_in_cents}</h1>
+						<h1>Tipo Pedido: {ped.tipo}</h1>
+						<h1>Numero Pedido: {ped.id}</h1>
 					</div>
-				{/each}
-			</div>
+					Produtos:
+					<div class="flex flex-col">
+						{#each ped.produto_pedido as produto}
+							<div class="flex">
+								produto: {produto.var_produto?.produto?.nome}
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/each}
 		</div>
-		{/each}
 	</div>
 </main>

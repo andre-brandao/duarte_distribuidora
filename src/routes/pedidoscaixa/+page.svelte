@@ -8,6 +8,7 @@
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
+	import * as Dialog from '$lib/components/ui/dialog';
 
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
@@ -30,17 +31,54 @@
 
 	let cliente_selecionado: any = null;
 
-	async function realizarPedido() {
+	$: console.log(cliente_selecionado);
+
+	async function realizarPedido(tipo_pagamento: string) {
+		if (tipo_pagamento === 'fiado' && !cliente_selecionado) {
+			toast.error('Selecione um cliente para realizar um pedido fiado');
+			return;
+		}
+
+		if ($pedidoStore.length === 0) {
+			toast.error('Adicione produtos ao pedido');
+			return;
+		}
+
 		console.log(cliente_selecionado);
 
+		const total_in_cents = $pedidoStore.reduce(
+			(acc, p) => acc + p.unidade_em_cents * p.quantidade,
+			0,
+		);
+
+		if (tipo_pagamento === 'fiado') {
+			if (
+				cliente_selecionado.credito_usado + total_in_cents >
+				cliente_selecionado.credito_maximo
+			) {
+				toast.error('Cliente não possui crédito suficiente');
+				return;
+			} else {
+				const { data: result_cliente, error: err_cliente } = await supabase
+					.from('cliente')
+					.update({
+						credito_usado: cliente_selecionado.credito_usado + total_in_cents,
+					})
+					.eq('id', cliente_selecionado.id)
+					.single();
+
+				if (err_cliente) {
+					toast.error(err_cliente.message);
+					console.error(err_cliente);
+					return;
+				}
+			}
+		}
 		// inserir na tabela pedido
 		const pedidoToInsert = {
 			cliente_id: cliente_selecionado?.id ?? null,
-			total_in_cents: $pedidoStore.reduce(
-				(acc, p) => acc + p.unidade_em_cents * p.quantidade,
-				0,
-			),
-			tipo: 'caixa',
+			total_in_cents,
+			tipo: tipo_pagamento,
 			meta_data: null,
 			status: 'aberto',
 		};
@@ -190,9 +228,36 @@
 						<div class="mb-4">
 							<ButtonCardapio label={'IMPRIMIR'} Icon={Printer} />
 						</div>
-						<button on:click={realizarPedido}>
-							<ButtonCardapio label={'PAGAMENTO'} Icon={DollarSign} />
-						</button>
+						<Dialog.Root>
+							<Dialog.Trigger>
+								<ButtonCardapio
+									label={'PAGAMENTO'}
+									Icon={DollarSign}
+								/></Dialog.Trigger
+							>
+							<Dialog.Content>
+								<Dialog.Header>
+									<Dialog.Title>Qual foi a forma de pagamento?</Dialog.Title>
+									<Dialog.Description>
+										Selecione a forma de pagamento do cliente, Pedidos Fiado
+										necessitam de credito do cliente
+
+										<div
+											class=" my-3 flex flex-col items-center justify-center gap-3"
+										>
+											{#if cliente_selecionado}
+												<button on:click={() => realizarPedido('fiado')}>
+													<ButtonCardapio label={'FIADO'} Icon={DollarSign} />
+												</button>
+											{/if}
+											<button on:click={() => realizarPedido('pago')}>
+												<ButtonCardapio label={'PAGO'} Icon={DollarSign} />
+											</button>
+										</div>
+									</Dialog.Description>
+								</Dialog.Header>
+							</Dialog.Content>
+						</Dialog.Root>
 					</div>
 				</div>
 			</div>
