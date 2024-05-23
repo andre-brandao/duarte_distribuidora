@@ -3,7 +3,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import CardCliente from '$lib/components/breninteste/card/CardCliente.svelte';
+	import CardCliente from '$lib/components/card/CardCliente.svelte';
 	import { UserPlus } from 'lucide-svelte';
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import type { Database } from '$lib/supabase-types';

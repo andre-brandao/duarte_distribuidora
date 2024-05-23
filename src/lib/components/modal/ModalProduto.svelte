@@ -2,7 +2,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import CardProduto from '$lib/components/breninteste/card/CardProduto.svelte';
+	import CardProduto from '$lib/components/card/CardProduto.svelte';
 	import ButtonCardapio from '../buttons/ButtonCardapio.svelte';
 	import { ShoppingBasket } from 'lucide-svelte';
 

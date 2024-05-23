@@ -27,7 +27,6 @@
 		{ label: 'Estoque', href: '/estoque', icon: Package },
 		{ label: 'Pedidos no caixa', href: '/pedidoscaixa', icon: ShoppingCart },
 		{ label: 'Pedidos delivery', href: '/pedidos', icon: Truck },
-		{ label: 'Cardapio online', href: '/cardapio', icon: SquareMenu },
 	];
 	let navseila: HTMLElement;
 
@@ -95,6 +94,9 @@
 				{/each}
 			</ul>
 		</div>
+		<hr>
+		<h1>Cliente:</h1>
+		<ButtonNav label={'Cardapio online'} Icon={SquareMenu} href={'/cardapio'}/>
 		<button on:click={signOut}>
 			<ButtonNav label={'Deslogar'} Icon={LogOut} />
 		</button>
