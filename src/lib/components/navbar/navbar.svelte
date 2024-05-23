@@ -25,7 +25,7 @@
 		{ label: 'Novo cliente', href: '/admin/cliente', icon: UserPlus },
 		{ label: 'Clientes', href: '/admin/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/admin/estoque', icon: Package },
-		{ label: 'Pedidos no caixa', href: '/admin/pedidoscaixa', icon: ShoppingCart },
+		{ label: 'Caixa', href: '/admin/caixa', icon: ShoppingCart },
 		{ label: 'Pedidos delivery', href: '/admin/pedidos', icon: Truck },
 	];
 	let navseila: HTMLElement;
