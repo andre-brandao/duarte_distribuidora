@@ -1,129 +1,156 @@
 <script lang="ts">
-	import Button from './../../../../lib/components/ui/button/button.svelte';
+	import { formatDate } from '$lib/utils';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
-	let clientes = data.clientes;
+	let novo_cliente = data.clientes;
 	let pedido = data.pedido;
+
+	let clientes = { ...novo_cliente };
+
+	let isChanged = false;
+
+	function checkChanges() {
+		isChanged = JSON.stringify(clientes) !== JSON.stringify(novo_cliente);
+	}
 </script>
 
 <main class="min-h-screen bg-white">
-	<div class="m-4">
-		<div class="mb-6 rounded-xl bg-gray-100 p-4 shadow-lg">
-			<div class="md:flex">
-				<div class="md:flex-shrink-0">
-					<div class="mb-4 flex flex-col text-2xl font-bold md:flex-row">
-						ID: {clientes.id} -
-						<div class="md:ml-2">
-							<input
-								type="text"
-								bind:value={clientes.nome}
-								class="editable-input"
-								placeholder="Não informada"
-							/>
-						</div>
+	<div class="mb-6 w-fit rounded-xl border bg-gray-100 p-4 shadow-sm mx-auto">
+		<div class="md:flex">
+			<div class="md:flex-shrink-0">
+				<div class="mb-2 text-gray-600">
+					<strong>Data de Criação:</strong>
+					<span on:input={checkChanges}
+						>{formatDate(novo_cliente.created_at)}</span
+					>
+				</div>
+				<div class="mb-4 flex flex-col text-2xl font-bold md:flex-row">
+					ID: {novo_cliente.id} -
+					<div class="md:ml-2">
+						<input
+							type="text"
+							bind:value={novo_cliente.nome}
+							on:input={checkChanges}
+							class="editable-input"
+							placeholder="Não informada"
+						/>
 					</div>
-					<p class="mb-2 text-gray-600">
+				</div>
+				<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+					<div class=" text-gray-600">
 						<strong>CPF/CNPJ:</strong>
 						<input
 							type="text"
-							bind:value={clientes.cpf_cnpj}
+							bind:value={novo_cliente.cpf_cnpj}
+							on:input={checkChanges}
 							class="editable-input"
 							placeholder="Não informada"
 						/>
-					</p>
-					<p class="mb-2 text-gray-600">
+					</div>
+					<div class=" text-gray-600">
 						<strong>RG/IE:</strong>
 						<input
 							type="text"
-							bind:value={clientes.rg_ie}
+							bind:value={novo_cliente.rg_ie}
+							on:input={checkChanges}
 							class="editable-input"
 							placeholder="Não informado"
 						/>
-					</p>
-					<p class="mb-2 text-gray-600">
+					</div>
+
+					<div class=" text-gray-600">
 						<strong>E-mail:</strong>
 						<input
 							type="email"
-							bind:value={clientes.email}
+							bind:value={novo_cliente.email}
+							on:input={checkChanges}
 							class="editable-input"
 							placeholder="Não informado"
 						/>
-					</p>
-					<p class="mb-2 text-gray-600">
+					</div>
+					<div class=" text-gray-600">
 						<strong>Celular:</strong>
 						<input
 							type="text"
-							bind:value={clientes.celular}
+							bind:value={novo_cliente.celular}
+							on:input={checkChanges}
 							class="editable-input"
 							placeholder="Não informada"
 						/>
-					</p>
-					<p class="mb-2 text-gray-600">
+					</div>
+					<div class=" text-gray-600">
 						<strong>Fixo:</strong>
 						<input
 							type="text"
-							bind:value={clientes.telefone_fixo}
+							bind:value={novo_cliente.telefone_fixo}
+							on:input={checkChanges}
 							class="editable-input"
 							placeholder="Não informado"
 						/>
-					</p>
-					<p class="mb-2 text-gray-600">
+					</div>
+					<div class=" text-gray-600">
 						<strong>Data de Nascimento:</strong>
 						<input
 							type="date"
-							bind:value={clientes.data_nascimento}
+							bind:value={novo_cliente.data_nascimento}
+							on:input={checkChanges}
 							class="editable-input"
 							placeholder="Não informada"
 						/>
-					</p>
-					<p class="mb-2 text-gray-600">
-						<strong>Data de Criação:</strong>
-						<span>{clientes.created_at}</span>
-					</p>
-
-					<div class="mt-2 w-fit rounded-lg bg-primary p-2 text-black">
-						<span class="block text-lg font-semibold">
-							Crédito: {clientes.credito_usado} / {clientes.credito_maximo}
-						</span>
-					</div>
-					<div class="mt-2">
-						<Button>SALVAR INFORMACÕES</Button>
 					</div>
 				</div>
+				<div class="mt-4 flex w-full justify-between gap-2 items-center">
+					<div class="block w-fit rounded-lg bg-primary p-2 text-lg font-semibold text-black" on:input={checkChanges}>
+						Crédito: {novo_cliente.credito_usado} / 
+						<input
+							type="text"
+							class="editable-input-2 ml-1"
+							bind:value={novo_cliente.credito_maximo}
+							on:input={checkChanges}
+							placeholder="Máximo"
+						/>
+					</div>
+					{#if isChanged}
+						<button class="block w-fit rounded-lg bg-primary p-2 text-center font-semibold text-black">
+							Salvar informações
+						</button>
+					{/if}
+				</div>
+				
 			</div>
-
-			{#each pedido as ped}
-				<div class=" mt-4 rounded-lg bg-white p-6 shadow-sm">
-					<div class="mb-4 text-center text-lg flex gap-2">
-						<h3>Pedido <strong>#{ped.id}</strong> -</h3>
-						<p>Total: <strong>{ped.total_in_cents}</strong> -</p>
-						<p>Tipo do pedido: <strong>{ped.tipo}</strong></p>
-					</div>
-					<div>
-						<h4 class="mb-2 text-lg font-semibold">Produtos pedidos:</h4>
-						<div
-							class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
-						>
-							{#each ped.produto_pedido as produto}
-								<div class="flex rounded-md bg-gray-200 p-2 shadow-sm">
-									<p class="text-gray-800">
-										QNTx -
-										{produto.var_produto?.produto?.nome}
-										{produto.var_produto?.categoria?.nome}
-										<span class="font-bold text-green-500">
-											- R${produto.unidade_in_cents}
-										</span>
-									</p>
-								</div>
-							{/each}
-						</div>
-					</div>
-				</div>
-			{/each}
 		</div>
 	</div>
+	{#each pedido as ped}
+		<div class=" mt-4 rounded-lg border bg-gray-100 p-6 shadow-sm">
+			<div class="mb-4 flex gap-2 text-center text-lg">
+				<h3>Pedido <strong>#{ped.id}</strong> -</h3>
+				<p>Total: <strong>{ped.total_in_cents}</strong> -</p>
+				<p>Tipo do pedido: <strong>{ped.tipo}</strong></p>
+			</div>
+			<div>
+				<h4 class="mb-2 text-lg font-semibold">Produtos pedidos:</h4>
+				<div
+					class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
+				>
+					{#each ped.produto_pedido as produto}
+						<div class="flex rounded-md bg-white p-2 shadow-sm">
+							<p class="text-gray-800">
+								{produto.quantidade}x -
+								{produto.var_produto?.produto?.nome}
+								{produto.var_produto?.categoria?.nome}
+								<span class="font-bold text-green-500">
+									- R${produto.unidade_in_cents}
+								</span>
+							</p>
+						</div>
+					{/each}
+				</div>
+			</div>
+		</div>
+	{/each}
 </main>
 
 <style>
@@ -139,10 +166,27 @@
 		border-bottom: 1px solid transparent;
 		transition: border-bottom-color 0.2s;
 	}
-	.editable-input:focus {
+	.editable-input {
 		border-bottom-color: #000;
+		transition: border-bottom-color 0.3s ease;
+	}
+	.editable-input:focus {
+		border-bottom-color: #facc15;
 	}
 	.editable-input::placeholder {
-		color: #9ca3af;
+		color: #a8a8a8;
+	}
+
+	.editable-input-2 {
+		border: none;
+		background: transparent;
+		font-size: inherit;
+		width: auto;
+		max-width: 80px;
+		padding: 0;
+		margin: 0;
+		outline: none;
+		border-bottom: 1px solid transparent;
+		transition: border-bottom-color 0.2s;
 	}
 </style>
