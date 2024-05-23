@@ -84,6 +84,38 @@ export type Database = {
         }
         Relationships: []
       }
+      endereco: {
+        Row: {
+          cep: string
+          cliente_id: number
+          created_at: string
+          endereco: string
+          id: number
+        }
+        Insert: {
+          cep: string
+          cliente_id: number
+          created_at?: string
+          endereco: string
+          id?: number
+        }
+        Update: {
+          cep?: string
+          cliente_id?: number
+          created_at?: string
+          endereco?: string
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "endereco_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "cliente"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       estoque: {
         Row: {
           created_at: string
@@ -125,29 +157,32 @@ export type Database = {
       }
       pedido: {
         Row: {
-          cliente_id: number
+          cliente_id: number | null
           created_at: string
           id: number
           meta_data: Json | null
           observacao: string | null
+          status: string
           tipo: string
           total_in_cents: number
         }
         Insert: {
-          cliente_id: number
+          cliente_id?: number | null
           created_at?: string
           id?: number
           meta_data?: Json | null
           observacao?: string | null
+          status?: string
           tipo: string
           total_in_cents: number
         }
         Update: {
-          cliente_id?: number
+          cliente_id?: number | null
           created_at?: string
           id?: number
           meta_data?: Json | null
           observacao?: string | null
+          status?: string
           tipo?: string
           total_in_cents?: number
         }

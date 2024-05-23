@@ -22,7 +22,7 @@
 
 	<div class="feed">
 		{#each clientes as cliente}
-			<a href="/clientesinfo/{cliente.id}">
+			<a href="/clientesinfo/{cliente.id}" class="hover:underline">
 				<h1>{cliente.nome}</h1>
 			</a>
 		{/each}

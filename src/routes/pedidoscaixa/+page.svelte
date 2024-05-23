@@ -42,6 +42,7 @@
 			),
 			tipo: 'caixa',
 			meta_data: null,
+			status: 'aberto',
 		};
 
 		const { data: result_pedido, error: err_pedido } = await supabase
