@@ -266,3 +266,20 @@ export function getEnderecoFromCEP(cep: string) {
 			return data;
 		});
 }
+
+export function formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit',
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'UTC',
+    };
+
+    const formattedDate = date.toLocaleString('pt-BR', options);
+    return formattedDate.replace(',', ' às');
+}
