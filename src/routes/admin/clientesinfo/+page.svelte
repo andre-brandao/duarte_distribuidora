@@ -1,31 +1,68 @@
 <script lang="ts">
-	import type { PageData } from '../../clientesinfo/$types';
-
+	import Button from './../../../lib/components/ui/button/button.svelte';
+	import type { PageData } from '../clientesinfo/$types';
 
 	export let data: PageData;
 
 	let clientes = data.clientes;
-	let modalInfo: HTMLDialogElement;
-
-
 </script>
 
-<main class="mx-auto ">
+<main class="mx-auto">
 	<div class="gap-0 py-1">
 		<div class="items-center gap-0 pb-7">
 			<h1 class="text-center text-4xl font-bold">Informações de clientes</h1>
 		</div>
 	</div>
-	<!-- <pre>
-		{JSON.stringify($page,null,2)}
-	</pre> -->
-
-	<div class="feed">
-		{#each clientes as cliente}
-			<a href="/admin/clientesinfo/{cliente.id}" class="hover:underline">
-				<h1>{cliente.nome}</h1>
-			</a>
-		{/each}
+	<div class="overflow-x-auto">
+		<table class="min-w-full border border-gray-300 leading-normal">
+			<thead>
+				<tr class="border-b border-gray-300 bg-gray-100">
+					<th
+						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700"
+						>ID</th
+					>
+					<th
+						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700"
+						>Nome</th
+					>
+					<th
+						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700"
+						>Celular</th
+					>
+					<th
+						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700"
+						>CPF/CNPJ</th
+					>
+					<th
+						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700"
+						>Crédito</th
+					>
+					<th
+						class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-700"
+						>Informações completas
+					</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-gray-200 bg-white">
+				{#each clientes as cliente}
+					<tr>
+						<td class="px-6 py-4 text-sm text-gray-900">{cliente.id}</td>
+						<td class="px-6 py-4 text-sm text-gray-900">{cliente.nome}</td>
+						<td class="px-6 py-4 text-sm text-gray-900">{cliente.celular}</td>
+						<td class="px-6 py-4 text-sm text-gray-900">{cliente.cpf_cnpj}</td>
+						<td class="px-6 py-4 text-sm text-gray-900"
+							>{cliente.credito_usado} - {cliente.credito_maximo}</td
+						>
+						<td class="px-6 py-4 text-sm text-gray-900"
+							><a
+								href="/admin/clientesinfo/{cliente.id}"
+								class="hover:underline"><Button>Visualizar e editar</Button></a
+							></td
+						>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
 	</div>
 	<!-- {#if clientes}
 		<div class="flex justify-center">
@@ -37,13 +74,3 @@
 		<p>Nenhum cliente encontrado!</p>
 	{/if} -->
 </main>
-
-<style>
-	.feed {
-		max-inline-size: 600px;
-		display: grid;
-		gap: 2rem;
-		margin-inline: auto;
-		padding-block: 2rem;
-	}
-</style>
