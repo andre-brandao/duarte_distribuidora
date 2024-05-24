@@ -127,7 +127,7 @@
 		<div class=" mt-4 rounded-lg border bg-gray-100 p-6 shadow-sm">
 			<div class="mb-4 flex gap-2 text-center text-lg">
 				<h3>Pedido <strong>#{ped.id}</strong> -</h3>
-				<p>Total: <strong>{ped.total_in_cents}</strong> -</p>
+				<p>Total: <strong>R${ped.total_in_cents}</strong> -</p>
 				<p>Tipo do pedido: <strong>{ped.tipo}</strong></p>
 			</div>
 			<div>
@@ -140,9 +140,9 @@
 							<p class="text-gray-800">
 								{produto.quantidade}x -
 								{produto.var_produto?.produto?.nome}
-								{produto.var_produto?.categoria?.nome}
+								{produto.var_produto?.categoria?.nome} -
 								<span class="font-bold text-green-500">
-									- R${produto.unidade_in_cents}
+									R${produto.total_in_cents}
 								</span>
 							</p>
 						</div>
