@@ -42,7 +42,6 @@
 		pedidoStore.removeUmItemPedido(produto.id);
 	}
 
-
 	let selectedPrice: number;
 </script>
 
@@ -51,7 +50,7 @@
 	<div class="w-full flex-none md:w-auto">
 		<img
 			alt="imagem"
-			src={'favicon.png'}
+			src={'/202403131209_krxb_i.jpg'}
 			class="h-16 w-16 rounded-lg object-cover md:h-20 md:w-20"
 		/>
 	</div>
@@ -66,7 +65,6 @@
 				id="precos"
 				class="mt-2 bg-transparent"
 			>
-				<option value="">Selecione...</option>
 				{#each produto.preco as preco}
 					<option value={preco.preco_in_cents}>{preco.tipo}</option>
 				{/each}
@@ -83,8 +81,7 @@
 			{/if}
 			<input
 				min="1"
-				style="width: {String($quantidade).length * 0.75}rem;"
-				class="text-xl font-bold"
+				class="min-w-10 max-w-28 bg-white text-right text-xl font-bold focus:border-yellow-500"
 				value={$quantidade}
 			/>
 			<Button on:click={increase}><Plus /></Button>
