@@ -182,7 +182,7 @@
 						<div class="h-40 w-full">
 							<img
 								src={variacao.img_url ?? "/favicon.png"}
-								class="mb-2 h-full w-full object-cover"
+								class="mb-2 h-full w-full object-cover rounded-t-lg"
 								alt=""
 							/>
 						</div>
@@ -209,7 +209,7 @@
 					<div class="mt-3 flex flex-col bg-gray-100 p-2">
 						<Label class="mb-1">Tipo Preco</Label>
 						<select
-							class="mb-2 rounded border border-gray-300 px-4 py-2 focus:outline-none"
+							class="mb-2 rounded border border-gray-300 px-4 py-2 focus:outline-none bg-white"
 							bind:value={novo_preco.tipo}
 						>
 							<option value="Atacado 10un">Atacado 10un</option>
