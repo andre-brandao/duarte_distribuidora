@@ -31,7 +31,7 @@
 				type: 'bar',
 				label: 'Entrada',
 				data: transacao_estoque.map((transacao) => {
-					if (transacao.tipo === 'Entrada') {
+					if (transacao.tipo === 'ENTRADA') {
 						return transacao.quantidade;
 					}
 					return 0;
@@ -96,7 +96,7 @@
 					{#each estoque.transacao_estoque as transacao}
 						<tr>
 							<td class="px-6 py-4 text-sm text-gray-900"
-								>Nº do pedido: {transacao.meta_data['pedido_id']}</td
+								>Nº do pedido: {transacao.meta_data?.['pedido_id']}</td
 							>
 							<td class="px-6 py-4 text-sm text-gray-900"
 								>{new Date(transacao.created_at)}</td
@@ -115,7 +115,7 @@
 						>
 							<div class="flex justify-between">
 								<p>Total:</p>
-								<p>XX unidades</p>
+								<p>{produto.quantidade} unidades</p>
 							</div>
 						</td>
 					</tr>
