@@ -2,12 +2,58 @@
 	import ModalEntradaEstoque from '$lib/components/modal/ModalEntradaEstoque.svelte';
 	import type { PageData } from './$types';
 
+	import SVChart from '$lib/SVChart.svelte';
+
 	export let data: PageData;
 
 	const estoque = data.estoque;
 	const produto = {
 		nome: estoque.var_produto?.produto?.nome,
 		quantidade: estoque.quantidade,
+	};
+
+	const transacao_estoque = estoque.transacao_estoque;
+	let chart_data = {
+		labels: transacao_estoque.map((transacao) => {
+			return new Date(transacao.created_at).toLocaleDateString('pt-BR');
+		}),
+
+		datasets: [
+			{
+				type: 'line',
+				label: 'Quantidade em Estoque',
+				data: transacao_estoque.map((transacao) => transacao.total_log),
+				// light blue
+				backgroundColor: 'rgba(0, 0, 255, 0.5)',
+				borderColor: 'rgba(0, 0, 255, 1)',
+			},
+			{
+				type: 'bar',
+				label: 'Entrada',
+				data: transacao_estoque.map((transacao) => {
+					if (transacao.tipo === 'Entrada') {
+						return transacao.quantidade;
+					}
+					return 0;
+				}),
+				// light green
+				backgroundColor: 'rgba(0, 255, 0, 0.5)',
+				borderColor: 'rgba(0, 255, 0, 1)',
+			},
+			{
+				type: 'bar',
+				label: 'Saida',
+				data: transacao_estoque.map((transacao) => {
+					if (transacao.tipo === 'SAIDA') {
+						return transacao.quantidade;
+					}
+					return 0;
+				}),
+				// light red
+				backgroundColor: 'rgba(255, 0, 0, 0.5)',
+				borderColor: 'rgba(255, 0, 0, 1)',
+			},
+		],
 	};
 </script>
 
@@ -50,7 +96,7 @@
 					{#each estoque.transacao_estoque as transacao}
 						<tr>
 							<td class="px-6 py-4 text-sm text-gray-900"
-								>Nº do pedido: {transacao.meta_data["pedido_id"]}</td
+								>Nº do pedido: {transacao.meta_data['pedido_id']}</td
 							>
 							<td class="px-6 py-4 text-sm text-gray-900"
 								>{new Date(transacao.created_at)}</td
@@ -76,7 +122,37 @@
 				</tfoot>
 			</table>
 		</div>
-		<div>GRAFICO</div>
+		<div>
+			<SVChart
+			height={200}
+			width={200}
+				config={{
+					type: 'line',
+					data: chart_data,
+					options: {
+						plugins: {
+							title: {
+								text: 'Chart.js Combo Time Scale',
+								display: true,
+							},
+						},
+						// scales: {
+						// 	// x: {
+						// 	// 	type: 'time',
+						// 	// 	display: true,
+						// 	// 	offset: true,
+						// 	// 	// ticks: {
+						// 	// 	// 	source: 'data',
+						// 	// 	// },
+						// 	// 	// time: {
+						// 	// 	// 	unit: 'day',
+						// 	// 	// },
+						// 	// },
+						// },
+					},
+				}}
+			/>
+		</div>
 	</div>
 </main>
 

@@ -311,6 +311,8 @@ export type Database = {
           id: number
           meta_data: Json | null
           quantidade: number
+          tipo: string
+          total_log: number
         }
         Insert: {
           created_at?: string
@@ -318,6 +320,8 @@ export type Database = {
           id?: number
           meta_data?: Json | null
           quantidade: number
+          tipo?: string
+          total_log?: number
         }
         Update: {
           created_at?: string
@@ -325,6 +329,8 @@ export type Database = {
           id?: number
           meta_data?: Json | null
           quantidade?: number
+          tipo?: string
+          total_log?: number
         }
         Relationships: [
           {

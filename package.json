@@ -46,6 +46,7 @@
 		"@supabase/ssr": "^0.3.0",
 		"@supabase/supabase-js": "^2.42.5",
 		"bits-ui": "^0.19.7",
+		"chart.js": "^4.4.3",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.15",
 		"formsnap": "^0.5.1",
