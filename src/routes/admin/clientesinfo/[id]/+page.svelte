@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import { formatDate } from '$lib/utils';
+	import { formatDate, mask, formatM } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { PageData } from './$types';
 
@@ -22,7 +22,7 @@
 	async function updateCliente() {
 		if (novo_cliente.nome.length < 3) {
 			toast.error('Nome precisa de 3 ou mais caracteres.');
-			return
+			return;
 		}
 
 		const { error: err } = await supabase
@@ -129,13 +129,16 @@
 						class="block w-fit rounded-lg bg-primary p-2 text-lg font-semibold text-black"
 						on:input={checkChanges}
 					>
-						Crédito: {novo_cliente.credito_usado} /
+						Crédito: {formatM(novo_cliente.credito_usado)} /
 						<input
-							type="text"
+							type="number"
 							class="editable-input-2 ml-1"
 							bind:value={novo_cliente.credito_maximo}
 							on:input={checkChanges}
 							placeholder="Máximo"
+							use:mask={{
+								mask: 'money',
+							}}
 						/>
 					</div>
 					{#if isChanged}

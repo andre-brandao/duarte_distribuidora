@@ -6,6 +6,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import PrecoInput from './PrecoInput.svelte';
 	import { toast } from 'svelte-sonner';
+	import { mask } from '$lib/utils';
 
 	import type { PageData } from './$types.js';
 	import { type FormInputEvent } from '$lib/components/ui/input';
@@ -181,8 +182,8 @@
 					<div class="flex flex-col items-center justify-center">
 						<div class="h-40 w-full">
 							<img
-								src={variacao.img_url ?? "/favicon.png"}
-								class="mb-2 h-full w-full object-cover rounded-t-lg"
+								src={variacao.img_url ?? '/favicon.png'}
+								class="mb-2 h-full w-full rounded-t-lg object-cover"
 								alt=""
 							/>
 						</div>
@@ -209,7 +210,7 @@
 					<div class="mt-3 flex flex-col bg-gray-100 p-2">
 						<Label class="mb-1">Tipo Preco</Label>
 						<select
-							class="mb-2 rounded border border-gray-300 px-4 py-2 focus:outline-none bg-white"
+							class="mb-2 rounded border border-gray-300 bg-white px-4 py-2 focus:outline-none"
 							bind:value={novo_preco.tipo}
 						>
 							<option value="Atacado 10un">Atacado 10un</option>
@@ -218,8 +219,12 @@
 							<option value="Varejo">Varejo</option>
 						</select>
 						<Label class="mb-1 mr-2">Preco</Label>
-						<NumberInput
-							class="mb-2 border-gray-300 bg-white"
+						<input
+							class=" mb-2 flex h-9 w-full rounded-md border border-gray-300 bg-transparent bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+							type="number"
+							use:mask={{
+								mask: 'money',
+							}}
 							bind:value={novo_preco.preco_in_cents}
 						/>
 						<Button

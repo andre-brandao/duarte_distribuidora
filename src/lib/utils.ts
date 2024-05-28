@@ -268,17 +268,21 @@ export function getEnderecoFromCEP(cep: string) {
 }
 
 export function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric', 
-        month: '2-digit', 
-        day: '2-digit',
-        hour: '2-digit', 
-        minute: '2-digit', 
-        hour12: false,
-        timeZone: 'UTC',
-    };
+	const date = new Date(dateString);
+	const options: Intl.DateTimeFormatOptions = {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		hour12: false,
+		timeZone: 'UTC',
+	};
 
-    const formattedDate = date.toLocaleString('pt-BR', options);
-    return formattedDate.replace(',', ' às');
+	const formattedDate = date.toLocaleString('pt-BR', options);
+	return formattedDate.replace(',', ' às');
+}
+
+export function formatM(dinheiro: number) {
+	return (dinheiro / 100).toFixed(2);
 }

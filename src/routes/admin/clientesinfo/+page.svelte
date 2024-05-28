@@ -1,6 +1,7 @@
 <script lang="ts">
-	import Button from './../../../lib/components/ui/button/button.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import type { PageData } from '../clientesinfo/$types';
+	import { formatM } from '$lib/utils';
 
 	export let data: PageData;
 
@@ -47,11 +48,19 @@
 				{#each clientes as cliente}
 					<tr>
 						<td class="px-6 py-4 text-sm text-gray-900">{cliente.id}</td>
-						<td class="px-6 py-4 text-sm text-gray-900">{cliente.nome}</td>
-						<td class="px-6 py-4 text-sm text-gray-900">{cliente.celular}</td>
-						<td class="px-6 py-4 text-sm text-gray-900">{cliente.cpf_cnpj}</td>
 						<td class="px-6 py-4 text-sm text-gray-900"
-							>{cliente.credito_usado} - {cliente.credito_maximo}</td
+							>{cliente.nome ?? 'Não cadastrado'}</td
+						>
+						<td class="px-6 py-4 text-sm text-gray-900"
+							>{cliente.celular ?? 'Não cadastrado'}</td
+						>
+						<td class="px-6 py-4 text-sm text-gray-900"
+							>{cliente.cpf_cnpj ?? 'Não cadastrado'}</td
+						>
+						<td class="px-6 py-4 text-sm text-gray-900"
+							>R${formatM(cliente.credito_usado)} - R${formatM(
+								cliente.credito_maximo,
+							)}</td
 						>
 						<td class="px-6 py-4 text-sm text-gray-900"
 							><a

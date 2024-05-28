@@ -4,6 +4,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import type { Database } from '$lib/supabase-types';
 	import type { SupabaseClient } from '@supabase/supabase-js';
+	import { mask } from '$lib/utils';
 
 	export let supabase: SupabaseClient<Database>;
 
@@ -37,7 +38,12 @@
 <div>
 	<Label>{preco.tipo}</Label>
 	<div class="flex">
-		<NumberInput
+		<input
+			class=" mb-2 flex h-9 w-full rounded-md border border-gray-300 bg-transparent bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+			type="number"
+			use:mask={{
+				mask: 'money',
+			}}
 			bind:value={preco.preco_in_cents}
 			on:change={(e) => (isChanged = true)}
 		/>
