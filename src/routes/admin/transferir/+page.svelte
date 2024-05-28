@@ -322,6 +322,6 @@
 	</div>
 </div>
 
-<pre>
+<!-- <pre>
 		{JSON.stringify($pedidoStore, null, 2)}
-	</pre>
+	</pre> -->
