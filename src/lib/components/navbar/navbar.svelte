@@ -8,6 +8,8 @@
 		SquareMenu,
 		User,
 		Truck,
+		ArchiveRestore,
+		PackageOpen,
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
@@ -24,9 +26,18 @@
 		{ label: 'Produtos', href: '/admin/produto', icon: Beer },
 		{ label: 'Clientes', href: '/admin/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/admin/estoque', icon: Package },
+		{
+			label: 'Lancar estoque',
+			href: '/admin/lacarestoque',
+			icon: ArchiveRestore,
+		},
+		{
+			label: 'Transferir estoque',
+			href: '/admin/transferir',
+			icon: PackageOpen,
+		},
 		{ label: 'Caixa', href: '/admin/caixa', icon: ShoppingCart },
 		{ label: 'Pedidos delivery', href: '/admin/pedidos', icon: Truck },
-		{ label: 'Transferir estoque', href: '/admin/transferir', icon: Truck },
 	];
 	let navseila: HTMLElement;
 

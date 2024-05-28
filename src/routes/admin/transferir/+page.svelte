@@ -7,7 +7,7 @@
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
+	import { Ban, Printer, PackageOpen, CircleX, X } from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
@@ -15,7 +15,7 @@
 	import ModalTransferir from '$lib/components/modal/ModalTransferir.svelte';
 	export let data: PageData;
 
-	const { clientes, produtos: prod_temp } = data;
+	const { distribuidoras, produtos: prod_temp } = data;
 
 	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
 
@@ -122,6 +122,24 @@
 		$pedidoStore = [];
 		cliente_selecionado = null;
 	}
+
+	async function getEstoque(id_distribuidora: number) {
+		if (id_distribuidora === 0) {
+			return;
+		}
+		const resp = await supabase
+			.from('estoque')
+			.select(
+				'*, var_produto(id, produto(*), preco(preco_in_cents,tipo), categoria(nome))',
+			)
+			.eq('distribuidora_id', id_distribuidora);
+		//.gt('quantidade', 0);
+
+		console.log(resp.data);
+	}
+
+	let distribuidoraSelecionada = 0;
+	$: getEstoque(distribuidoraSelecionada);
 </script>
 
 <div class="">
@@ -164,11 +182,14 @@
 					<div class="w-1/2">
 						<Label class="mt-3 text-left">Saindo de qual unidade?</Label>
 						<select
+							bind:value={distribuidoraSelecionada}
 							id="unidades"
 							class="flex h-9 w-full rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 						>
-							<option value="">Selecione...</option>
-							<option value="unidade1">Unidade 1</option>
+							<option value="">Selecione</option>
+							{#each distribuidoras as item}
+								<option value={item.id}>{item.nome}</option>
+							{/each}
 						</select>
 					</div>
 					<div class="w-1/2">
@@ -178,7 +199,9 @@
 							class="flex h-9 w-full rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 						>
 							<option value="">Selecione...</option>
-							<option value="unidade1">Unidade 1</option>
+							{#each distribuidoras as item}
+								<option value={item.id}>{item.nome}</option>
+							{/each}
 						</select>
 					</div>
 				</div>
@@ -203,15 +226,15 @@
 						</Dialog.Header>
 						<p class="text-center">
 							Transferencia entre <span class="font-bold text-primary"
-								>Unidade 1</span
+								>Unidade {distribuidoraSelecionada}</span
 							>
 							para <span class="font-bold text-primary">Unidade 2</span>
 						</p>
-						<div class=" my-3 flex flex-col items-center justify-center gap-3">
-							<button>
+						<div class=" flex flex-col items-center justify-center gap-3">
+							<button class="w-full">
 								<ButtonCardapio
 									label={'TRANSFERIR ESTOQUE'}
-									Icon={DollarSign}
+									Icon={PackageOpen}
 								/>
 							</button>
 						</div>

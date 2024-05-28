@@ -5,10 +5,10 @@ export const load = (async ({ locals }) => {
 	const supabase = locals.supabase;
 
 	const [
-		{ data: clientes, error: err_cliente },
+		{ data: distribuidoras, error: err_cliente },
 		{ data: produtos, error: err_produtos },
 	] = await Promise.all([
-		supabase.from('cliente').select('*'),
+		supabase.from('distribuidora').select('*'),
 		supabase
 			.from('var_produto')
 			.select('id, produto(*), preco(preco_in_cents,tipo), categoria(nome)')
@@ -29,5 +29,5 @@ export const load = (async ({ locals }) => {
 		error(404, err_produtos.message);
 	}
 
-	return { clientes, produtos };
+	return { distribuidoras, produtos };
 }) satisfies PageServerLoad;
