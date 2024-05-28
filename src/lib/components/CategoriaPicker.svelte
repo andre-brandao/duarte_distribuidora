@@ -7,6 +7,7 @@
 	import { CirclePlus } from 'lucide-svelte';
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import type { Database } from '$lib/supabase-types';
+	import { toast } from 'svelte-sonner';
 
 	type Status = {
 		value: string;
@@ -33,21 +34,35 @@
 	}
 
 	let nomeNovaCategoria = '';
-	function createNewCategoria() {
+	async function createNewCategoria() {
+		const { data, error } = await supabase
+			.from('categoria')
+			.insert({
+				nome: nomeNovaCategoria,
+			})
+			.select('*').single();
 		console.log('nova categoria');
+
+		if (error ){
+			toast.error(error.message)
+			return
+		}
+		toast.success('Categoria adicionada com sucesso!')
+
+		categorias.push({
+			label: data.nome,
+			value: data.id.toString()
+		})
+		categorias = categorias
 	}
 </script>
 
-<div class="flex w-full">
+<div class="flex">
 	<!-- <p class="text-sm text-muted-foreground">Status</p> -->
 	<Popover.Root bind:open let:ids>
 		<Popover.Trigger asChild let:builder class="w-full">
-			<Button
-				builders={[builder]}
-				variant="outline"
-				class="w-full text-center"
-			>
-				{selectedStatus ? selectedStatus.label : '+ Selecionar Categoria'}
+			<Button builders={[builder]} variant="outline" class="w-full text-center">
+				{'+ Adicionar nova categoria'}
 			</Button>
 		</Popover.Trigger>
 		<Popover.Content class="p-0" align="start" side="right">
@@ -69,7 +84,10 @@
 						{/each}
 					</Command.Group>
 				</Command.List>
-				<form action="nova_categoria" class="flex gap-1 p-1 justify-center items-center">
+				<div
+					
+					class="flex items-center justify-center gap-1 p-1"
+				>
 					<Input placeholder="Nova Categoria" bind:value={nomeNovaCategoria} />
 					<button
 						class="rounded-full bg-transparent p-2"
@@ -77,7 +95,7 @@
 					>
 						<CirclePlus />
 					</button>
-				</form>
+				</div>
 			</Command.Root>
 		</Popover.Content>
 	</Popover.Root>
