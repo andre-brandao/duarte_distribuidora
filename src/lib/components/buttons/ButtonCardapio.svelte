@@ -9,7 +9,7 @@
 <li class="list-none">
 	<a
 		{href}
-		class="group flex content-center items-center justify-center rounded-lg bg-primary w-auto px xl:w-96 py-3 text-center font-semibold text-secondary-foreground shadow-sm transition ease-in-out hover:bg-yellow-300"
+		class="group flex content-center items-center justify-center rounded-lg bg-primary px w-full py-3 text-center font-semibold text-secondary-foreground shadow-sm transition ease-in-out hover:bg-yellow-300"
 	>
 		<span class="mr-1">{label}</span>
 		{#if Icon}

@@ -1,0 +1,227 @@
+<script lang="ts">
+	import { Label } from '$lib/components/ui/label';
+	import ModalCliente from '$lib/components/modal/ModalCliente.svelte';
+	import ButtonCliente from '$lib/components/buttons/ButtonCliente.svelte';
+	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { onMount } from 'svelte';
+	import { Textarea } from '$lib/components/ui/textarea';
+	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
+	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
+	import { pedidoStore } from '$lib/stores/pedidoStore.js';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import type { PageData } from './$types.js';
+	import { toast } from 'svelte-sonner';
+	import ModalTransferir from '$lib/components/modal/ModalTransferir.svelte';
+	export let data: PageData;
+
+	const { clientes, produtos: prod_temp } = data;
+
+	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
+
+	let { supabase } = data;
+	$: ({ supabase } = data);
+
+	let { session } = data;
+
+	const pedidos_caixa = {
+		num_pedido: 0,
+		datahora_pedido: '',
+		isOpen: true,
+		criado_por: session?.user.email ?? 'Desconhecido',
+		valor_total: 0,
+	};
+
+	let cliente_selecionado: any = null;
+
+	$: console.log(cliente_selecionado);
+
+	async function transferirEstoque(tipo_pagamento: string) {
+		if (tipo_pagamento === 'fiado' && !cliente_selecionado) {
+			toast.error('Selecione um cliente para realizar um pedido fiado');
+			return;
+		}
+
+		if ($pedidoStore.length === 0) {
+			toast.error('Adicione produtos ao pedido');
+			return;
+		}
+
+		console.log(cliente_selecionado);
+
+		const total_in_cents = $pedidoStore.reduce(
+			(acc, p) => acc + p.unidade_em_cents * p.quantidade,
+			0,
+		);
+
+		if (tipo_pagamento === 'fiado') {
+			if (
+				cliente_selecionado.credito_usado + total_in_cents >
+				cliente_selecionado.credito_maximo
+			) {
+				toast.error('Cliente não possui crédito suficiente');
+				return;
+			} else {
+				const { data: result_cliente, error: err_cliente } = await supabase
+					.from('cliente')
+					.update({
+						credito_usado: cliente_selecionado.credito_usado + total_in_cents,
+					})
+					.eq('id', cliente_selecionado.id)
+					.single();
+
+				if (err_cliente) {
+					toast.error(err_cliente.message);
+					console.error(err_cliente);
+					return;
+				}
+			}
+		}
+		// inserir na tabela pedido
+		const pedidoToInsert = {
+			cliente_id: cliente_selecionado?.id ?? null,
+			total_in_cents,
+			tipo: tipo_pagamento,
+			meta_data: null,
+			status: 'aberto',
+		};
+
+		const { data: result_pedido, error: err_pedido } = await supabase
+			.from('pedido')
+			.insert(pedidoToInsert)
+			.select('*')
+			.single();
+
+		if (err_pedido) {
+			toast.error(err_pedido.message);
+			console.error(err_pedido);
+			return;
+		}
+
+		// inserir na tabela produto_pedido
+		const produtosToInsert = $pedidoStore.map((p) => {
+			return {
+				pedido_id: result_pedido?.id, // mudar isso
+				var_produto_id: p.var_produto_id,
+				quantidade: p.quantidade, // e isso
+				unidade_in_cents: p.unidade_em_cents,
+				total_in_cents: p.quantidade * p.unidade_em_cents,
+			};
+		});
+
+		const { error: err_pp } = await supabase
+			.from('produto_pedido')
+			.insert(produtosToInsert);
+		if (err_pp) {
+			toast.error(err_pp.message);
+			console.error(err_pp);
+			return;
+		}
+
+		toast.success('Pedido realizado com sucesso');
+		$pedidoStore = [];
+		cliente_selecionado = null;
+	}
+</script>
+
+<div class="">
+	<div class="gap-0 py-1">
+		<div class="items-center gap-0 pb-7">
+			<h1 class="text-center text-4xl font-bold">
+				Transferir estoque entre unidades
+			</h1>
+		</div>
+	</div>
+	<div class="grid grid-cols-1 justify-center xl:grid-cols-2 xl:flex-row">
+		<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
+			<ul class="mb-4 text-center text-lg">
+				{#if $pedidoStore.length != 0}
+					{#each $pedidoStore as item}
+						<div class="flex justify-center">
+							<li class="py-2 font-bold">
+								<!--Colocar quantidade-->
+								({item.quantidade}x)
+								{item.nome}
+							</li>
+							<button
+								class="px-2"
+								on:click={(e) =>
+									pedidoStore.removeTodosItemPedido(item.var_produto_id)}
+								><X /></button
+							>
+						</div>
+						<hr />
+					{/each}
+				{:else}
+					<p>Nenhum item adicionado para transferencia!</p>
+				{/if}
+			</ul>
+		</div>
+
+		<div class="col-auto flex h-auto flex-col justify-between gap-3 xl:ml-6">
+			<div class="w-full">
+				<div class="flex w-full gap-4">
+					<div class="w-1/2">
+						<Label class="mt-3 text-left">Saindo de qual unidade?</Label>
+						<select
+							id="unidades"
+							class="flex h-9 w-full rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							<option value="">Selecione...</option>
+							<option value="unidade1">Unidade 1</option>
+						</select>
+					</div>
+					<div class="w-1/2">
+						<Label class="mt-3 text-left">Entrada em qual unidade?</Label>
+						<select
+							id="unidades"
+							class="flex h-9 w-full rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+						>
+							<option value="">Selecione...</option>
+							<option value="unidade1">Unidade 1</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<hr />
+
+			<div>
+				<ModalProduto {produtos} />
+			</div>
+			<div>
+				<Dialog.Root>
+					<Dialog.Trigger class="w-full">
+						<ButtonCardapio label={'TRANSFERIR'} />
+					</Dialog.Trigger>
+					<Dialog.Content>
+						<Dialog.Header>
+							<Dialog.Title>Confirmar transferencia</Dialog.Title>
+							<Dialog.Description>
+								Confirme a transferencia de estoque
+							</Dialog.Description>
+						</Dialog.Header>
+						<p class="text-center">
+							Transferencia entre <span class="font-bold text-primary"
+								>Unidade 1</span
+							>
+							para <span class="font-bold text-primary">Unidade 2</span>
+						</p>
+						<div class=" my-3 flex flex-col items-center justify-center gap-3">
+							<button>
+								<ButtonCardapio
+									label={'TRANSFERIR ESTOQUE'}
+									Icon={DollarSign}
+								/>
+							</button>
+						</div>
+					</Dialog.Content>
+				</Dialog.Root>
+			</div>
+		</div>
+	</div>
+</div>
+
+<pre>
+		{JSON.stringify($pedidoStore, null, 2)}
+	</pre>
