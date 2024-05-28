@@ -83,6 +83,7 @@
 			tipo: tipo_pagamento,
 			meta_data: null,
 			status: 'aberto',
+			distribuidora_id: 1
 		};
 
 		const { data: result_pedido, error: err_pedido } = await supabase

@@ -1,14 +1,12 @@
-import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-export const load = (async ({ locals: { supabase } }) => {
-	const { data: estoque, error: err } = await supabase
-		.from('estoque')
-		.select('*, var_produto(*, produto(*), categoria(*))');
+import type { PageServerLoad } from './$types';
+
+export const load = (async ({ locals }) => {
+	const supabase = locals.supabase;
+
+	const { data, error: err } = await supabase.from(`distribuidora`).select(`*`);
 	if (err) {
-		console.error(err);
 		error(404, err.message);
 	}
-	console.log(estoque);
-
-	return { estoque };
+	return { distribuidoras: data };
 }) satisfies PageServerLoad;

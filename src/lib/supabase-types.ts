@@ -165,6 +165,7 @@ export type Database = {
         Row: {
           cliente_id: number | null
           created_at: string
+          distribuidora_id: number | null
           id: number
           meta_data: Json | null
           observacao: string | null
@@ -175,6 +176,7 @@ export type Database = {
         Insert: {
           cliente_id?: number | null
           created_at?: string
+          distribuidora_id?: number | null
           id?: number
           meta_data?: Json | null
           observacao?: string | null
@@ -185,6 +187,7 @@ export type Database = {
         Update: {
           cliente_id?: number | null
           created_at?: string
+          distribuidora_id?: number | null
           id?: number
           meta_data?: Json | null
           observacao?: string | null
@@ -193,6 +196,13 @@ export type Database = {
           total_in_cents?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "pedido_distribuidora_id_fkey"
+            columns: ["distribuidora_id"]
+            isOneToOne: false
+            referencedRelation: "distribuidora"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "public_pedido_cliente_id_fkey"
             columns: ["cliente_id"]
@@ -301,7 +311,6 @@ export type Database = {
           id: number
           meta_data: Json | null
           quantidade: number
-          transacao_estoque: number
         }
         Insert: {
           created_at?: string
@@ -309,7 +318,6 @@ export type Database = {
           id?: number
           meta_data?: Json | null
           quantidade: number
-          transacao_estoque: number
         }
         Update: {
           created_at?: string
@@ -317,7 +325,6 @@ export type Database = {
           id?: number
           meta_data?: Json | null
           quantidade?: number
-          transacao_estoque?: number
         }
         Relationships: [
           {
@@ -378,6 +385,21 @@ export type Database = {
     Functions: {
       create_estoque_for_distribuidora: {
         Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      process_pedido: {
+        Args: {
+          p_pedido_id: number
+        }
+        Returns: undefined
+      }
+      remove_from_estoque: {
+        Args: {
+          p_var_produto_id: number
+          p_quantity: number
+          p_distribuidora_id: number
+          p_pedido_id: number
+        }
         Returns: undefined
       }
     }

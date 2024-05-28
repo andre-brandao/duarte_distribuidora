@@ -4,7 +4,16 @@
 
 	export let data: PageData;
 
+	let { supabase } = data;
+	$: ({ supabase } = data);
+
 	const pedidos = data.pedidos;
+
+	async function removeEstoque(id_pedido: number) {
+		const r = await supabase.rpc('process_pedido', { p_pedido_id: id_pedido });
+
+		console.log(r);
+	}
 </script>
 
 <!-- <pre>
@@ -16,10 +25,19 @@
 		<div class=" mt-4 rounded-lg border bg-gray-100 p-6 shadow-sm">
 			<div class="mb-4 flex gap-2 text-center text-lg">
 				<h3>Pedido <strong>#{ped.id}</strong> -</h3>
-				<p>Total: <strong class="text-green-500">R${ped.total_in_cents}</strong> -</p>
+				<p>
+					Total: <strong class="text-green-500">R${ped.total_in_cents}</strong> -
+				</p>
 				<p>Tipo do pedido: <strong>{ped.tipo}</strong> -</p>
 				<p>Data: {formatDate(ped.created_at)} -</p>
 				<p>Observacoes: {ped.observacao}</p>
+
+				<button
+					on:click={() => removeEstoque(ped.id)}
+					class="rounded-md bg-red-500 px-4 py-2 text-white"
+				>
+					Processar pedido
+				</button>
 			</div>
 			<div>
 				<h4 class="mb-2 text-lg font-semibold">Produtos pedidos:</h4>

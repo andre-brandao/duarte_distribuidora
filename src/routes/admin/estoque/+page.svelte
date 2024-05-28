@@ -1,22 +1,16 @@
 <script lang="ts">
-	import type { PageData } from '../../estoque/$types';
-	import DataTable from './data-table.svelte';
+	import type { PageData } from './$types';
+
 	export let data: PageData;
 
-	const estoque = data.estoque.map((item) => {
-		return {
-			id: item.id,
-			nome: item.var_produto?.produto?.nome + ' ' + item.var_produto?.categoria?.nome,
-			quantidade: item.quantidade,
-			tipo: item.var_produto?.categoria?.nome ?? 'Sem categoria'
-		};
-	});
+	const distribuidoras = data.distribuidoras;
 </script>
 
-<div class="mx-auto">
-	<div class="">
-		<div class="">
-			<DataTable data={estoque} />
-		</div>
-	</div>
-</div>
+<main class="flex justify-center items-center gap-3">
+	{#each distribuidoras as item}
+		<!-- content here -->
+		<a href="/admin/estoque/{item.id}" class="rounded bg-primary hover:bg-secondary p-3">
+			{item.nome}
+		</a>
+	{/each}
+</main>

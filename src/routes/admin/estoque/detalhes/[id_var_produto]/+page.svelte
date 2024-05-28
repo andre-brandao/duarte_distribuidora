@@ -47,13 +47,19 @@
 				<tbody
 					class="block max-h-[45vh] divide-y divide-gray-200 overflow-y-auto bg-white"
 				>
-					<tr>
-						<td class="px-6 py-4 text-sm text-gray-900">Nº do pedido: 000</td>
-						<td class="px-6 py-4 text-sm text-gray-900"
-							>13:09:37 - 20/04/2024</td
-						>
-						<td class="px-6 py-4 text-sm text-gray-900">X unidade</td>
-					</tr>
+					{#each estoque.transacao_estoque as transacao}
+						<tr>
+							<td class="px-6 py-4 text-sm text-gray-900"
+								>Nº do pedido: {transacao.meta_data["pedido_id"]}</td
+							>
+							<td class="px-6 py-4 text-sm text-gray-900"
+								>{new Date(transacao.created_at)}</td
+							>
+							<td class="px-6 py-4 text-sm text-gray-900"
+								>{transacao.quantidade} unidade</td
+							>
+						</tr>
+					{/each}
 				</tbody>
 				<tfoot>
 					<tr class="rounded-lg border-t border-gray-300 bg-gray-100">
