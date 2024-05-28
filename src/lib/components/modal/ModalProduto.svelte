@@ -76,10 +76,9 @@
 				</div>
 			</Dialog.Header>
 			<div class="grid pr-5">
-				{#each produtosFiltrados as prod (prod.id)}
-					{@const varejo =
-						prod.preco.find((p) => (p.tipo = 'Varejo'))?.preco_in_cents ?? 0}
-					<CardProduto produto={prod} />
+				{#each produtosFiltrados as prod , i (prod.id)}
+					
+					<CardProduto produto={prod}/>
 				{/each}
 			</div>
 		</div>

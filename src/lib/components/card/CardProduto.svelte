@@ -4,9 +4,7 @@
 	import { pedidoStore } from '$lib/stores/pedidoStore';
 	import { derived } from 'svelte/store';
 	import { createEventDispatcher } from 'svelte';
-	import {formatM} from '$lib/utils'
-
-	const dispatch = createEventDispatcher();
+	import { formatM } from '$lib/utils';
 
 	export let produto: {
 		id: number;
@@ -24,12 +22,12 @@
 		} | null;
 	};
 
-	let quantidade = derived(
-		pedidoStore,
-		() =>
-			$pedidoStore.find((p) => p.var_produto_id === produto?.id)?.quantidade ??
-			0,
+	$: storeProdutoIndex = $pedidoStore.findIndex(
+		(p) => p.var_produto_id === produto?.id,
 	);
+
+	$: quantidade =
+		$pedidoStore.find((p) => p.var_produto_id === produto?.id)?.quantidade ?? 0;
 
 	function increase() {
 		if (!selectedPrice) {
@@ -64,7 +62,7 @@
 			<h3 class="text-md text-gray-600">{produto.categoria?.nome}</h3>
 			<select
 				bind:value={selectedPrice}
-				disabled={$quantidade > 1}
+				disabled={quantidade > 1}
 				name="preco"
 				id="precos"
 				class="mt-2 bg-transparent"
@@ -76,17 +74,28 @@
 		</div>
 	</div>
 	<div class="w-full text-right">
-		<span class="block pb-3 text-xl font-bold"
-			>R${formatM(selectedPrice)}</span
-		>
+		<span class="block pb-3 text-xl font-bold">R${formatM(selectedPrice)}</span>
 		<div class="flex items-center justify-end gap-3 text-center">
-			{#if $quantidade > 0}
+			{#if quantidade && quantidade > 0}
 				<Button on:click={decrease}><Minus /></Button>
 			{/if}
 			<input
 				min="1"
 				class="min-w-10 max-w-28 bg-white text-right text-xl font-bold focus:border-yellow-500"
-				bind:value={$quantidade}
+				value={quantidade}
+				on:change={(e) => {
+
+					console.log(e);
+
+					const quant_temp = e.target?.value
+
+					pedidoStore.setQuantidadePedido({
+						var_produto_id: produto.id,
+						unidade_em_cents: selectedPrice,
+						nome: `${produto.produto?.nome}  ${produto.categoria?.nome}`,
+						quantidade: quant_temp,
+					});
+				}}
 			/>
 			<Button on:click={increase}><Plus /></Button>
 		</div>

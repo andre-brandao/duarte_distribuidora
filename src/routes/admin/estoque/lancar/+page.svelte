@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Label } from '$lib/components/ui/label';
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
 	import { Ban, Printer, PackageOpen, CircleX, X } from 'lucide-svelte';
@@ -6,14 +7,14 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
-	import NumberInput from '$lib/components/ui/input/number_input.svelte';
-	import ModalLancar from './ModalLancar.svelte';
 	import { mask } from '$lib/utils';
 	export let data: PageData;
 
 	const { distribuidoras, produtos: prod_temp } = data;
 
 	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
+
+	$pedidoStore = [];
 
 	let { supabase } = data;
 	$: ({ supabase } = data);
@@ -212,7 +213,7 @@
 			</div> -->
 
 			<div>
-				<ModalLancar {produtos} />
+				<ModalProduto {produtos} />
 			</div>
 			<div>
 				<Dialog.Root>

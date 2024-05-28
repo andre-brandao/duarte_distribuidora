@@ -85,11 +85,43 @@ function createPedidoStore() {
 		});
 	}
 
+
+	function setQuantidadePedido(produto: {
+		var_produto_id: number;
+		unidade_em_cents: number;
+		nome: string;
+		quantidade: number
+	}){
+
+		if(produto.quantidade === 0 ){
+			removeTodosItemPedido(produto.var_produto_id)
+			return
+		}
+
+		update(array_pedidos=>{
+
+
+	
+
+
+			const exists = array_pedidos.findIndex(
+				(p) => p.var_produto_id === produto.var_produto_id,
+			);
+			if (exists === -1) { // se nao existe
+				array_pedidos.push(produto)
+				return array_pedidos
+			}
+			array_pedidos[exists].quantidade = produto.quantidade
+			return array_pedidos
+		})
+	}
+
 	return {
 		set,
 		subscribe,
 		update,
 		addItemPedido,
+		setQuantidadePedido,
 		removeTodosItemPedido,
 		removeUmItemPedido,
 	};

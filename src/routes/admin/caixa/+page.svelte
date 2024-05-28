@@ -9,14 +9,16 @@
 	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
-	import { formatM } from '$lib/utils'
+	import { formatM } from '$lib/utils';
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
 	export let data: PageData;
 
+	$pedidoStore = []
 	const { clientes, produtos: prod_temp } = data;
 
 	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
+	
 
 	let { supabase } = data;
 	$: ({ supabase } = data);
@@ -129,8 +131,8 @@
 		<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 	</div>
 </div>
-<div class="flex flex-col justify-center xl:flex-row">
-	<div class="col-auto flex h-auto flex-col justify-between xl:mr-6">
+<div class="flex flex-col justify-center gap-4 xl:flex-row">
+	<div class="col-auto flex h-auto flex-col justify-between">
 		<div class="">
 			<h2 class="text-3xl font-bold">Informações do pedido:</h2>
 			<div
@@ -174,11 +176,13 @@
 					</Button>
 				</div>
 			{/if}
-			<ButtonCardapio label={'CANCELAR'} Icon={Ban} href="/" />
+			<button class="w-full" on:click={() => ($pedidoStore = [])}>
+				<ButtonCardapio label={'CANCELAR'} Icon={Ban} href="#" />
+			</button>
 		</div>
 	</div>
 
-	<div class="col-auto rounded-lg border-4 border-opacity-50 p-4 xl:my-3">
+	<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
 		<ul class="mb-4 text-center text-lg">
 			{#each $pedidoStore as item}
 				<div class="flex justify-center">
@@ -203,15 +207,17 @@
 		</ul>
 		<h2 class="mx-10 flex justify-center text-3xl font-bold">
 			Preco total:&nbsp;<span class="text-green-500"
-				>R${formatM($pedidoStore.reduce(
-					(acc, p) => acc + p.unidade_em_cents * p.quantidade,
-					0,
-				))}</span
+				>R${formatM(
+					$pedidoStore.reduce(
+						(acc, p) => acc + p.unidade_em_cents * p.quantidade,
+						0,
+					),
+				)}</span
 			>
 		</h2>
 	</div>
 
-	<div class="col-auto w-96 flex h-auto flex-col justify-between xl:ml-6">
+	<div class="col-auto flex h-auto w-96 flex-col justify-between">
 		<div>
 			<ModalProduto {produtos} />
 			<p class="mb-2 mt-6">Observações sobre compra:</p>
@@ -259,9 +265,9 @@
 	</div>
 </div>
 
-<pre>
+<!-- <pre>
 		{JSON.stringify($pedidoStore, null, 2)}
-	</pre>
+	</pre> -->
 
 <style>
 	.success-bg {

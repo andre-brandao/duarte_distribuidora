@@ -21,8 +21,9 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
-	import CardTransferir from './CardTransferir.svelte';
 	export let data: PageData;
+
+	$pedidoStore = []
 
 	const { distribuidoras, produtos: prod_temp } = data;
 
@@ -176,7 +177,7 @@
 			</h1>
 		</div>
 	</div>
-	<div class="grid grid-cols-1 justify-center xl:grid-cols-2 xl:flex-row">
+	<div class="grid grid-cols-1 justify-center xl:grid-cols-2 xl:flex-row gap-5">
 		<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
 			<ul class="mb-4 text-center text-lg">
 				{#if $pedidoStore.length != 0}
@@ -202,7 +203,7 @@
 			</ul>
 		</div>
 
-		<div class="col-auto flex h-auto flex-col justify-between gap-3 xl:ml-6">
+		<div class="col-auto flex h-auto flex-col justify-between gap-3">
 			<div class="w-full">
 				<div class="flex w-full gap-4">
 					<div class="w-1/2">
@@ -280,7 +281,7 @@
 									{@const varejo =
 										prod.preco.find((p) => (p.tipo = 'Varejo'))
 											?.preco_in_cents ?? 0}
-									<CardTransferir produto={prod} />
+									<CardProduto produto={prod} />
 								{/each}
 							</div>
 						</div>
