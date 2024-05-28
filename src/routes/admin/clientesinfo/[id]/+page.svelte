@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { toast } from 'svelte-sonner';
 	import { formatDate } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+	let { supabase } = data;
+	$: ({ supabase } = data);
 
 	let novo_cliente = data.clientes;
 	let pedido = data.pedido;
@@ -15,10 +18,29 @@
 	function checkChanges() {
 		isChanged = JSON.stringify(clientes) !== JSON.stringify(novo_cliente);
 	}
+
+	async function updateCliente() {
+		if (novo_cliente.nome.length < 3) {
+			toast.error('Nome precisa de 3 ou mais caracteres.');
+			return
+		}
+
+		const { error: err } = await supabase
+			.from('cliente')
+			.update(novo_cliente)
+			.eq('id', novo_cliente.id);
+
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+		toast.success('cliente atualizado com suesso');
+		isChanged = false;
+	}
 </script>
 
 <main class="min-h-screen bg-white">
-	<div class="mb-6 w-fit rounded-xl border bg-gray-100 p-4 shadow-sm mx-auto">
+	<div class="mx-auto mb-6 w-fit rounded-xl border bg-gray-100 p-4 shadow-sm">
 		<div class="md:flex">
 			<div class="md:flex-shrink-0">
 				<div class="mb-2 text-gray-600">
@@ -102,9 +124,12 @@
 						/>
 					</div>
 				</div>
-				<div class="mt-4 flex w-full justify-between gap-2 items-center">
-					<div class="block w-fit rounded-lg bg-primary p-2 text-lg font-semibold text-black" on:input={checkChanges}>
-						Crédito: {novo_cliente.credito_usado} / 
+				<div class="mt-4 flex w-full items-center justify-between gap-2">
+					<div
+						class="block w-fit rounded-lg bg-primary p-2 text-lg font-semibold text-black"
+						on:input={checkChanges}
+					>
+						Crédito: {novo_cliente.credito_usado} /
 						<input
 							type="text"
 							class="editable-input-2 ml-1"
@@ -114,12 +139,14 @@
 						/>
 					</div>
 					{#if isChanged}
-						<button class="block w-fit rounded-lg bg-primary p-2 text-center font-semibold text-black">
+						<button
+							on:click={updateCliente}
+							class="block w-fit rounded-lg bg-primary p-2 text-center font-semibold text-black"
+						>
 							Salvar informações
 						</button>
 					{/if}
 				</div>
-				
 			</div>
 		</div>
 	</div>
