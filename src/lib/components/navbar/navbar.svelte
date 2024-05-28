@@ -22,11 +22,11 @@
 		icon: ComponentType<Icon>;
 	}[] = [
 		{ label: 'Produtos', href: '/admin/produto', icon: Beer },
-		{ label: 'Novo cliente', href: '/admin/cliente', icon: UserPlus },
 		{ label: 'Clientes', href: '/admin/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/admin/estoque', icon: Package },
 		{ label: 'Caixa', href: '/admin/caixa', icon: ShoppingCart },
 		{ label: 'Pedidos delivery', href: '/admin/pedidos', icon: Truck },
+		{ label: 'Transferir estoque', href: '/admin/transferir', icon: Truck },
 	];
 	let navseila: HTMLElement;
 
@@ -83,8 +83,7 @@
 	>
 		<div>
 			<a href="/" class="mb-5 flex items-center ps-2.5">
-				<span
-					class="self-center whitespace-nowrap text-xl font-semibold "
+				<span class="self-center whitespace-nowrap text-xl font-semibold"
 					>Duarte Distribuidora</span
 				>
 			</a>
@@ -94,9 +93,13 @@
 				{/each}
 			</ul>
 		</div>
-		<hr>
+		<hr />
 		<h1>Cliente:</h1>
-		<ButtonNav label={'Cardapio online'} Icon={SquareMenu} href={'/cliente/cardapio'}/>
+		<ButtonNav
+			label={'Cardapio online'}
+			Icon={SquareMenu}
+			href={'/cliente/cardapio'}
+		/>
 		<button on:click={signOut}>
 			<ButtonNav label={'Deslogar'} Icon={LogOut} />
 		</button>
