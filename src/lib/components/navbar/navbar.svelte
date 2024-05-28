@@ -27,11 +27,6 @@
 		{ label: 'Clientes', href: '/admin/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/admin/estoque', icon: Package },
 		{
-			label: 'Lancar estoque',
-			href: '/admin/lacarestoque',
-			icon: ArchiveRestore,
-		},
-		{
 			label: 'Transferir estoque',
 			href: '/admin/transferir',
 			icon: PackageOpen,

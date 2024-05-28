@@ -1,6 +1,4 @@
 <script lang="ts">
-	import CardProduto from '$lib/components/card/CardProduto.svelte';
-	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label';
 	import ModalCliente from '$lib/components/modal/ModalCliente.svelte';
 	import ButtonCliente from '$lib/components/buttons/ButtonCliente.svelte';
@@ -9,18 +7,12 @@
 	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	import {
-		Ban,
-		Printer,
-		PackageOpen,
-		CircleX,
-		X,
-		ShoppingBasket,
-	} from 'lucide-svelte';
+	import { Ban, Printer, PackageOpen, CircleX, X } from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
+	import NumberInput from '$lib/components/ui/input/number_input.svelte';
 	export let data: PageData;
 
 	const { distribuidoras, produtos: prod_temp } = data;
@@ -148,31 +140,12 @@
 
 	let distribuidoraSelecionada = 0;
 	$: getEstoque(distribuidoraSelecionada);
-
-	let search = '';
-
-	$: produtosFiltrados = produtos.filter((p) => {
-		if (search.length === 0) {
-			return true;
-		}
-		if (
-			p.produto?.nome
-				.toLocaleLowerCase()
-				.includes(search.toLocaleLowerCase()) ||
-			p.categoria?.nome.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-		) {
-			return true;
-		}
-		return false;
-	});
 </script>
 
 <div class="">
 	<div class="gap-0 py-1">
 		<div class="items-center gap-0 pb-7">
-			<h1 class="text-center text-4xl font-bold">
-				Transferir estoque entre unidades
-			</h1>
+			<h1 class="text-center text-4xl font-bold">Lancar estoque</h1>
 		</div>
 	</div>
 	<div class="grid grid-cols-1 justify-center xl:grid-cols-2 xl:flex-row">
@@ -180,29 +153,33 @@
 			<ul class="mb-4 text-center text-lg">
 				{#if $pedidoStore.length != 0}
 					{#each $pedidoStore as item}
-						<div class="flex justify-center">
-							<li class="py-2 font-bold">
+						<div class="flex items-center justify-between gap-3">
+							<li class="py-3 font-bold">
 								<!--Colocar quantidade-->
 								({item.quantidade}x)
 								{item.nome}
 							</li>
-							<button
-								class="px-2"
-								on:click={(e) =>
-									pedidoStore.removeTodosItemPedido(item.var_produto_id)}
-								><X /></button
-							>
+							<div class="flex items-center gap-3">
+								<Label for="custo">Preco de custo:</Label>
+								<NumberInput class="w-24 border-gray-300 bg-white" />
+								<button
+									class="px-2"
+									on:click={(e) =>
+										pedidoStore.removeTodosItemPedido(item.var_produto_id)}
+									><X /></button
+								>
+							</div>
 						</div>
 						<hr />
 					{/each}
 				{:else}
-					<p>Nenhum item adicionado para transferencia!</p>
+					<p>Nenhum item adicionado para lancamento!</p>
 				{/if}
 			</ul>
 		</div>
 
 		<div class="col-auto flex h-auto flex-col justify-between gap-3 xl:ml-6">
-			<div class="w-full">
+			<!-- <div class="w-full">
 				<div class="flex w-full gap-4">
 					<div class="w-1/2">
 						<Label class="mt-3 text-left">Saindo de qual unidade?</Label>
@@ -230,82 +207,23 @@
 						</select>
 					</div>
 				</div>
-			</div>
-
-			<hr />
+			</div> -->
 
 			<div>
-				<Dialog.Root>
-					<Dialog.Trigger class="w-full" disabled={!distribuidoraSelecionada}>
-						<ButtonCardapio label={'ACESSAR PRODUTOS'} Icon={ShoppingBasket} />
-					</Dialog.Trigger>
-					<Dialog.Content
-						class="flex h-[600px] overflow-hidden sm:max-w-[900px]"
-					>
-						<div
-							class="sticky top-0 flex h-full w-1/4 flex-col gap-2 bg-gray-100 p-4 text-center"
-						>
-							<Dialog.Title class="pb-2 text-center text-2xl"
-								>Categorias:</Dialog.Title
-							>
-							<div class="flex flex-col gap-2">
-								{#each produtos as categoria}
-									<Button
-										on:click={() => {
-											search = categoria.categoria?.nome ?? '';
-										}}>{categoria.categoria?.nome}</Button
-									>
-								{/each}
-							</div>
-						</div>
-						<div class="w-3/4 overflow-y-auto">
-							<Dialog.Header class="sticky top-0 bg-white">
-								<div class="gap-0 pb-5">
-									<div class=" flex items-center justify-between gap-0 pr-5">
-										<Dialog.Title class="pr-3 text-center text-3xl"
-											>Produtos:</Dialog.Title
-										>
-										<Input
-											id="name"
-											placeholder="Pesquisar produto..."
-											class="col-span-1 h-auto w-auto py-1"
-											bind:value={search}
-										/>
-									</div>
-								</div>
-							</Dialog.Header>
-							<div class="grid pr-5">
-								{#each produtosFiltrados as prod (prod.id)}
-									{@const varejo =
-										prod.preco.find((p) => (p.tipo = 'Varejo'))
-											?.preco_in_cents ?? 0}
-									<CardProduto produto={prod} />
-								{/each}
-							</div>
-						</div>
-					</Dialog.Content>
-				</Dialog.Root>
+				<ModalProduto {produtos} />
 			</div>
 			<div>
 				<Dialog.Root>
-					<Dialog.Trigger class="w-full" disabled={!distribuidoraSelecionada}>
-						<ButtonCardapio label={'TRANSFERIR'} />
+					<Dialog.Trigger class="w-full">
+						<ButtonCardapio label={'LANCAR ESTOQUE'} />
 					</Dialog.Trigger>
 					<Dialog.Content>
 						<Dialog.Header>
-							<Dialog.Title>Confirmar transferencia</Dialog.Title>
+							<Dialog.Title>Confirmar lancamento</Dialog.Title>
 							<Dialog.Description>
-								Confirme a transferencia de estoque
+								Confirme o lancamento de estoque
 							</Dialog.Description>
 						</Dialog.Header>
-						<p class="text-center">
-							Transferencia entre
-							<span class="font-bold text-primary">
-								Unidade {distribuidoraSelecionada}
-							</span>
-							para
-							<span class="font-bold text-primary"> Unidade </span>
-						</p>
 						<div class="flex flex-col items-center justify-center gap-3">
 							<button class="w-full">
 								<ButtonCardapio

@@ -3,6 +3,9 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { pedidoStore } from '$lib/stores/pedidoStore';
 	import { derived } from 'svelte/store';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let produto: {
 		id: number;

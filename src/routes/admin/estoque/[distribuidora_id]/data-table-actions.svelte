@@ -3,7 +3,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import { goto } from '$app/navigation';
-	import ModalTransferir from '$lib/components/modal/ModalTransferir.svelte';
+	import ModalTransferir from '../../transferir/CardTransferir.svelte';
 
 	export let id: string;
 	export let nome:string;
