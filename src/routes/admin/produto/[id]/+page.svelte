@@ -91,7 +91,7 @@
 			.from('preco')
 			.insert({
 				var_produto_id: var_id,
-				preco_in_cents: novo_preco.preco_in_cents,
+				preco_in_cents: Number(novo_preco.preco_in_cents) * 100,
 				tipo: novo_preco.tipo,
 			})
 			.select('*')

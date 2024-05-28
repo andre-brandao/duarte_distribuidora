@@ -22,7 +22,7 @@
 		const { data, error } = await supabase
 			.from('preco')
 			.update({
-				preco_in_cents: preco.preco_in_cents,
+				preco_in_cents: Number(preco.preco_in_cents)*100,
 				tipo: preco.tipo,
 			})
 			.eq('id', preco.id);
