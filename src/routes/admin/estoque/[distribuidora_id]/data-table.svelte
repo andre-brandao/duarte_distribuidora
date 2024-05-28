@@ -31,6 +31,7 @@
 		tipo: string;
 	};
 
+	import { page } from '$app/stores';
 	export let data: Estoque[] = [];
 
 	const table = createTable(readable(data), {
@@ -106,29 +107,36 @@
 </script>
 
 <div>
-	<div class="flex items-center py-4">
+	<div class="flex justify-between items-center py-4">
 		<Input
 			class="max-w-sm"
 			placeholder="Filter produtos..."
 			type="text"
 			bind:value={$filterValue}
 		/>
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger asChild let:builder>
-				<Button variant="outline" class="ml-auto" builders={[builder]}>
-					Colunas <ChevronDown class="ml-2 h-4 w-4" />
-				</Button>
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content>
-				{#each flatColumns as col}
-					{#if hidableCols.includes(col.id)}
-						<DropdownMenu.CheckboxItem bind:checked={hideForId[col.id]}>
-							{col.header}
-						</DropdownMenu.CheckboxItem>
-					{/if}
-				{/each}
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
+		<div class="flex gap-3">
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger asChild let:builder>
+					<Button variant="outline" class="ml-auto" builders={[builder]}>
+						Colunas <ChevronDown class="ml-2 h-4 w-4" />
+					</Button>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content>
+					{#each flatColumns as col}
+						{#if hidableCols.includes(col.id)}
+							<DropdownMenu.CheckboxItem bind:checked={hideForId[col.id]}>
+								{col.header}
+							</DropdownMenu.CheckboxItem>
+						{/if}
+					{/each}
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+			<div>
+				<a href="/admin/estoque/{$page.params.distribuidora_id}/lancar">
+					<Button>Lancar estoque</Button>
+				</a>
+			</div>
+		</div>
 	</div>
 
 	<div class="rounded-md border">

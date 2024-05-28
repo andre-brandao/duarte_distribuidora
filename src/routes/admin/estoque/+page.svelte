@@ -8,18 +8,19 @@
 </script>
 
 <main class="flex items-center justify-center gap-3">
-	{#each distribuidoras as item}
-		<!-- content here -->
-		<a
-			href="/admin/estoque/{item.id}"
-			class="rounded bg-primary p-3 hover:bg-secondary"
-		>
-			{item.nome}
-		</a>
-	{/each}
-	<div>
-		<a href="/admin/estoque/lancar">
-			<Button>Lancar estoque</Button>
-		</a>
+	<div class="flex flex-col gap-0 py-1">
+		<div class="items-center gap-0 pb-7">
+			<h1 class="text-center text-4xl font-bold">Unidades cadastradas</h1>
+		</div>
+		<div class="flex gap-2 justify-center">
+			{#each distribuidoras as item}
+				<a
+					href="/admin/estoque/{item.id}"
+					class="rounded bg-primary p-12 hover:bg-yellow-300 min-w-48 text-center"
+				>
+					{item.nome}
+				</a>
+			{/each}
+		</div>
 	</div>
 </main>
