@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatDate } from '$lib/utils';
+	import { formatDate,formatM } from '$lib/utils';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -26,11 +26,11 @@
 			<div class="mb-4 flex gap-2 text-center text-lg">
 				<h3>Pedido <strong>#{ped.id}</strong> -</h3>
 				<p>
-					Total: <strong class="text-green-500">R${ped.total_in_cents}</strong> -
+					Total: <strong class="text-green-500">R${formatM(ped.total_in_cents)}</strong> -
 				</p>
 				<p>Tipo do pedido: <strong>{ped.tipo}</strong> -</p>
 				<p>Data: {formatDate(ped.created_at)} -</p>
-				<p>Observacoes: {ped.observacao}</p>
+				<p>Observacoes: {ped.observacao ?? 'Nenhuma observacao'}</p>
 
 				<button
 					on:click={() => removeEstoque(ped.id)}
@@ -51,7 +51,7 @@
 								{produto.var_produto?.produto?.nome}
 								{produto.var_produto?.categoria?.nome} -
 								<span class="font-bold">
-									R${produto.total_in_cents}
+									R${formatM(produto.total_in_cents)}
 								</span>
 							</p>
 						</div>

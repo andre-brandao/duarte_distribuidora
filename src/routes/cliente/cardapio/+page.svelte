@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { intersect } from '$lib/utils';
+	import { intersect,formatM } from '$lib/utils';
 	import type { PageData } from './$types';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
@@ -113,9 +113,9 @@
 					{#each categoria.var_produto as prod (prod.id)}
 						<ModalPedido
 							nome={prod.produto?.nome ?? 'Sem nome'}
-							preco={prod.preco?.[0]?.preco_in_cents}
-							categoria={categoria.nome}
-							img={prod.img_url ?? ''}
+							preco={formatM(prod.preco?.[0]?.preco_in_cents ?? '0.00')}
+							categoria={categoria.nome ?? 'Sem categoria'}
+							img={prod.img_url ?? '/202403131209_krxb_i.jpg'}
 						/>
 					{/each}
 				</div>

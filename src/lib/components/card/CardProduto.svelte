@@ -4,6 +4,7 @@
 	import { pedidoStore } from '$lib/stores/pedidoStore';
 	import { derived } from 'svelte/store';
 	import { createEventDispatcher } from 'svelte';
+	import {formatM} from '$lib/utils'
 
 	const dispatch = createEventDispatcher();
 
@@ -76,7 +77,7 @@
 	</div>
 	<div class="w-full text-right">
 		<span class="block pb-3 text-xl font-bold"
-			>R${selectedPrice ? selectedPrice : '0.00'}</span
+			>R${formatM(selectedPrice)}</span
 		>
 		<div class="flex items-center justify-end gap-3 text-center">
 			{#if $quantidade > 0}
@@ -85,7 +86,7 @@
 			<input
 				min="1"
 				class="min-w-10 max-w-28 bg-white text-right text-xl font-bold focus:border-yellow-500"
-				value={$quantidade}
+				bind:value={$quantidade}
 			/>
 			<Button on:click={increase}><Plus /></Button>
 		</div>

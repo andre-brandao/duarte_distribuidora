@@ -9,7 +9,7 @@
 	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
-
+	import { formatM } from '$lib/utils'
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
 	export let data: PageData;
@@ -188,7 +188,7 @@
 						{item.nome}
 
 						<span class="text-green-500"
-							>R${item.unidade_em_cents * item.quantidade}</span
+							>R${formatM(item.unidade_em_cents * item.quantidade)}</span
 						>
 					</li>
 					<button
@@ -203,10 +203,10 @@
 		</ul>
 		<h2 class="mx-10 flex justify-center text-3xl font-bold">
 			Preco total:&nbsp;<span class="text-green-500"
-				>R${$pedidoStore.reduce(
+				>R${formatM($pedidoStore.reduce(
 					(acc, p) => acc + p.unidade_em_cents * p.quantidade,
 					0,
-				)}</span
+				))}</span
 			>
 		</h2>
 	</div>
