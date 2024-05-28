@@ -4,7 +4,8 @@
 	import { pedidoStore } from '$lib/stores/pedidoStore';
 	import { derived } from 'svelte/store';
 	import { createEventDispatcher } from 'svelte';
-	import { formatM } from '$lib/utils';
+	import { formatM, mask } from '$lib/utils';
+	import Label from '$lib/components/ui/label/label.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -75,18 +76,30 @@
 			</select>
 		</div>
 	</div>
-	<div class="w-full text-right">
-		<!-- <span class="block pb-3 text-xl font-bold">R${formatM(selectedPrice)}</span> -->
-		<div class="flex items-center justify-end gap-3 text-center">
-			{#if $quantidade > 0}
-				<Button on:click={decrease}><Minus /></Button>
-			{/if}
-			<input
-				min="1"
-				class="min-w-10 max-w-28 bg-white text-right text-xl font-bold focus:border-yellow-500"
-				bind:value={$quantidade}
-			/>
-			<Button on:click={increase}><Plus /></Button>
-		</div>
+	<div class="w-full object-right text-right">
+		<span class="block gap-4 pb-3 text-xl font-bold">
+			<!-- <div class="flex items-center gap-3 float-right mb-2">
+				<Label for="custo">Preco de custo:</Label>
+				<input
+					class=" flex h-9 w-24 rounded-md border border-gray-300 bg-transparent bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+					type="number"
+					use:mask={{
+						mask: 'money',
+					}}
+				/>
+			</div> -->
+
+			<div class="float-right flex items-center justify-end gap-3 text-center">
+				{#if $quantidade > 0}
+					<Button on:click={decrease}><Minus /></Button>
+				{/if}
+				<input
+					min="1"
+					class="min-w-10 max-w-28 bg-white text-right text-xl font-bold focus:border-yellow-500"
+					bind:value={$quantidade}
+				/>
+				<Button on:click={increase}><Plus /></Button>
+			</div>
+		</span>
 	</div>
 </div>

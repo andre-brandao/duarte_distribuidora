@@ -21,6 +21,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
+	import CardTransferir from './CardTransferir.svelte';
 	export let data: PageData;
 
 	const { distribuidoras, produtos: prod_temp } = data;
@@ -279,7 +280,7 @@
 									{@const varejo =
 										prod.preco.find((p) => (p.tipo = 'Varejo'))
 											?.preco_in_cents ?? 0}
-									<CardProduto produto={prod} />
+									<CardTransferir produto={prod} />
 								{/each}
 							</div>
 						</div>

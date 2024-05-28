@@ -1,18 +1,14 @@
 <script lang="ts">
 	import { Label } from '$lib/components/ui/label';
-	import ModalCliente from '$lib/components/modal/ModalCliente.svelte';
-	import ButtonCliente from '$lib/components/buttons/ButtonCliente.svelte';
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import { onMount } from 'svelte';
-	import { Textarea } from '$lib/components/ui/textarea';
-	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Ban, Printer, PackageOpen, CircleX, X } from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
 	import NumberInput from '$lib/components/ui/input/number_input.svelte';
+	import ModalLancar from './ModalLancar.svelte';
+	import { mask } from '$lib/utils';
 	export let data: PageData;
 
 	const { distribuidoras, produtos: prod_temp } = data;
@@ -148,7 +144,7 @@
 			<h1 class="text-center text-4xl font-bold">Lancar estoque</h1>
 		</div>
 	</div>
-	<div class="grid grid-cols-1 justify-center xl:grid-cols-2 xl:flex-row">
+	<div class="grid grid-cols-1 justify-center gap-5 xl:grid-cols-2 xl:flex-row">
 		<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
 			<ul class="mb-4 text-center text-lg">
 				{#if $pedidoStore.length != 0}
@@ -161,7 +157,13 @@
 							</li>
 							<div class="flex items-center gap-3">
 								<Label for="custo">Preco de custo:</Label>
-								<NumberInput class="w-24 border-gray-300 bg-white" />
+								<input
+									class=" flex h-9 w-24 rounded-md border border-gray-300 bg-transparent bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+									type="number"
+									use:mask={{
+										mask: 'money',
+									}}
+								/>
 								<button
 									class="px-2"
 									on:click={(e) =>
@@ -178,7 +180,7 @@
 			</ul>
 		</div>
 
-		<div class="col-auto flex h-auto flex-col justify-between gap-3 xl:ml-6">
+		<div class="col-auto flex h-auto flex-col justify-between gap-3">
 			<!-- <div class="w-full">
 				<div class="flex w-full gap-4">
 					<div class="w-1/2">
@@ -210,7 +212,7 @@
 			</div> -->
 
 			<div>
-				<ModalProduto {produtos} />
+				<ModalLancar {produtos} />
 			</div>
 			<div>
 				<Dialog.Root>
@@ -239,6 +241,6 @@
 	</div>
 </div>
 
-<pre>
+<!-- <pre>
 		{JSON.stringify($pedidoStore, null, 2)}
-	</pre>
+	</pre> -->
