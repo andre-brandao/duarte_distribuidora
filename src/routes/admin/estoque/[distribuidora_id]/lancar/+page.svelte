@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { lancarStore } from './lancarStore';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Label } from '$lib/components/ui/label';
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
@@ -10,7 +11,6 @@
 		X,
 		ShoppingBasket,
 	} from 'lucide-svelte';
-	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
@@ -22,9 +22,7 @@
 
 	const { distribuidoras } = data;
 
-	const estoque = data.estoques;
-
-	$pedidoStore = [];
+	const estoques = data.estoques;
 
 	let { supabase } = data;
 	$: ({ supabase } = data);
@@ -36,15 +34,15 @@
 	$: console.log(cliente_selecionado);
 
 	async function transferirEstoque() {
-		const estoqueParaLancar = $pedidoStore.map((p) => {
+		const estoqueParaLancar = $lancarStore.map((p) => {
 			return {
 				quantidade: p.quantidade,
-				estoque_id: 0, // TODO: 'COLOCAR ESTOQUE ID AQUI',
+				estoque_id: p.estoque_id, // TODO: 'COLOCAR ESTOQUE ID AQUI',
 				tipo: 'ENTRADA',
 				meta_data: {
 					user_id: session?.user.id,
 					email: session?.user.email,
-					preco_custo: p.unidade_em_cents, // TODO: 'COLOCAR PRECO DE CUSTO AQUI',
+					preco_custo: p.preco_custo, // TODO: 'COLOCAR PRECO DE CUSTO AQUI',
 				},
 			};
 		});
@@ -59,6 +57,7 @@
 
 		toast.success('Estoque lancado com sucesso!');
 	}
+	let search = '';
 </script>
 
 <div class="">
@@ -70,8 +69,8 @@
 	<div class="grid grid-cols-1 justify-center gap-5 xl:grid-cols-2 xl:flex-row">
 		<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
 			<ul class="mb-4 text-center text-lg">
-				{#if $pedidoStore.length != 0}
-					{#each $pedidoStore as item}
+				{#if $lancarStore.length != 0}
+					{#each $lancarStore as item}
 						<div class="flex items-center justify-between gap-3">
 							<li class="py-3 font-bold">
 								<!--Colocar quantidade-->
@@ -90,7 +89,7 @@
 								<button
 									class="px-2"
 									on:click={(e) =>
-										pedidoStore.removeTodosItemPedido(item.var_produto_id)}
+										lancarStore.removeTodosItemPedido(item.estoque_id)}
 									><X /></button
 								>
 							</div>
@@ -149,11 +148,12 @@
 								>Categorias:</Dialog.Title
 							>
 							<div class="flex flex-col gap-2">
-								{#each produtos as categoria}
+								{#each estoques as e}
+									{@const var_produto = e.var_produto}
 									<Button
 										on:click={() => {
-											search = categoria.categoria?.nome ?? '';
-										}}>{categoria.categoria?.nome}</Button
+											search = var_produto?.categoria?.nome ?? '';
+										}}>{var_produto?.categoria?.nome}</Button
 									>
 								{/each}
 							</div>
@@ -175,8 +175,17 @@
 								</div>
 							</Dialog.Header>
 							<div class="grid pr-5">
-								{#each produtosFiltrados as prod, i (prod.id)}
-									<CardLancar produto={prod} />
+								{#each estoques.filter((e) => {
+									if (!search) {
+										return true;
+									}
+									return e.var_produto?.produto?.nome
+											.toLowerCase()
+											.includes(search) || e.var_produto?.categoria?.nome
+											.toLowerCase()
+											.includes(search);
+								}) as prod, i (prod.id)}
+									<CardLancar {prod} />
 								{/each}
 							</div>
 						</div>
@@ -211,5 +220,5 @@
 </div>
 
 <!-- <pre>
-		{JSON.stringify($pedidoStore, null, 2)}
+		{JSON.stringify($lancarStore, null, 2)}
 	</pre> -->

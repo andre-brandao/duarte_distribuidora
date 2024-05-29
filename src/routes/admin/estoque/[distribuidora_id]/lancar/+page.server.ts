@@ -14,7 +14,7 @@ export const load = (async ({ locals, params }) => {
 		supabase
 			.from('estoque')
 			.select(
-				'*, var_produto(id, produto(*), preco(preco_in_cents,tipo), categoria(nome))',
+				'*, var_produto(id, produto(*), categoria(nome))',
 			)
 			.eq('distribuidora_id', distribuidora_id),
 	]);

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Plus, Minus } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { pedidoStore } from '$lib/stores/pedidoStore';
+	import { lancarStore } from './lancarStore';
 	import { derived } from 'svelte/store';
 	import { createEventDispatcher } from 'svelte';
 	import { formatM, mask } from '$lib/utils';
@@ -9,45 +9,38 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let produto: {
+	export let prod: {
+		created_at: string;
+		distribuidora_id: number;
 		id: number;
-		produto: {
-			created_at: string;
+	quantidade: number;
+		var_produto_id: number;
+		var_produto: {
 			id: number;
-			nome: string;
-		} | null;
-		preco: {
-			preco_in_cents: number;
-			tipo: string;
-		}[];
-		categoria: {
-			nome: string;
+			produto: {
+				created_at: string;
+				id: number;
+				nome: string;
+			} | null;
+			categoria: {
+				nome: string;
+			} | null;
 		} | null;
 	};
 
-	let quantidade = derived(
-		pedidoStore,
-		() =>
-			$pedidoStore.find((p) => p.var_produto_id === produto?.id)?.quantidade ??
-			0,
-	);
+	$: quantidade = $lancarStore.find((p) => p.estoque_id === prod?.id)?.quantidade ?? 0;
 
 	function increase() {
-		if (!selectedPrice) {
-			return;
-		}
-		pedidoStore.addItemPedido({
-			var_produto_id: produto.id,
-			unidade_em_cents: selectedPrice,
-			nome: `${produto.produto?.nome}  ${produto.categoria?.nome}`,
+		lancarStore.addItemPedido({
+			estoque_id: prod.id,
+			preco_custo: 0,
+			nome: `${prod.var_produto?.produto?.nome}  ${prod.var_produto?.categoria?.nome}`,
 		});
 	}
 
 	function decrease() {
-		pedidoStore.removeUmItemPedido(produto.id);
+		lancarStore.removeUmItemPedido(prod.id);
 	}
-
-	let selectedPrice: number;
 </script>
 
 <hr />
@@ -61,8 +54,8 @@
 	</div>
 	<div class="flex-grow pl-4">
 		<div>
-			<h2 class="text-xl font-bold">{produto.produto?.nome}</h2>
-			<h3 class="text-md text-gray-600">{produto.categoria?.nome}</h3>
+			<h2 class="text-xl font-bold">{prod.var_produto?.produto?.nome}</h2>
+			<h3 class="text-md text-gray-600">{prod.var_produto?.categoria?.nome}</h3>
 		</div>
 	</div>
 	<div class="w-full object-right text-right">
@@ -79,13 +72,25 @@
 			</div> -->
 
 			<div class="float-right flex items-center justify-end gap-3 text-center">
-				{#if $quantidade > 0}
+				{#if quantidade > 0}
 					<Button on:click={decrease}><Minus /></Button>
 				{/if}
 				<input
 					min="1"
 					class="min-w-10 max-w-28 bg-white text-right text-xl font-bold focus:border-yellow-500"
-					bind:value={$quantidade}
+					on:change={(e) => {
+
+						console.log(e);
+	
+						const quant_temp = e.target?.value
+	
+						lancarStore.setQuantidadePedido({
+							estoque_id: prod.id,
+							preco_custo: 0,
+							nome: `${prod.var_produto?.produto?.nome}  ${prod.var_produto?.categoria?.nome}`,
+							quantidade: quant_temp,
+						});
+					}}
 				/>
 				<Button on:click={increase}><Plus /></Button>
 			</div>
