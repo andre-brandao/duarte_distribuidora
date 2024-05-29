@@ -26,11 +26,11 @@
 		{ label: 'Produtos', href: '/admin/produto', icon: Beer },
 		{ label: 'Clientes', href: '/admin/clientesinfo', icon: User },
 		{ label: 'Estoque', href: '/admin/estoque', icon: Package },
-		{
-			label: 'Transferir estoque',
-			href: '/admin/transferir',
-			icon: PackageOpen,
-		},
+		// {
+		// 	label: 'Transferir estoque',
+		// 	href: '/admin/transferir',
+		// 	icon: PackageOpen,
+		// },
 		{ label: 'Caixa', href: '/admin/caixa', icon: ShoppingCart },
 		{ label: 'Pedidos delivery', href: '/admin/pedidos', icon: Truck },
 	];
