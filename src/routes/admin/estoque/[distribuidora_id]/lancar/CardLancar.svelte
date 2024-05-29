@@ -78,6 +78,7 @@
 				<input
 					min="1"
 					class="min-w-10 max-w-28 bg-white text-right text-xl font-bold focus:border-yellow-500"
+					value="{quantidade}"
 					on:change={(e) => {
 
 						console.log(e);
