@@ -2,7 +2,14 @@
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Label } from '$lib/components/ui/label';
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
-	import { Ban, Printer, PackageOpen, CircleX, X,ShoppingBasket } from 'lucide-svelte';
+	import {
+		Ban,
+		Printer,
+		PackageOpen,
+		CircleX,
+		X,
+		ShoppingBasket,
+	} from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { PageData } from './$types.js';
@@ -13,9 +20,9 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	export let data: PageData;
 
-	const { distribuidoras, produtos: prod_temp } = data;
+	const { distribuidoras } = data;
 
-	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
+	const estoque = data.estoques;
 
 	$pedidoStore = [];
 
@@ -24,139 +31,34 @@
 
 	let { session } = data;
 
-	const pedidos_caixa = {
-		num_pedido: 0,
-		datahora_pedido: '',
-		isOpen: true,
-		criado_por: session?.user.email ?? 'Desconhecido',
-		valor_total: 0,
-	};
-
 	let cliente_selecionado: any = null;
 
 	$: console.log(cliente_selecionado);
 
-	async function transferirEstoque(tipo_pagamento: string) {
-		if (tipo_pagamento === 'fiado' && !cliente_selecionado) {
-			toast.error('Selecione um cliente para realizar um pedido fiado');
-			return;
-		}
-
-		if ($pedidoStore.length === 0) {
-			toast.error('Adicione produtos ao pedido');
-			return;
-		}
-
-		console.log(cliente_selecionado);
-
-		const total_in_cents = $pedidoStore.reduce(
-			(acc, p) => acc + p.unidade_em_cents * p.quantidade,
-			0,
-		);
-
-		if (tipo_pagamento === 'fiado') {
-			if (
-				cliente_selecionado.credito_usado + total_in_cents >
-				cliente_selecionado.credito_maximo
-			) {
-				toast.error('Cliente não possui crédito suficiente');
-				return;
-			} else {
-				const { data: result_cliente, error: err_cliente } = await supabase
-					.from('cliente')
-					.update({
-						credito_usado: cliente_selecionado.credito_usado + total_in_cents,
-					})
-					.eq('id', cliente_selecionado.id)
-					.single();
-
-				if (err_cliente) {
-					toast.error(err_cliente.message);
-					console.error(err_cliente);
-					return;
-				}
-			}
-		}
-		// inserir na tabela pedido
-		const pedidoToInsert = {
-			cliente_id: cliente_selecionado?.id ?? null,
-			total_in_cents,
-			tipo: tipo_pagamento,
-			meta_data: null,
-			status: 'aberto',
-		};
-
-		const { data: result_pedido, error: err_pedido } = await supabase
-			.from('pedido')
-			.insert(pedidoToInsert)
-			.select('*')
-			.single();
-
-		if (err_pedido) {
-			toast.error(err_pedido.message);
-			console.error(err_pedido);
-			return;
-		}
-
-		// inserir na tabela produto_pedido
-		const produtosToInsert = $pedidoStore.map((p) => {
+	async function transferirEstoque() {
+		const estoqueParaLancar = $pedidoStore.map((p) => {
 			return {
-				pedido_id: result_pedido?.id, // mudar isso
-				var_produto_id: p.var_produto_id,
-				quantidade: p.quantidade, // e isso
-				unidade_in_cents: p.unidade_em_cents,
-				total_in_cents: p.quantidade * p.unidade_em_cents,
+				quantidade: p.quantidade,
+				estoque_id: 0, // TODO: 'COLOCAR ESTOQUE ID AQUI',
+				tipo: 'ENTRADA',
+				meta_data: {
+					user_id: session?.user.id,
+					email: session?.user.email,
+					preco_custo: p.unidade_em_cents, // TODO: 'COLOCAR PRECO DE CUSTO AQUI',
+				},
 			};
 		});
-
-		const { error: err_pp } = await supabase
-			.from('produto_pedido')
-			.insert(produtosToInsert);
-		if (err_pp) {
-			toast.error(err_pp.message);
-			console.error(err_pp);
-			return;
-		}
-
-		toast.success('Pedido realizado com sucesso');
-		$pedidoStore = [];
-		cliente_selecionado = null;
-	}
-
-	async function getEstoque(id_distribuidora: number) {
-		if (id_distribuidora === 0) {
-			return;
-		}
 		const resp = await supabase
-			.from('estoque')
-			.select(
-				'*, var_produto(id, produto(*), preco(preco_in_cents,tipo), categoria(nome))',
-			)
-			.eq('distribuidora_id', id_distribuidora);
-		//.gt('quantidade', 0);
+			.from('transacao_estoque')
+			.insert(estoqueParaLancar);
 
-		console.log(resp.data);
+		if (resp.error) {
+			toast.error(resp.error.message);
+			return;
+		}
+
+		toast.success('Estoque lancado com sucesso!');
 	}
-
-	let distribuidoraSelecionada = 0;
-	$: getEstoque(distribuidoraSelecionada);
-
-	let search = '';
-
-	$: produtosFiltrados = produtos.filter((p) => {
-		if (search.length === 0) {
-			return true;
-		}
-		if (
-			p.produto?.nome
-				.toLocaleLowerCase()
-				.includes(search.toLocaleLowerCase()) ||
-			p.categoria?.nome.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-		) {
-			return true;
-		}
-		return false;
-	});
 </script>
 
 <div class="">
@@ -237,11 +139,15 @@
 					<Dialog.Trigger class="w-full">
 						<ButtonCardapio label={'ACESSAR PRODUTOS'} Icon={ShoppingBasket} />
 					</Dialog.Trigger>
-					<Dialog.Content class="flex h-[600px] overflow-hidden sm:max-w-[900px]">
+					<Dialog.Content
+						class="flex h-[600px] overflow-hidden sm:max-w-[900px]"
+					>
 						<div
 							class="sticky top-0 flex h-full w-1/4 flex-col gap-2 bg-gray-100 p-4 text-center"
 						>
-							<Dialog.Title class="pb-2 text-center text-2xl">Categorias:</Dialog.Title>
+							<Dialog.Title class="pb-2 text-center text-2xl"
+								>Categorias:</Dialog.Title
+							>
 							<div class="flex flex-col gap-2">
 								{#each produtos as categoria}
 									<Button
@@ -269,15 +175,13 @@
 								</div>
 							</Dialog.Header>
 							<div class="grid pr-5">
-								{#each produtosFiltrados as prod , i (prod.id)}
-									
-									<CardLancar produto={prod}/>
+								{#each produtosFiltrados as prod, i (prod.id)}
+									<CardLancar produto={prod} />
 								{/each}
 							</div>
 						</div>
 					</Dialog.Content>
 				</Dialog.Root>
-				
 			</div>
 			<div>
 				<Dialog.Root>

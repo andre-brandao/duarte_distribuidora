@@ -1,18 +1,22 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, params }) => {
 	const supabase = locals.supabase;
+
+	const distribuidora_id = params.distribuidora_id;
 
 	const [
 		{ data: distribuidoras, error: err_cliente },
-		{ data: produtos, error: err_produtos },
+		{ data: estoques, error: err_estoques },
 	] = await Promise.all([
 		supabase.from('distribuidora').select('*'),
 		supabase
-			.from('var_produto')
-			.select('id, produto(*), preco(preco_in_cents,tipo), categoria(nome)')
-			
+			.from('estoque')
+			.select(
+				'*, var_produto(id, produto(*), preco(preco_in_cents,tipo), categoria(nome))',
+			)
+			.eq('distribuidora_id', distribuidora_id),
 	]);
 
 	if (err_cliente) {
@@ -22,12 +26,12 @@ export const load = (async ({ locals }) => {
 		error(404, err_cliente?.message);
 	}
 
-	if (err_produtos) {
-		console.log(err_produtos);
-		console.error(err_produtos);
+	if (err_estoques) {
+		console.log(err_estoques);
+		console.error(err_estoques);
 
-		error(404, err_produtos.message);
+		error(404, err_estoques.message);
 	}
 
-	return { distribuidoras, produtos };
+	return { distribuidoras, estoques };
 }) satisfies PageServerLoad;

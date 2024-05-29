@@ -8,6 +8,7 @@
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import type { Database } from '$lib/supabase-types';
 	import { toast } from 'svelte-sonner';
+	import { mask } from '$lib/utils';
 
 	export let supabase: SupabaseClient<Database>;
 
@@ -105,12 +106,18 @@
 				{/each}
 			</div>
 			<div
-				class="mt-5 flex flex-col items-center justify-center gap-3 rounded bg-gray-100 p-5 mr-5"
+				class="mr-5 mt-5 flex flex-col items-center justify-center gap-3 rounded bg-gray-100 p-5"
 			>
 				<p class="font-bold">Novo Cliente:</p>
 				<Input placeholder="Nome" bind:value={formNovoCliente.nome} />
 				<Input placeholder="Email" bind:value={formNovoCliente.email} />
-				<Input placeholder="Celular" bind:value={formNovoCliente.celular} />
+				<input
+					use:mask={{ mask: ' (99) 99999-9999' }}
+					bind:value={formNovoCliente.celular}
+					type="text"
+					placeholder="Celular"
+					class=" flex h-9 w-full rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+				/>
 				<Button on:click={cadastrarCliente}>Cadastrar cliente</Button>
 			</div>
 		</div>
