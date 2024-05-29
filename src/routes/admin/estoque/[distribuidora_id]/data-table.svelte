@@ -133,7 +133,7 @@
 			</DropdownMenu.Root>
 			<div>
 				<a href="/admin/estoque/{$page.params.distribuidora_id}/lancar">
-					<Button>Lancar estoque</Button>
+					<Button>Lançar estoque</Button>
 				</a>
 			</div>
 		</div>

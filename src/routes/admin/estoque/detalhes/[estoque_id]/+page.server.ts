@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 export const load = (async ({ locals, params }) => {
 	const supabase = locals.supabase;
 
-	const estoqueID = params.id_var_produto;
+	const estoqueID = Number(params.estoque_id);
 
 	const { data: estoque, error: err_estoque } = await supabase
 		.from('estoque')
@@ -17,5 +17,5 @@ export const load = (async ({ locals, params }) => {
 	if (err_estoque) {
 		error(404, err_estoque.message);
 	}
-	return { estoque };
+	return { estoque, estoqueID };
 }) satisfies PageServerLoad;

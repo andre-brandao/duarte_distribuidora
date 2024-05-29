@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import type { PageData } from '../../produto/$types';
+	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
 	import { Plus } from 'lucide-svelte';
 

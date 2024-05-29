@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { lancarStore } from './lancarStore';
+	import { lancarStore } from '$lib/stores/lancarStore';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Label } from '$lib/components/ui/label';
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
@@ -16,7 +16,7 @@
 	import { toast } from 'svelte-sonner';
 	import { mask } from '$lib/utils';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import CardLancar from './CardLancar.svelte';
+	import CardLancar from '$lib/components/card/CardLancarTransf.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	export let data: PageData;
 
@@ -29,11 +29,8 @@
 
 	let { session } = data;
 
-	let cliente_selecionado: any = null;
 
-	$: console.log(cliente_selecionado);
-
-	async function transferirEstoque() {
+	async function lancarEstoque() {
 		const estoqueParaLancar = $lancarStore.map((p) => {
 			return {
 				quantidade: p.quantidade,
@@ -63,14 +60,14 @@
 <div class="">
 	<div class="gap-0 py-1">
 		<div class="items-center gap-0 pb-7">
-			<h1 class="text-center text-4xl font-bold">Lancar estoque</h1>
+			<h1 class="text-center text-4xl font-bold">Lançar estoque</h1>
 		</div>
 	</div>
 	<div class="grid grid-cols-1 justify-center gap-5 xl:grid-cols-2 xl:flex-row">
 		<div class="col-auto rounded-lg border-4 border-opacity-50 p-4">
 			<ul class="mb-4 text-center text-lg">
 				{#if $lancarStore.length != 0}
-					{#each $lancarStore as item}
+					{#each $lancarStore as item, i}
 						<div class="flex items-center justify-between gap-3">
 							<li class="py-3 font-bold">
 								<!--Colocar quantidade-->
@@ -85,6 +82,7 @@
 									use:mask={{
 										mask: 'money',
 									}}
+									bind:value={$lancarStore[i].preco_custo}
 								/>
 								<button
 									class="px-2"
@@ -97,41 +95,13 @@
 						<hr />
 					{/each}
 				{:else}
-					<p>Nenhum item adicionado para lancamento!</p>
+					<p>Nenhum item adicionado para lançamento!</p>
 				{/if}
 			</ul>
 		</div>
 
 		<div class="col-auto flex h-auto flex-col justify-between gap-3">
-			<!-- <div class="w-full">
-				<div class="flex w-full gap-4">
-					<div class="w-1/2">
-						<Label class="mt-3 text-left">Saindo de qual unidade?</Label>
-						<select
-							bind:value={distribuidoraSelecionada}
-							id="unidades"
-							class="flex h-9 w-full rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							<option value="">Selecione</option>
-							{#each distribuidoras as item}
-								<option value={item.id}>{item.nome}</option>
-							{/each}
-						</select>
-					</div>
-					<div class="w-1/2">
-						<Label class="mt-3 text-left">Entrada em qual unidade?</Label>
-						<select
-							id="unidades"
-							class="flex h-9 w-full rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-						>
-							<option value="">Selecione...</option>
-							{#each distribuidoras as item}
-								<option value={item.id}>{item.nome}</option>
-							{/each}
-						</select>
-					</div>
-				</div>
-			</div> -->
+			
 
 			<div>
 				<Dialog.Root>
@@ -195,21 +165,22 @@
 			<div>
 				<Dialog.Root>
 					<Dialog.Trigger class="w-full">
-						<ButtonCardapio label={'LANCAR ESTOQUE'} />
+						<button
+							disabled={$lancarStore.length === 0 || $lancarStore.reduce((acc, item) => acc || item.preco_custo === 0, false)}
+							class="group flex w-full content-center items-center justify-center rounded-lg bg-primary py-3 text-center font-semibold text-secondary-foreground shadow-sm transition ease-in-out hover:bg-yellow-300 disabled:bg-yellow-200 disabled:text-opacity-50"
+							>LANÇAR ESTOQUE</button
+						>
 					</Dialog.Trigger>
 					<Dialog.Content>
 						<Dialog.Header>
-							<Dialog.Title>Confirmar lancamento</Dialog.Title>
+							<Dialog.Title>Confirmar lançamento</Dialog.Title>
 							<Dialog.Description>
-								Confirme o lancamento de estoque
+								Confirme o lançamento de estoque
 							</Dialog.Description>
 						</Dialog.Header>
 						<div class="flex flex-col items-center justify-center gap-3">
-							<button class="w-full">
-								<ButtonCardapio
-									label={'TRANSFERIR ESTOQUE'}
-									Icon={PackageOpen}
-								/>
+							<button class="w-full" on:click={lancarEstoque} >
+								<ButtonCardapio label={'CONFIRMAR'} Icon={PackageOpen} />
 							</button>
 						</div>
 					</Dialog.Content>

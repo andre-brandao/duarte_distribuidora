@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Plus, Minus } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { lancarStore } from './lancarStore';
+	import { lancarStore } from '../../stores/lancarStore';
 	import { derived } from 'svelte/store';
 	import { createEventDispatcher } from 'svelte';
 	import { formatM, mask } from '$lib/utils';
@@ -56,6 +56,7 @@
 		<div>
 			<h2 class="text-xl font-bold">{prod.var_produto?.produto?.nome}</h2>
 			<h3 class="text-md text-gray-600">{prod.var_produto?.categoria?.nome}</h3>
+			<h3 class="text-md text-gray-600 text-nowrap">Em estoque: {prod.quantidade}</h3>
 		</div>
 	</div>
 	<div class="w-full object-right text-right">
