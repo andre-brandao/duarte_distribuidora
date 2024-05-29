@@ -63,17 +63,6 @@
 		<div>
 			<h2 class="text-xl font-bold">{produto.produto?.nome}</h2>
 			<h3 class="text-md text-gray-600">{produto.categoria?.nome}</h3>
-			<select
-				bind:value={selectedPrice}
-				disabled={$quantidade > 1}
-				name="preco"
-				id="precos"
-				class="mt-2 bg-transparent"
-			>
-				{#each produto.preco as preco}
-					<option value={preco.preco_in_cents}>{preco.tipo}</option>
-				{/each}
-			</select>
 		</div>
 	</div>
 	<div class="w-full object-right text-right">
