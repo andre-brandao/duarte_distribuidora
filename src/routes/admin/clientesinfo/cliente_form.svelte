@@ -5,7 +5,11 @@
 	import { Input } from '$lib/components/ui/input';
 	import NumberInput from '$lib/components/ui/input/number_input.svelte';
 	import { formSchema, type FormSchema } from '$lib/schemas/cliente_schema';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import {
+		type SuperValidated,
+		type Infer,
+		superForm,
+	} from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import { CalendarIcon } from 'lucide-svelte/icons';
@@ -17,7 +21,7 @@
 		getLocalTimeZone,
 		parseDate,
 		CalendarDate,
-		today
+		today,
 	} from '@internationalized/date';
 	import { cn } from '$lib/utils.js';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
@@ -30,20 +34,22 @@
 	const form = superForm(data, {
 		validators: zodClient(formSchema),
 		dataType: 'json',
-		delayMs: 500
+		delayMs: 500,
 	});
 
 	const { form: formData, enhance, delayed } = form;
 
 	const df = new DateFormatter('pt-BR', {
-		dateStyle: 'long'
+		dateStyle: 'long',
 	});
 
-	$: value = $formData.data_nascimento ? parseDate($formData.data_nascimento) : undefined;
+	$: value = $formData.data_nascimento
+		? parseDate($formData.data_nascimento)
+		: undefined;
 </script>
 
-<form method="POST" use:enhance class="m-8 w-[500px]">
-	<div class="rounded-lg border border-gray-400 bg-gray-100 p-10 shadow-sm">
+<form method="POST" use:enhance>
+	<div>
 		<!-- <h1
 			class="self-center whitespace-nowrap pb-8 text-center text-2xl font-semibold"
 		>
@@ -63,7 +69,11 @@
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Form.Label>Email</Form.Label>
-					<Input placeholder="exemplo@gmail.com" {...attrs} bind:value={$formData.email} />
+					<Input
+						placeholder="exemplo@gmail.com"
+						{...attrs}
+						bind:value={$formData.email}
+					/>
 				</Form.Control>
 
 				<Form.Description>Email do cliente.</Form.Description>
@@ -77,7 +87,12 @@
 				<Form.Label>
 					{#each ['Pessoa Fisica', 'Pessoa Juridica'] as option}
 						<label class="mr-3">
-							<input type="radio" name="cpf_cnpj" value={option} bind:group={person_type} />
+							<input
+								type="radio"
+								name="cpf_cnpj"
+								value={option}
+								bind:group={person_type}
+							/>
 							{option}
 						</label>
 					{/each}
@@ -85,7 +100,9 @@
 			</Form.Control>
 			<Form.Control let:attrs>
 				<Input
-					placeholder="Digite o {person_type === 'Pessoa Juridica' ? 'CNPJ' : 'CPF'}"
+					placeholder="Digite o {person_type === 'Pessoa Juridica'
+						? 'CNPJ'
+						: 'CPF'}"
 					{...attrs}
 					bind:value={$formData.cpf_cnpj}
 				/>
@@ -98,7 +115,11 @@
 			<Form.Field {form} name="celular">
 				<Form.Control let:attrs>
 					<Form.Label>Celular*</Form.Label>
-					<Input placeholder="(00) 00000-0000" {...attrs} bind:value={$formData.celular} />
+					<Input
+						placeholder="(00) 00000-0000"
+						{...attrs}
+						bind:value={$formData.celular}
+					/>
 				</Form.Control>
 
 				<Form.Description>Celular pessoal do cliente.</Form.Description>
@@ -108,7 +129,11 @@
 			<Form.Field {form} name="telefone_fixo">
 				<Form.Control let:attrs>
 					<Form.Label>Telefone Fixo</Form.Label>
-					<Input placeholder="0000-0000" {...attrs} bind:value={$formData.telefone_fixo} />
+					<Input
+						placeholder="0000-0000"
+						{...attrs}
+						bind:value={$formData.telefone_fixo}
+					/>
 				</Form.Control>
 
 				<Form.Description>Telefone fixo do cliente.</Form.Description>
@@ -126,7 +151,7 @@
 						class={cn(
 							buttonVariants({ variant: 'outline' }),
 							'w-full justify-start pl-4 text-left font-normal',
-							!$formData.data_nascimento && 'text-muted-foreground'
+							!$formData.data_nascimento && 'text-muted-foreground',
 						)}
 					>
 						{$formData.data_nascimento
@@ -151,7 +176,9 @@
 						/>
 					</Popover.Content>
 				</Popover.Root>
-				<Form.Description>Your date of birth is used to calculator your age</Form.Description>
+				<Form.Description
+					>Your date of birth is used to calculator your age</Form.Description
+				>
 				<Form.FieldErrors />
 				<input hidden value={$formData.data_nascimento} name={attrs.name} />
 			</Form.Control>
@@ -159,11 +186,15 @@
 
 		<Form.Field {form} name="rg_ie">
 			<Form.Control let:attrs>
-				<Form.Label>{person_type === 'Pessoa Juridica' ? 'IE' : 'RG'} do cliente</Form.Label>
+				<Form.Label
+					>{person_type === 'Pessoa Juridica' ? 'IE' : 'RG'} do cliente</Form.Label
+				>
 				<Input
 					{...attrs}
 					bind:value={$formData.rg_ie}
-					placeholder="Digite o {person_type === 'Pessoa Juridica' ? 'IE' : 'RG'}"
+					placeholder="Digite o {person_type === 'Pessoa Juridica'
+						? 'IE'
+						: 'RG'}"
 				/>
 			</Form.Control>
 

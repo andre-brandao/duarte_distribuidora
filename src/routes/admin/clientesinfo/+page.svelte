@@ -1,17 +1,29 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import type { PageData } from '../clientesinfo/$types';
 	import { formatM } from '$lib/utils';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import ProdutoForm from './cliente_form.svelte';
 
 	export let data: PageData;
 
 	let clientes = data.clientes;
+
+	
 </script>
 
 <main class="mx-auto">
 	<div class="gap-0 py-1">
-		<div class="items-center gap-0 pb-7">
+		<div class="flex items-center justify-between gap-0 pb-7">
 			<h1 class="text-center text-4xl font-bold">Informações de clientes</h1>
+			<Dialog.Root>
+				<Dialog.Trigger class={buttonVariants({ variant: 'default' })}
+					>Adicionar cliente</Dialog.Trigger
+				>
+				<Dialog.Content class="sm:max-w-[500px]">
+					<ProdutoForm data={data.form}/>
+				</Dialog.Content>
+			</Dialog.Root>
 		</div>
 	</div>
 	<div class="overflow-x-auto">
