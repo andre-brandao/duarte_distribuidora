@@ -50,16 +50,16 @@
 
 <form method="POST" use:enhance>
 	<div>
-		<!-- <h1
+		<h1
 			class="self-center whitespace-nowrap pb-8 text-center text-2xl font-semibold"
 		>
 			Formulário cadastro
-		</h1> -->
+		</h1>
 		<div class="flex gap-2">
 			<Form.Field {form} name="nome">
 				<Form.Control let:attrs>
 					<Form.Label>Nome*</Form.Label>
-					<Input {...attrs} bind:value={$formData.nome} />
+					<Input placeholder="Seu nome" {...attrs} bind:value={$formData.nome} />
 				</Form.Control>
 
 				<Form.Description>Nome do Cliente.</Form.Description>
