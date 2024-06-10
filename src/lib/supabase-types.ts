@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      caixa: {
+        Row: {
+          cents_em_caixa: number
+          created_at: string
+          distribuidora_id: number
+          id: number
+          status: string
+        }
+        Insert: {
+          cents_em_caixa?: number
+          created_at?: string
+          distribuidora_id: number
+          id?: number
+          status?: string
+        }
+        Update: {
+          cents_em_caixa?: number
+          created_at?: string
+          distribuidora_id?: number
+          id?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "caixa_distribuidora_id_fkey"
+            columns: ["distribuidora_id"]
+            isOneToOne: false
+            referencedRelation: "distribuidora"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categoria: {
         Row: {
           created_at: string
@@ -303,6 +335,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      transacao_caixa: {
+        Row: {
+          cents_transacao: number
+          created_at: string
+          id: number
+          meta_data: Json
+        }
+        Insert: {
+          cents_transacao: number
+          created_at?: string
+          id?: number
+          meta_data: Json
+        }
+        Update: {
+          cents_transacao?: number
+          created_at?: string
+          id?: number
+          meta_data?: Json
+        }
+        Relationships: []
       }
       transacao_estoque: {
         Row: {
