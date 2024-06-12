@@ -338,24 +338,38 @@ export type Database = {
       }
       transacao_caixa: {
         Row: {
+          caixa_id: number
           cents_transacao: number
           created_at: string
           id: number
           meta_data: Json
+          total_log: number | null
         }
         Insert: {
+          caixa_id: number
           cents_transacao: number
           created_at?: string
           id?: number
           meta_data: Json
+          total_log?: number | null
         }
         Update: {
+          caixa_id?: number
           cents_transacao?: number
           created_at?: string
           id?: number
           meta_data?: Json
+          total_log?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "transacao_caixa_caixa_id_fkey"
+            columns: ["caixa_id"]
+            isOneToOne: false
+            referencedRelation: "caixa"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       transacao_estoque: {
         Row: {
