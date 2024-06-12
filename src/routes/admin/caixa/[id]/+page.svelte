@@ -1,25 +1,30 @@
 <script lang="ts">
 	import ModalCliente from '$lib/components/modal/ModalCliente.svelte';
-	import ButtonCliente from '$lib/components/buttons/ButtonCliente.svelte';
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
-	import { onMount } from 'svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
 	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { formatM } from '$lib/utils';
-	import type { PageData } from '../$types.js';
+	import type { PageData } from './$types.js';
 	import { toast } from 'svelte-sonner';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { mask } from '$lib/utils';
 
 	export let data: PageData;
 
 	$pedidoStore = [];
-	const { clientes, produtos: prod_temp } = data;
+	const { clientes, produtos: prod_temp, caixa } = data;
+
+	type Caixa = {
+		cents_em_caixa: number;
+		created_at: string;
+		distribuidora_id: number;
+		id: number;
+		status: string;
+	};
 
 	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
 
@@ -130,24 +135,45 @@
 		cliente_selecionado = null;
 	}
 
-	function abrirCaixa() {
-		pedidos_caixa.isOpen = true;
+	async function abrirCaixa(caixa: Caixa) {
+		if (caixa.status != 'fechado') {
+			toast.error('Caixa não está fechado');
+			return;
+		} else {
+			const { data: result_data, error: err_caixa } = await supabase
+				.from('caixa')
+				.update({ status: 'aberto', cents_em_caixa: saldo_inicial })
+				.eq('id', caixa.id)
+				.select();
+
+			if (err_caixa) {
+				toast.error(err_caixa.message);
+				console.error(err_caixa);
+				return;
+			}
+			console.log(result_data);
+		}
 	}
 	function fecharCaixa() {
 		pedidos_caixa.isOpen = false;
 	}
 </script>
 
+<pre>
+	{JSON.stringify(caixa, null, 2)}
+</pre>
 <div class="gap-0 py-1">
 	<div class="items-center gap-0 pb-7">
 		<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 	</div>
 	<p class="text-center">
-		Saldo inicial do caixa: <span class="font-bold">R${saldo_inicial}</span>
+		Saldo inicial do caixa: <span class="font-bold"
+			>R${formatM(caixa.cents_em_caixa)}</span
+		>
 	</p>
 	<div class="flex items-center justify-center gap-0 pb-7">
 		<div class="flex gap-4 py-4">
-			{#if !pedidos_caixa.isOpen}
+			{#if caixa.status == 'fechado'}
 				<div class="grid grid-cols-2 items-center gap-4">
 					<Label for="name" class="text-right"
 						>Digite o saldo inicial do dia:</Label
@@ -161,25 +187,26 @@
 						bind:value={saldo_inicial}
 					/>
 				</div>
-				<Button on:click={abrirCaixa} disabled={saldo_inicial === 0}
-					>Abrir caixa</Button
+				<Button
+					on:click={() => abrirCaixa(caixa)}
+					disabled={saldo_inicial === 0}>Abrir caixa</Button
 				>
-			{:else}
+			{:else if caixa.status == 'aberto'}
 				<Button on:click={fecharCaixa}>Fechar caixa</Button>
 			{/if}
 		</div>
 	</div>
 </div>
 
-{#if pedidos_caixa.isOpen}
+{#if caixa.status == 'aberto'}
 	<div class="flex flex-col justify-center gap-4 xl:flex-row">
 		<div class="col-auto flex h-auto flex-col justify-between">
 			<div class="">
 				<h2 class="text-3xl font-bold">Informações do pedido:</h2>
 				<div
-					class={`mt-5 w-full rounded-lg px-3 py-1 text-center font-bold text-white  ${pedidos_caixa.isOpen ? 'success-bg' : 'bg-red-500'}`}
+					class={`mt-5 w-full rounded-lg px-3 py-1 text-center font-bold text-white  ${caixa.status == 'aberto' ? 'success-bg' : 'bg-red-500'}`}
 				>
-					{pedidos_caixa.isOpen ? 'Em aberto' : 'Fechado'}
+					{caixa.status == 'aberto' ? 'Em aberto' : 'Fechado'}
 				</div>
 				<div class="mt-4">
 					<p>
@@ -290,11 +317,17 @@
 									class=" my-3 flex flex-col items-center justify-center gap-3"
 								>
 									{#if cliente_selecionado}
-										<button class="w-full" on:click={() => realizarPedido('fiado')}>
+										<button
+											class="w-full"
+											on:click={() => realizarPedido('fiado')}
+										>
 											<ButtonCardapio label={'FIADO'} Icon={DollarSign} />
 										</button>
 									{/if}
-									<button class="w-full" on:click={() => realizarPedido('pago')}>
+									<button
+										class="w-full"
+										on:click={() => realizarPedido('pago')}
+									>
 										<ButtonCardapio label={'PAGO'} Icon={DollarSign} />
 									</button>
 									<button class="w-full">

@@ -31,4 +31,6 @@
 		</div>
 	</div>
 </main>
- {JSON.stringify(distribuidoras, null, 2)}
+<pre>
+	{JSON.stringify(distribuidoras, null, 2)}
+</pre>

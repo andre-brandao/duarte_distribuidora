@@ -1,19 +1,20 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, params }) => {
 	const supabase = locals.supabase;
+	const caixa_id = params.id;
 
 	const [
 		{ data: clientes, error: err_cliente },
 		{ data: produtos, error: err_produtos },
-		{ data: caixas, error: err_caixas },
+		{ data: caixa, error: err_caixa },
 	] = await Promise.all([
 		supabase.from('cliente').select('*'),
 		supabase
 			.from('var_produto')
 			.select('id, produto(*), preco(preco_in_cents,tipo), categoria(nome)'),
-		supabase.from('caixa').select('*'),
+		supabase.from('caixa').select('*').eq('id', caixa_id).single(),
 	]);
 
 	if (err_cliente) {
@@ -30,12 +31,12 @@ export const load = (async ({ locals }) => {
 		error(404, err_produtos.message);
 	}
 
-	if (err_caixas) {
-		console.log(err_caixas);
-		console.error(err_caixas);
+	if (err_caixa) {
+		console.log(err_caixa);
+		console.error(err_caixa);
 
-		error(404, err_caixas.message);
+		error(404, err_caixa.message);
 	}
 
-	return { clientes, produtos, caixas };
+	return { clientes, produtos, caixa };
 }) satisfies PageServerLoad;
