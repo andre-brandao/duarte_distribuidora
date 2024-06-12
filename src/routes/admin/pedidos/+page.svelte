@@ -31,7 +31,7 @@
 	{JSON.stringify(pedidos, null, 2)}
 </pre> -->
 <div>
-	<div class="flex justify-between mb-4 items-center">
+	<div class="mb-4 flex items-center justify-between">
 		<h1 class="text-3xl font-bold">Pedidos:</h1>
 		<div class="mt-2">
 			<label for="filtro">Filtrar pedidos:</label>
@@ -54,7 +54,7 @@
 		{/each}
 	{:else}
 		<div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
-			<div>
+			<div class="bg-red-100 rounded-lg p-2">
 				<h1 class="text-center">Pendentes:</h1>
 				{#each pedidos as pedido}
 					{#if pedido.status === 'aberto'}
@@ -62,7 +62,7 @@
 					{/if}
 				{/each}
 			</div>
-			<div>
+			<div class="bg-yellow-100 rounded-lg p-2">
 				<h1 class="text-center">A caminho:</h1>
 				{#each pedidos as pedido}
 					{#if pedido.status === 'caminho'}
@@ -70,7 +70,7 @@
 					{/if}
 				{/each}
 			</div>
-			<div>
+			<div class="bg-green-100 rounded-lg p-2">
 				<h1 class="text-center">Entregue:</h1>
 				{#each pedidos as pedido}
 					{#if pedido.status === 'entregue'}
