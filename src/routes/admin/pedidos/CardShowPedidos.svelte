@@ -68,7 +68,7 @@
 		</div>
 	</div>
     <div class="flex justify-between items-center text-sm mt-2">
-        <p>Observacoes: {pedido.observacao ?? 'Nenhuma observacao'}</p>
+        <p>Observacoes: {pedido.observacao ?? 'Nenhuma'}</p>
         <button
 			on:click={() => removeEstoque(pedido.id)}
 			class="rounded-md bg-red-500 p-2 text-white"

@@ -3,7 +3,15 @@
 	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
-	import { Ban, Printer, DollarSign, CircleX, X } from 'lucide-svelte';
+	import {
+		Ban,
+		Printer,
+		DollarSign,
+		CircleX,
+		X,
+		HandCoins,
+		Handshake,
+	} from 'lucide-svelte';
 	import { pedidoStore } from '$lib/stores/pedidoStore.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { formatM } from '$lib/utils';
@@ -12,6 +20,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { mask } from '$lib/utils';
+	import { getCaixa } from '$lib/db/querys';
 
 	export let data: PageData;
 
@@ -28,10 +37,8 @@
 
 	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
 
-	let { supabase } = data;
-	$: ({ supabase } = data);
-
-	let { session } = data;
+	let { supabase, session } = data;
+	$: ({ supabase, session } = data);
 
 	let saldo_inicial = 0;
 
@@ -88,6 +95,31 @@
 				}
 			}
 		}
+
+		if (tipo_pagamento === 'dinheiro') {
+			const { data: result_transacao_data } = await supabase
+				.from('transacao_caixa')
+				.insert([
+					{
+						cents_transacao: troco_in_cents,
+						meta_data: {
+							tipo: 'Troco',
+							user: session?.user.email,
+							pedido_id: 'todo',
+						},
+						caixa_id: caixa.id,
+					},
+					{
+						cents_transacao: dinheiro_recebido,
+						meta_data: {
+							tipo: 'Pagamento',
+							user: session?.user.email,
+							pedido_id: 'todo',
+						},
+						caixa_id: caixa.id,
+					},
+				]);
+		}
 		// inserir na tabela pedido
 		const pedidoToInsert = {
 			cliente_id: cliente_selecionado?.id ?? null,
@@ -142,28 +174,66 @@
 		} else {
 			const { data: result_data, error: err_caixa } = await supabase
 				.from('caixa')
-				.update({ status: 'aberto', cents_em_caixa: saldo_inicial })
-				.eq('id', caixa.id)
-				.select();
+				.update({ status: 'aberto' })
+				.eq('id', caixa.id);
+
+			const { data: result_transacao_data } = await supabase
+				.from('transacao_caixa')
+				.insert({
+					cents_transacao: Number(saldo_inicial) * 100,
+					meta_data: {
+						tipo: 'Abrir caixa',
+						user: session?.user.email,
+					},
+					caixa_id: caixa.id,
+				});
 
 			if (err_caixa) {
 				toast.error(err_caixa.message);
 				console.error(err_caixa);
 				return;
 			}
+			const { data: caixa_novo, error: err_caixanovo } = await getCaixa(
+				supabase,
+				{
+					caixa_id: caixa.id,
+				},
+			);
+
+			if (err_caixanovo) {
+				toast.error(err_caixanovo.message);
+				console.error(err_caixanovo);
+				return;
+			}
+
+			caixa = caixa_novo;
 			console.log(result_data);
 		}
+
+		toast.success('Caixa aberto com sucesso!');
 	}
-	function fecharCaixa() {
-		pedidos_caixa.isOpen = false;
+	async function fecharCaixa() {}
+
+	function pagamentoDinheiro() {}
+
+	let isDinheiro = false;
+
+	function mudaStatus() {
+		isDinheiro = true;
 	}
+	let dinheiro_recebido: string;
+	$: valor_pedido_in_cents = $pedidoStore.reduce(
+		(acc, p) => acc + p.unidade_em_cents * p.quantidade,
+		0,
+	);
+	$: troco_in_cents = Number(dinheiro_recebido) * 100 - valor_pedido_in_cents;
 </script>
 
 <pre>
 	{JSON.stringify(caixa, null, 2)}
 </pre>
 <div class="gap-0 py-1">
-	<div class="items-center gap-0 pb-7">
+	<div class="mb-5 items-center gap-0">
 		<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 	</div>
 	<p class="text-center">
@@ -171,7 +241,7 @@
 			>R${formatM(caixa.cents_em_caixa)}</span
 		>
 	</p>
-	<div class="flex items-center justify-center gap-0 pb-7">
+	<div class="flex items-center justify-center gap-0">
 		<div class="flex gap-4 py-4">
 			{#if caixa.status == 'fechado'}
 				<div class="grid grid-cols-2 items-center gap-4">
@@ -299,42 +369,71 @@
 				<div class="mb-4">
 					<ButtonCardapio label={'IMPRIMIR'} Icon={Printer} />
 				</div>
-				<Dialog.Root>
+				<Dialog.Root
+					onOpenChange={(e) => {
+						if (!e) {
+							dinheiro_recebido = '0';
+							isDinheiro = false;
+						}
+					}}
+				>
 					<Dialog.Trigger class="w-full">
-						<ButtonCardapio
-							label={'PAGAMENTO'}
-							Icon={DollarSign}
-						/></Dialog.Trigger
+						<button
+							class="group flex w-full content-center items-center justify-center gap-2 rounded-lg bg-primary py-3 text-center font-semibold text-secondary-foreground shadow-sm transition ease-in-out hover:bg-yellow-300 disabled:bg-yellow-100"
+							disabled={$pedidoStore.length === 0}
+						>
+							PAGAMENTO
+							<DollarSign />
+						</button></Dialog.Trigger
 					>
-					<Dialog.Content>
+					<Dialog.Content class=" overflow-hidden sm:min-w-[600px]">
 						<Dialog.Header>
 							<Dialog.Title>Qual foi a forma de pagamento?</Dialog.Title>
 							<Dialog.Description>
 								Selecione a forma de pagamento do cliente, Pedidos Fiado
 								necessitam de credito do cliente
-
-								<div
-									class=" my-3 flex flex-col items-center justify-center gap-3"
-								>
-									{#if cliente_selecionado}
-										<button
-											class="w-full"
-											on:click={() => realizarPedido('fiado')}
-										>
-											<ButtonCardapio label={'FIADO'} Icon={DollarSign} />
-										</button>
-									{/if}
+							</Dialog.Description>
+							<div
+								class=" my-3 flex flex-col items-center justify-center gap-3"
+							>
+								{#if cliente_selecionado}
 									<button
 										class="w-full"
-										on:click={() => realizarPedido('pago')}
+										on:click={() => realizarPedido('fiado')}
 									>
-										<ButtonCardapio label={'PAGO'} Icon={DollarSign} />
+										<ButtonCardapio label={'FIADO'} Icon={Handshake} />
 									</button>
-									<button class="w-full">
-										<ButtonCardapio label={'DINHEIRO'} Icon={DollarSign} />
-									</button>
-								</div>
-							</Dialog.Description>
+								{/if}
+								<button class="w-full" on:click={() => realizarPedido('pago')}>
+									<ButtonCardapio label={'PAGO'} Icon={DollarSign} />
+								</button>
+								<button class="w-full" on:click={mudaStatus}>
+									<ButtonCardapio label={'DINHEIRO'} Icon={HandCoins} />
+								</button>
+
+								{#if isDinheiro}
+									<div class="flex w-full items-center justify-center gap-4">
+										<Label for="troco" class="w-fit">Valor recebido:</Label>
+										<input
+											class="flex h-9 w-fit rounded-md border border-gray-300 bg-transparent bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+											type="number"
+											min={valor_pedido_in_cents}
+											use:mask={{
+												mask: 'money',
+											}}
+											bind:value={dinheiro_recebido}
+										/>
+										<Button>CONFIRMAR</Button>
+									</div>
+									{#if dinheiro_recebido && Number(dinheiro_recebido) * 100 >= valor_pedido_in_cents}
+										<h1 class="font-lg">
+											Troco do cliente: <span class="font-bold"
+												>R${formatM(troco_in_cents)}</span
+											>
+										</h1>
+									{/if}
+								{/if}
+							</div>
 						</Dialog.Header>
 					</Dialog.Content>
 				</Dialog.Root>
