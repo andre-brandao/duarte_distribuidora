@@ -343,6 +343,7 @@ export type Database = {
           created_at: string
           id: number
           meta_data: Json
+          total_log: number | null
         }
         Insert: {
           caixa_id: number
@@ -350,6 +351,7 @@ export type Database = {
           created_at?: string
           id?: number
           meta_data: Json
+          total_log?: number | null
         }
         Update: {
           caixa_id?: number
@@ -357,6 +359,7 @@ export type Database = {
           created_at?: string
           id?: number
           meta_data?: Json
+          total_log?: number | null
         }
         Relationships: [
           {
