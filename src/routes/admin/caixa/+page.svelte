@@ -22,7 +22,7 @@
 							<a
 								href="/admin/caixa/{caixa.id}"
 								class="rounded-lg bg-primary p-2"
-								>Caixa {caixa.distribuidora_id}</a
+								>Caixa {caixa.id}</a
 							>
 						{/each}
 					</div>

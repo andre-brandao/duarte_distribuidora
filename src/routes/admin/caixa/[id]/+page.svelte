@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ModalCliente from '$lib/components/modal/ModalCliente.svelte';
-	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte';
-	import { Textarea } from '$lib/components/ui/textarea';
-	import ModalProduto from '$lib/components/modal/ModalProduto.svelte';
+	import ModalCliente from '$lib/components/modal/ModalCliente.svelte'
+	import ButtonCardapio from '$lib/components/buttons/ButtonCardapio.svelte'
+	import { Textarea } from '$lib/components/ui/textarea'
+	import ModalProduto from '$lib/components/modal/ModalProduto.svelte'
 	import {
 		Ban,
 		Printer,
@@ -11,36 +11,29 @@
 		X,
 		HandCoins,
 		Handshake,
-	} from 'lucide-svelte';
-	import { pedidoStore } from '$lib/stores/pedidoStore.js';
-	import * as Dialog from '$lib/components/ui/dialog';
-	import { formatM } from '$lib/utils';
-	import type { PageData } from './$types.js';
-	import { toast } from 'svelte-sonner';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { mask } from '$lib/utils';
-	import { getCaixa } from '$lib/db/querys';
+	} from 'lucide-svelte'
+	import { pedidoStore } from '$lib/stores/pedidoStore.js'
+	import * as Dialog from '$lib/components/ui/dialog'
+	import { formatM } from '$lib/utils'
+	import type { PageData } from './$types.js'
+	import { toast } from 'svelte-sonner'
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js'
+	import { Label } from '$lib/components/ui/label/index.js'
+	import { mask } from '$lib/utils'
+	import { getCaixa } from '$lib/db/querys'
 
-	export let data: PageData;
+	export let data: PageData
 
-	$pedidoStore = [];
-	const { clientes, produtos: prod_temp, caixa } = data;
+	$pedidoStore = []
+	let { clientes, produtos: prod_temp } = data
+	let caixa = data.caixa
 
-	type Caixa = {
-		cents_em_caixa: number;
-		created_at: string;
-		distribuidora_id: number;
-		id: number;
-		status: string;
-	};
+	const produtos = prod_temp.filter((p) => p.preco.length !== 0)
 
-	const produtos = prod_temp.filter((p) => p.preco.length !== 0);
+	let { supabase, session } = data
+	$: ({ supabase, session } = data)
 
-	let { supabase, session } = data;
-	$: ({ supabase, session } = data);
-
-	let saldo_inicial = 0;
+	let saldo_inicial = 0
 
 	const pedidos_caixa = {
 		num_pedido: 0,
@@ -48,37 +41,37 @@
 		isOpen: false,
 		criado_por: session?.user.email ?? 'Desconhecido',
 		valor_total: 0,
-	};
+	}
 
-	let cliente_selecionado: any = null;
+	let cliente_selecionado: any = null
 
-	$: console.log(cliente_selecionado);
+	$: console.log(cliente_selecionado)
 
 	async function realizarPedido(tipo_pagamento: string) {
 		if (tipo_pagamento === 'fiado' && !cliente_selecionado) {
-			toast.error('Selecione um cliente para realizar um pedido fiado');
-			return;
+			toast.error('Selecione um cliente para realizar um pedido fiado')
+			return
 		}
 
 		if ($pedidoStore.length === 0) {
-			toast.error('Adicione produtos ao pedido');
-			return;
+			toast.error('Adicione produtos ao pedido')
+			return
 		}
 
-		console.log(cliente_selecionado);
+		console.log(cliente_selecionado)
 
 		const total_in_cents = $pedidoStore.reduce(
 			(acc, p) => acc + p.unidade_em_cents * p.quantidade,
 			0,
-		);
+		)
 
 		if (tipo_pagamento === 'fiado') {
 			if (
 				cliente_selecionado.credito_usado + total_in_cents >
 				cliente_selecionado.credito_maximo
 			) {
-				toast.error('Cliente não possui crédito suficiente');
-				return;
+				toast.error('Cliente não possui crédito suficiente')
+				return
 			} else {
 				const { data: result_cliente, error: err_cliente } = await supabase
 					.from('cliente')
@@ -86,12 +79,12 @@
 						credito_usado: cliente_selecionado.credito_usado + total_in_cents,
 					})
 					.eq('id', cliente_selecionado.id)
-					.single();
+					.single()
 
 				if (err_cliente) {
-					toast.error(err_cliente.message);
-					console.error(err_cliente);
-					return;
+					toast.error(err_cliente.message)
+					console.error(err_cliente)
+					return
 				}
 			}
 		}
@@ -118,7 +111,7 @@
 						},
 						caixa_id: caixa.id,
 					},
-				]);
+				])
 		}
 		// inserir na tabela pedido
 		const pedidoToInsert = {
@@ -128,18 +121,18 @@
 			meta_data: null,
 			status: 'aberto',
 			distribuidora_id: 1,
-		};
+		}
 
 		const { data: result_pedido, error: err_pedido } = await supabase
 			.from('pedido')
 			.insert(pedidoToInsert)
 			.select('*')
-			.single();
+			.single()
 
 		if (err_pedido) {
-			toast.error(err_pedido.message);
-			console.error(err_pedido);
-			return;
+			toast.error(err_pedido.message)
+			console.error(err_pedido)
+			return
 		}
 
 		// inserir na tabela produto_pedido
@@ -150,88 +143,100 @@
 				quantidade: p.quantidade, // e isso
 				unidade_in_cents: p.unidade_em_cents,
 				total_in_cents: p.quantidade * p.unidade_em_cents,
-			};
-		});
+			}
+		})
 
 		const { error: err_pp } = await supabase
 			.from('produto_pedido')
-			.insert(produtosToInsert);
+			.insert(produtosToInsert)
 		if (err_pp) {
-			toast.error(err_pp.message);
-			console.error(err_pp);
-			return;
+			toast.error(err_pp.message)
+			console.error(err_pp)
+			return
 		}
 
-		toast.success('Pedido realizado com sucesso');
-		$pedidoStore = [];
-		cliente_selecionado = null;
+		toast.success('Pedido realizado com sucesso')
+		$pedidoStore = []
+		cliente_selecionado = null
 	}
 
-	async function abrirCaixa(caixa: Caixa) {
+	async function abrirCaixa() {
 		if (caixa.status != 'fechado') {
-			toast.error('Caixa não está fechado');
-			return;
+			toast.error('Caixa não está fechado')
+			return
 		} else {
-			const { data: result_data, error: err_caixa } = await supabase
-				.from('caixa')
-				.update({ status: 'aberto' })
-				.eq('id', caixa.id);
-
-			const { data: result_transacao_data } = await supabase
-				.from('transacao_caixa')
-				.insert({
+			const { data: result_transacao_data, error: err_transacao } =
+				await supabase.from('transacao_caixa').insert({
 					cents_transacao: Number(saldo_inicial) * 100,
 					meta_data: {
 						tipo: 'Abrir caixa',
 						user: session?.user.email,
 					},
 					caixa_id: caixa.id,
-				});
+				})
+
+			if (err_transacao) {
+				toast.error(err_transacao.message)
+				console.error(err_transacao)
+				return
+			}
+
+			const { data: caixa_novo, error: err_caixa } = await supabase
+				.from('caixa')
+				.update({ status: 'aberto' })
+				.eq('id', caixa.id)
+				.select('*')
+				.single()
 
 			if (err_caixa) {
-				toast.error(err_caixa.message);
-				console.error(err_caixa);
-				return;
-			}
-			const { data: caixa_novo, error: err_caixanovo } = await getCaixa(
-				supabase,
-				{
-					caixa_id: caixa.id,
-				},
-			);
-
-			if (err_caixanovo) {
-				toast.error(err_caixanovo.message);
-				console.error(err_caixanovo);
-				return;
+				toast.error(err_caixa.message)
+				console.error(err_caixa)
+				return
 			}
 
-			caixa = caixa_novo;
-			console.log(result_data);
+			caixa.status = caixa_novo.status
+			caixa.cents_em_caixa = caixa_novo.cents_em_caixa
+			console.log(caixa_novo)
+			console.log(caixa)
 		}
 
-		toast.success('Caixa aberto com sucesso!');
+		toast.success('Caixa aberto com sucesso!')
+		caixa.status = 'aberto'
+		caixa = caixa
 	}
-	async function fecharCaixa() {}
+	async function fecharCaixa() {
+		const { data: fechar_data, error: err_fechar } = await supabase
+			.from('caixa')
+			.update({
+				status: 'fechado',
+			})
+			.eq('id', caixa.id)
+			.select('*')
+			.single()
+
+		if (err_fechar) {
+			toast.error(err_fechar.message)
+		}
+		console.log(fechar_data)
+
+		caixa = fechar_data
+	}
 
 	function pagamentoDinheiro() {}
 
-	let isDinheiro = false;
+	let isDinheiro = false
 
 	function mudaStatus() {
-		isDinheiro = true;
+		isDinheiro = true
 	}
-	let dinheiro_recebido: string;
+	let dinheiro_recebido: string
 	$: valor_pedido_in_cents = $pedidoStore.reduce(
 		(acc, p) => acc + p.unidade_em_cents * p.quantidade,
 		0,
-	);
-	$: troco_in_cents = Number(dinheiro_recebido) * 100 - valor_pedido_in_cents;
+	)
+	$: troco_in_cents = Number(dinheiro_recebido) * 100 - valor_pedido_in_cents
 </script>
 
-<pre>
-	{JSON.stringify(caixa, null, 2)}
-</pre>
 <div class="gap-0 py-1">
 	<div class="mb-5 items-center gap-0">
 		<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
@@ -241,9 +246,10 @@
 			>R${formatM(caixa.cents_em_caixa)}</span
 		>
 	</p>
+
 	<div class="flex items-center justify-center gap-0">
 		<div class="flex gap-4 py-4">
-			{#if caixa.status == 'fechado'}
+			{#if caixa.status === 'fechado'}
 				<div class="grid grid-cols-2 items-center gap-4">
 					<Label for="name" class="text-right"
 						>Digite o saldo inicial do dia:</Label
@@ -258,17 +264,19 @@
 					/>
 				</div>
 				<Button
-					on:click={() => abrirCaixa(caixa)}
+					on:click={() => {
+						abrirCaixa()
+					}}
 					disabled={saldo_inicial === 0}>Abrir caixa</Button
 				>
-			{:else if caixa.status == 'aberto'}
+			{:else if caixa.status === 'aberto'}
 				<Button on:click={fecharCaixa}>Fechar caixa</Button>
 			{/if}
 		</div>
 	</div>
 </div>
 
-{#if caixa.status == 'aberto'}
+{#if caixa.status === 'aberto'}
 	<div class="flex flex-col justify-center gap-4 xl:flex-row">
 		<div class="col-auto flex h-auto flex-col justify-between">
 			<div class="">
@@ -298,8 +306,8 @@
 						{supabase}
 						{clientes}
 						on:cliente_selecionado={(e) => {
-							const c = e.detail.cliente;
-							cliente_selecionado = c;
+							const c = e.detail.cliente
+							cliente_selecionado = c
 						}}
 					/>
 				{:else}
@@ -372,8 +380,8 @@
 				<Dialog.Root
 					onOpenChange={(e) => {
 						if (!e) {
-							dinheiro_recebido = '0';
-							isDinheiro = false;
+							dinheiro_recebido = '0'
+							isDinheiro = false
 						}
 					}}
 				>
