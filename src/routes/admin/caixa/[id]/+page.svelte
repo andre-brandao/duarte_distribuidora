@@ -204,6 +204,7 @@
 		caixa.status = 'aberto'
 		caixa = caixa
 	}
+
 	async function fecharCaixa() {
 		const { data: fechar_data, error: err_fechar } = await supabase
 			.from('caixa')
@@ -222,13 +223,12 @@
 		caixa = fechar_data
 	}
 
-	function pagamentoDinheiro() {}
-
 	let isDinheiro = false
 
 	function mudaStatus() {
 		isDinheiro = true
 	}
+
 	let dinheiro_recebido: string
 	$: valor_pedido_in_cents = $pedidoStore.reduce(
 		(acc, p) => acc + p.unidade_em_cents * p.quantidade,
@@ -242,7 +242,7 @@
 		<h1 class="text-center text-4xl font-bold">Pedido no caixa</h1>
 	</div>
 	<p class="text-center">
-		Saldo inicial do caixa: <span class="font-bold"
+		Saldo do caixa: <span class="font-bold"
 			>R${formatM(caixa.cents_em_caixa)}</span
 		>
 	</p>
@@ -264,10 +264,7 @@
 					/>
 				</div>
 				<Button
-					on:click={() => {
-						abrirCaixa()
-					}}
-					disabled={saldo_inicial === 0}>Abrir caixa</Button
+					on:click={abrirCaixa}>Abrir caixa</Button
 				>
 			{:else if caixa.status === 'aberto'}
 				<Button on:click={fecharCaixa}>Fechar caixa</Button>
@@ -431,7 +428,7 @@
 											}}
 											bind:value={dinheiro_recebido}
 										/>
-										<Button>CONFIRMAR</Button>
+										<Button on:click={() => realizarPedido('dinheiro')}>CONFIRMAR</Button>
 									</div>
 									{#if dinheiro_recebido && Number(dinheiro_recebido) * 100 >= valor_pedido_in_cents}
 										<h1 class="font-lg">

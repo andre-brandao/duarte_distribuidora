@@ -1,41 +1,41 @@
 <script lang="ts">
-	import type { Json } from '$lib/supabase-types';
-	import { formatDate, formatM } from '$lib/utils';
-	import type { SupabaseClient } from '@supabase/supabase-js';
+	import type { Json } from '$lib/supabase-types'
+	import { formatDate, formatM } from '$lib/utils'
+	import type { SupabaseClient } from '@supabase/supabase-js'
 
-	export let supabase: SupabaseClient;
+	export let supabase: SupabaseClient
 
 	export let pedido: {
-		cliente_id: number | null;
-		created_at: string;
-		distribuidora_id: number | null;
-		id: number;
-		meta_data: Json;
-		observacao: string | null;
-		status: string;
-		tipo: string;
-		total_in_cents: number;
+		cliente_id: number | null
+		created_at: string
+		distribuidora_id: number | null
+		id: number
+		meta_data: Json
+		observacao: string | null
+		status: string
+		tipo: string
+		total_in_cents: number
 		produto_pedido: {
-			quantidade: number;
+			quantidade: number
 			var_produto: {
-				id: number;
+				id: number
 				produto: {
-					created_at: string;
-					id: number;
-					nome: string;
-				} | null;
+					created_at: string
+					id: number
+					nome: string
+				} | null
 				categoria: {
-					nome: string;
-				} | null;
-			} | null;
-			total_in_cents: number;
-		}[];
-	};
+					nome: string
+				} | null
+			} | null
+			total_in_cents: number
+		}[]
+	}
 
 	async function removeEstoque(id_pedido: number) {
-		const r = await supabase.rpc('process_pedido', { p_pedido_id: id_pedido });
+		const r = await supabase.rpc('process_pedido', { p_pedido_id: id_pedido })
 
-		console.log(r);
+		console.log(r)
 	}
 </script>
 
@@ -67,13 +67,13 @@
 			{/each}
 		</div>
 	</div>
-    <div class="flex justify-between items-center text-sm mt-2">
-        <p>Observacoes: {pedido.observacao ?? 'Nenhuma'}</p>
-        <button
+	<div class="mt-2 flex items-center justify-between text-sm">
+		<p>Observacoes: {pedido.observacao ?? 'Nenhuma'}</p>
+		<button
 			on:click={() => removeEstoque(pedido.id)}
 			class="rounded-md bg-red-500 p-2 text-white"
 		>
 			Processar pedido
 		</button>
-    </div>
+	</div>
 </div>
