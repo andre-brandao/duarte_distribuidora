@@ -21,6 +21,7 @@
 	import { Label } from '$lib/components/ui/label/index.js'
 	import { mask } from '$lib/utils'
 	import { getCaixa } from '$lib/db/querys'
+	import ModalAlertFechar from './ModalAlertFechar.svelte'
 
 	export let data: PageData
 
@@ -205,7 +206,7 @@
 		caixa = caixa
 	}
 
-	async function fecharCaixa() {
+	export async function fecharCaixa() {
 		const { data: fechar_data, error: err_fechar } = await supabase
 			.from('caixa')
 			.update({
@@ -263,11 +264,11 @@
 						bind:value={saldo_inicial}
 					/>
 				</div>
-				<Button
-					on:click={abrirCaixa}>Abrir caixa</Button
-				>
+				<Button on:click={abrirCaixa}>Abrir caixa</Button>
 			{:else if caixa.status === 'aberto'}
-				<Button on:click={fecharCaixa}>Fechar caixa</Button>
+				<ModalAlertFechar>
+					<Button on:click={fecharCaixa}>Confirmar fechamento</Button>
+				</ModalAlertFechar>
 			{/if}
 		</div>
 	</div>
@@ -428,7 +429,9 @@
 											}}
 											bind:value={dinheiro_recebido}
 										/>
-										<Button on:click={() => realizarPedido('dinheiro')}>CONFIRMAR</Button>
+										<Button on:click={() => realizarPedido('dinheiro')}
+											>CONFIRMAR</Button
+										>
 									</div>
 									{#if dinheiro_recebido && Number(dinheiro_recebido) * 100 >= valor_pedido_in_cents}
 										<h1 class="font-lg">
