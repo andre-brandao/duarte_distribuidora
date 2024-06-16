@@ -34,16 +34,16 @@
 			{#each transacao_caixa as transacao}
 				<Table.Row>
 					<Table.Cell class="font-medium">{transacao.id}</Table.Cell>
-					<Table.Cell>{transacao.caixa.distribuidora.nome}</Table.Cell>
+					<Table.Cell>{transacao.caixa?.distribuidora?.nome ?? 'Não tem'}</Table.Cell>
 					<Table.Cell>{formatDate(transacao.created_at)}</Table.Cell>
 					<Table.Cell class="text-right"
-						>{transacao.meta_data.tipo ?? 'Sem tipo'}</Table.Cell
+						>{transacao.meta_data?.tipo ?? 'Sem tipo'}</Table.Cell
 					>
 					<Table.Cell class="text-right"
 						>R${formatM(transacao.cents_transacao)}</Table.Cell
 					>
 					<Table.Cell class="text-right font-medium"
-						>R${formatM(transacao.total_log)}</Table.Cell
+						>R${formatM(transacao.total_log) ?? '0.00'}</Table.Cell
 					>
 				</Table.Row>
 			{/each}

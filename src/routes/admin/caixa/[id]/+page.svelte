@@ -90,30 +90,6 @@
 			}
 		}
 
-		if (tipo_pagamento === 'dinheiro') {
-			const { data: result_transacao_data } = await supabase
-				.from('transacao_caixa')
-				.insert([
-					{
-						cents_transacao: troco_in_cents,
-						meta_data: {
-							tipo: 'Troco',
-							user: session?.user.email,
-							pedido_id: 'todo',
-						},
-						caixa_id: caixa.id,
-					},
-					{
-						cents_transacao: dinheiro_recebido,
-						meta_data: {
-							tipo: 'Pagamento',
-							user: session?.user.email,
-							pedido_id: 'todo',
-						},
-						caixa_id: caixa.id,
-					},
-				])
-		}
 		// inserir na tabela pedido
 		const pedidoToInsert = {
 			cliente_id: cliente_selecionado?.id ?? null,
@@ -134,6 +110,33 @@
 			toast.error(err_pedido.message)
 			console.error(err_pedido)
 			return
+		}
+
+		const pedido_id = result_pedido.id;
+
+		if (tipo_pagamento === 'dinheiro') {
+			const { data: result_transacao_data } = await supabase
+				.from('transacao_caixa')
+				.insert([
+					{
+						cents_transacao: Number(dinheiro_recebido) * 100,
+						meta_data: {
+							tipo: 'Pagamento',
+							user: session?.user.email,
+							pedido_id: pedido_id,
+						},
+						caixa_id: caixa.id,
+					},
+					{
+						cents_transacao: -troco_in_cents,
+						meta_data: {
+							tipo: 'Troco',
+							user: session?.user.email,
+							pedido_id: pedido_id,
+						},
+						caixa_id: caixa.id,
+					},
+				])
 		}
 
 		// inserir na tabela produto_pedido
@@ -207,21 +210,43 @@
 	}
 
 	export async function fecharCaixa() {
-		const { data: fechar_data, error: err_fechar } = await supabase
-			.from('caixa')
-			.update({
-				status: 'fechado',
-			})
-			.eq('id', caixa.id)
-			.select('*')
-			.single()
+		if (caixa.status != 'aberto') {
+			toast.error('Caixa está fechado')
+			return
+		} else {
+			const { error: err_transacao } =
+				await supabase.from('transacao_caixa').insert({
+					cents_transacao: 0,
+					meta_data: {
+						tipo: 'Fechar caixa',
+						user: session?.user.email,
+					},
+					caixa_id: caixa.id,
+				})
 
-		if (err_fechar) {
-			toast.error(err_fechar.message)
+			if (err_transacao) {
+				toast.error(err_transacao.message)
+				console.error(err_transacao)
+				return
+			}
+
+			const { data: fechar_data, error: err_fechar } = await supabase
+				.from('caixa')
+				.update({
+					status: 'fechado',
+				})
+				.eq('id', caixa.id)
+				.select('*')
+				.single()
+
+			if (err_fechar) {
+				toast.error(err_fechar.message)
+			}
+			console.log(fechar_data)
+
+			caixa = fechar_data
+			toast.success('Caixa fechado com sucesso');
 		}
-		console.log(fechar_data)
-
-		caixa = fechar_data
 	}
 
 	let isDinheiro = false
