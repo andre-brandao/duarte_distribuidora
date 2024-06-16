@@ -28,6 +28,7 @@
 	$pedidoStore = []
 	let { clientes, produtos: prod_temp } = data
 	let caixa = data.caixa
+	let open: boolean
 
 	const produtos = prod_temp.filter((p) => p.preco.length !== 0)
 
@@ -112,7 +113,7 @@
 			return
 		}
 
-		const pedido_id = result_pedido.id;
+		const pedido_id = result_pedido.id
 
 		if (tipo_pagamento === 'dinheiro') {
 			const { data: result_transacao_data } = await supabase
@@ -160,6 +161,9 @@
 		}
 
 		toast.success('Pedido realizado com sucesso')
+		open = false
+		dinheiro_recebido = '0'
+		isDinheiro = false
 		$pedidoStore = []
 		cliente_selecionado = null
 	}
@@ -214,8 +218,9 @@
 			toast.error('Caixa está fechado')
 			return
 		} else {
-			const { error: err_transacao } =
-				await supabase.from('transacao_caixa').insert({
+			const { error: err_transacao } = await supabase
+				.from('transacao_caixa')
+				.insert({
 					cents_transacao: 0,
 					meta_data: {
 						tipo: 'Fechar caixa',
@@ -245,7 +250,7 @@
 			console.log(fechar_data)
 
 			caixa = fechar_data
-			toast.success('Caixa fechado com sucesso');
+			toast.success('Caixa fechado com sucesso')
 		}
 	}
 
@@ -407,6 +412,7 @@
 							isDinheiro = false
 						}
 					}}
+					bind:open
 				>
 					<Dialog.Trigger class="w-full">
 						<button
