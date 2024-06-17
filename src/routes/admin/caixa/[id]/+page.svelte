@@ -28,7 +28,7 @@
 	$pedidoStore = []
 	let { clientes, produtos: prod_temp } = data
 	let caixa = data.caixa
-	let open: boolean
+	let isOpen: boolean
 
 	const produtos = prod_temp.filter((p) => p.preco.length !== 0)
 
@@ -161,7 +161,7 @@
 		}
 
 		toast.success('Pedido realizado com sucesso')
-		open = false
+		isOpen = false
 		dinheiro_recebido = '0'
 		isDinheiro = false
 		$pedidoStore = []
@@ -412,7 +412,7 @@
 							isDinheiro = false
 						}
 					}}
-					bind:open
+					bind:open={isOpen}
 				>
 					<Dialog.Trigger class="w-full">
 						<button

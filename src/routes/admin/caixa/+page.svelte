@@ -22,11 +22,11 @@
 					{distribuidora.nome}:
 				</h1>
 				<div class="flex flex-col gap-2 text-center">
-					{#each distribuidora.caixa as caixa, i}
+					{#each distribuidora.caixa as caixa}
 						<a
 							href="/admin/caixa/{caixa.id}"
 							class="rounded-lg bg-primary p-2 transition ease-in-out hover:bg-opacity-80"
-							>Caixa {i + 1}</a
+							>Caixa {caixa.id}</a
 						>
 					{/each}
 				</div>

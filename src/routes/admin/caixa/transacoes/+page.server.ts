@@ -5,7 +5,11 @@ export const load = (async ({ locals }) => {
 	const supabase = locals.supabase
 
 	const [{ data: transacao_caixa, error: err_transacao_caixa }] =
-		await Promise.all([supabase.from('transacao_caixa').select('*,caixa(*,distribuidora(id,nome))')])
+		await Promise.all([
+			supabase
+				.from('transacao_caixa')
+				.select('*,caixa(*,distribuidora(id,nome))'),
+		])
 
 	if (err_transacao_caixa) {
 		console.log(err_transacao_caixa)
