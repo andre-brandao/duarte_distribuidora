@@ -8,7 +8,6 @@
 	export let data: PageData
 
 	let transacao_caixa = data.transacao_caixa
-	//MOSTRAR UMA TABELA POR CAIXA E POR DISTRIBUIDORA
 </script>
 
 <main>
@@ -69,6 +68,6 @@
 	<DataTable data={transacao_caixa}/>
 </main>
 
-<pre>
+<!-- <pre>
     {JSON.stringify(transacao_caixa, null, 2)}
-</pre>
+</pre> -->

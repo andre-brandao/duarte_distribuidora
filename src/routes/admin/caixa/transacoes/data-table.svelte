@@ -86,15 +86,16 @@
 			},
 		}),
 		table.column({
-			accessor: 'meta_data',
-			header: 'Tipo',
+			accessor: 'caixa',
+			header: 'Caixa',
+			id: 'id_caixa',
 			cell: ({ value }) => {
-				const tipo = value?.tipo ? value?.tipo : 'Sem tipo'
-				return tipo
+				const caixa_id = value?.id ? value?.id : ''
+				return caixa_id
 			},
 			plugins: {
 				sort: {
-					disable: true,
+					disable: false,
 				},
 				filter: {
 					exclude: true,
@@ -118,8 +119,24 @@
 			},
 		}),
 		table.column({
+			accessor: 'meta_data',
+			header: 'Tipo',
+			cell: ({ value }) => {
+				const tipo = value?.tipo ? value?.tipo : 'Sem tipo'
+				return tipo
+			},
+			plugins: {
+				sort: {
+					disable: true,
+				},
+				filter: {
+					exclude: true,
+				},
+			},
+		}),
+		table.column({
 			accessor: 'cents_transacao',
-			header: 'Valor da transacão',
+			header: 'Valor da transação',
 			cell: ({ value }) => {
 				const formatted = formatM(value)
 				return formatted
@@ -178,49 +195,56 @@
 		.filter(([, hide]) => !hide)
 		.map(([id]) => id)
 
-	const hidableCols = ['id', 'cents_transacao']
+	const hidableCols = ['id', 'cents_transacao', 'meta_data', 'total_log']
 </script>
 
 <div>
-	<div class="flex items-center gap-5 py-4">
-		<Input
+	<div class="flex items-center justify-between gap-5 py-4">
+		<!-- <Input
 			class="max-w-sm"
 			placeholder="Filtrar por filial..."
 			type="text"
 			bind:value={$filterValue}
-		/>
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger asChild let:builder>
-				<Button variant="outline" class="ml-auto" builders={[builder]}>
-					Columns <ChevronDown class="ml-2 h-4 w-4" />
-				</Button>
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content>
-				{#each flatColumns as col}
-					{#if hidableCols.includes(col.id)}
-						<DropdownMenu.CheckboxItem bind:checked={hideForId[col.id]}>
-							{col.header}
-						</DropdownMenu.CheckboxItem>
-					{/if}
+		/> -->
+		<div class="flex gap-2">
+			<select
+				on:change={(e) => {
+					if (e.target && e.target instanceof HTMLSelectElement) {
+						selectedCaixaId.set(
+							e.target.value ? parseInt(e.target.value) : null,
+						)
+					}
+				}}
+				class="flex h-9 rounded-md border border-input bg-background px-3 py-1 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground"
+			>
+				<option value="">Todos os caixas</option>
+				{#each uniqueCaixas as caixa}
+					<option value={caixa?.id}>
+						Caixa {caixa?.id} - {caixa?.distribuidora?.nome}
+					</option>
 				{/each}
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
-		<select
-			on:change={(e) =>
-				selectedCaixaId.set(e.target.value ? parseInt(e.target.value) : null)}
-			class="flex h-9 rounded-md border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-		>
-			<option value="">Todos os caixas</option>
-			{#each uniqueCaixas as caixa,i}
-				<option value={caixa?.id}>
-					Caixa {caixa?.id} - {caixa?.distribuidora?.nome}
-				</option>
-			{/each}
-		</select>
+			</select>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger asChild let:builder>
+					<Button variant="outline" class="ml-auto" builders={[builder]}>
+						Visibilidade colunas <ChevronDown class="ml-2 h-4 w-4" />
+					</Button>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content>
+					{#each flatColumns as col}
+						{#if hidableCols.includes(col.id)}
+							<DropdownMenu.CheckboxItem bind:checked={hideForId[col.id]}>
+								{col.header}
+							</DropdownMenu.CheckboxItem>
+						{/if}
+					{/each}
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+		</div>
 	</div>
 	<div class="rounded-md border">
 		<Table.Root {...$tableAttrs}>
-			<Table.Header>
+			<Table.Header class="bg-primary">
 				{#each $headerRows as headerRow}
 					<Subscribe rowAttrs={headerRow.attrs()}>
 						<Table.Row>
@@ -231,7 +255,7 @@
 									props={cell.props()}
 									let:props
 								>
-									<Table.Head {...attrs}>
+									<Table.Head {...attrs} class="text-primary-foreground">
 										{#if cell.id === 'total_log'}
 											<div class="text-right">
 												<Button variant="ghost" on:click={props.sort.toggle}>
