@@ -130,9 +130,10 @@
 						on:input={checkChanges}
 					>
 						Crédito: R${formatM(novo_cliente.credito_usado)} /
+						R$
 						<input
 							type="number"
-							class="editable-input-2 ml-1"
+							class="editable-input-2 ml-1 min-w-28"
 							use:mask={{
 								mask: 'money',
 							}}

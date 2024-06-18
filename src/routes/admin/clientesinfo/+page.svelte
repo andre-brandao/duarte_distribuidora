@@ -4,6 +4,7 @@
 	import { formatM } from '$lib/utils';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import ProdutoForm from './cliente_form.svelte';
+	import DataTable from './data-table.svelte'
 
 	export let data: PageData;
 
@@ -85,7 +86,7 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- {#if clientes}
+	{#if clientes}
 		<div class="flex justify-center">
 			<div class="overflow-x-auto">
 				<DataTable {clientes} />
@@ -93,5 +94,5 @@
 		</div>
 	{:else}
 		<p>Nenhum cliente encontrado!</p>
-	{/if} -->
+	{/if}
 </main>

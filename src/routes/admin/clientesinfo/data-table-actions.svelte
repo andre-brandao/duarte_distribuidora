@@ -2,7 +2,7 @@
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
-	import ModalShowInfo from './ModalShowInfo.svelte';
+	//import ModalShowInfo from './ModalShowInfo.svelte';
 
 	export let celular: string;
 	export let cpf_cnpj: string | null;
@@ -37,7 +37,8 @@
 		<!-- <DropdownMenu.Item>View payment details</DropdownMenu.Item> -->
 		<button
 			class="relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-gray-100 data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50"
-			><ModalShowInfo
+			>
+			<!-- <ModalShowInfo
 				{id}
 				{nome}
 				{email}
@@ -47,7 +48,7 @@
 				{data_nascimento}
 				{rg_ie}
 				{telefone_fixo}
-			/>
+			/> -->
 		</button>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

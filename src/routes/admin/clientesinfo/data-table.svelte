@@ -7,8 +7,8 @@
 	} from 'svelte-headless-table';
 	import { readable } from 'svelte/store';
 	import * as Table from '$lib/components/ui/table';
-	import type { PageData } from '../../clientesinfo/$types';
-	import ModalShowInfo from './ModalShowInfo.svelte';
+	import type { PageData } from './$types';
+	//import ModalShowInfo from './ModalShowInfo.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import {
 		addTableFilter,
