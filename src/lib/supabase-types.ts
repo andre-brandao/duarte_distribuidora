@@ -72,6 +72,7 @@ export type Database = {
           nome: string
           rg_ie: string | null
           telefone_fixo: string | null
+          tipo_pessoa: string
         }
         Insert: {
           celular: string
@@ -85,6 +86,7 @@ export type Database = {
           nome?: string
           rg_ie?: string | null
           telefone_fixo?: string | null
+          tipo_pessoa?: string
         }
         Update: {
           celular?: string
@@ -98,6 +100,7 @@ export type Database = {
           nome?: string
           rg_ie?: string | null
           telefone_fixo?: string | null
+          tipo_pessoa?: string
         }
         Relationships: []
       }
