@@ -52,6 +52,7 @@ export const load: PageServerLoad = async ({
 		data_nascimento: data.data_nascimento ?? '',
 		email: data.email ?? '',
 		rg_ie: data.rg_ie ?? '',
+		person_type: data.tipo_pessoa ?? 'fisica'
 	};
 
 	return {
