@@ -129,16 +129,16 @@
 						class="block w-fit rounded-lg bg-primary p-2 text-lg font-semibold text-black"
 						on:input={checkChanges}
 					>
-						Crédito: {formatM(novo_cliente.credito_usado)} /
+						Crédito: R${formatM(novo_cliente.credito_usado)} /
 						<input
 							type="number"
 							class="editable-input-2 ml-1"
-							bind:value={novo_cliente.credito_maximo}
-							on:input={checkChanges}
-							placeholder="Máximo"
 							use:mask={{
 								mask: 'money',
 							}}
+							bind:value={novo_cliente.credito_maximo}
+							on:input={checkChanges}
+							placeholder="Máximo"
 						/>
 					</div>
 					{#if isChanged}
@@ -155,10 +155,11 @@
 	</div>
 	{#each pedido as ped}
 		<div class=" mt-4 rounded-lg border bg-gray-100 p-6 shadow-sm">
-			<div class="mb-4 flex gap-2 text-center text-lg">
+			<div class="mb-4 flex gap-2 text-center text-lg flex-col md:flex-row">
 				<h3>Pedido <strong>#{ped.id}</strong> -</h3>
 				<p>Total: <strong>R${ped.total_in_cents}</strong> -</p>
 				<p>Tipo do pedido: <strong>{ped.tipo}</strong></p>
+				<p>Status do pedido: <strong>{ped.status}</strong></p>
 			</div>
 			<div>
 				<h4 class="mb-2 text-lg font-semibold">Produtos pedidos:</h4>

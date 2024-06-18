@@ -96,7 +96,9 @@
 			cliente_id: cliente_selecionado?.id ?? null,
 			total_in_cents,
 			tipo: tipo_pagamento,
-			meta_data: null,
+			meta_data: {
+				tipo_pessoa: cliente_selecionado?.tipo_pessoa == `juridico` ? 'atacado' : 'varejo'
+			},
 			status: 'aberto',
 			distribuidora_id: 1,
 		}
