@@ -1,30 +1,55 @@
 <script lang="ts">
-	import { formatDate, formatM } from '$lib/utils';
-	import type { PageData } from './$types';
-	import CardShowPedidos from './CardShowPedidos.svelte';
+	import { formatDate, formatM } from '$lib/utils'
+	import type { PageData } from './$types'
+	import CardShowPedidos from './CardShowPedidos.svelte'
+	import { updateStatusPedido } from '$lib/db/querys'
+	import { onMount, onDestroy } from 'svelte'
+	import { getPedidosNaoFinalizado } from '$lib/db/querys'
 
-	export let data: PageData;
+	export let data: PageData
 
-	let { supabase } = data;
-	$: ({ supabase } = data);
+	let { supabase } = data
+	$: ({ supabase } = data)
 
-	const pedidos = data.pedidos;
+	const pedidos = data.pedidos
 
-	let pedidoSelecionado = 'all';
+	let pedidoSelecionado = 'all'
 
-	let pedidosFiltrados = pedidos;
+	let pedidosFiltrados = pedidos
 
-	$: if (pedidoSelecionado) pedidosPorStatus();
+	$: if (pedidoSelecionado) pedidosPorStatus()
 
 	const pedidosPorStatus = () => {
 		if (pedidoSelecionado === 'all') {
-			return pedidos;
+			return pedidos
 		}
-		console.log(pedidosFiltrados);
+
+		console.log(pedidosFiltrados)
 		return (pedidosFiltrados = pedidos.filter(
 			(pedido) => pedido.status === pedidoSelecionado,
-		));
-	};
+		))
+	}
+
+	onMount(() => {
+		const sub_channel = supabase
+			.channel('custom-filter-channel')
+			.on(
+				'postgres_changes',
+				{
+					event: '*',
+					schema: 'public',
+					table: 'pedido',
+					filter: 'status=neq.finalizado',
+				},
+				async (payload) => {
+					await getPedidosNaoFinalizado(supabase)
+				},
+			)
+			.subscribe()
+
+			return sub_channel.unsubscribe()
+	})
+	
 </script>
 
 <!-- <pre>
@@ -32,7 +57,11 @@
 </pre> -->
 <div>
 	<div class="mb-4 flex items-center justify-between">
-		<h1 class="text-3xl font-bold">Pedidos:</h1>
+		{#if pedidoSelecionado === 'all'}
+			<h1 class="text-3xl font-bold">Pedidos:</h1>
+		{:else}
+			<h1 class="text-3xl font-bold">Pedidos {pedidoSelecionado}:</h1>
+		{/if}
 		<div class="mt-2">
 			<label for="filtro">Filtrar pedidos:</label>
 			<select
@@ -43,7 +72,7 @@
 			>
 				<option value="all">Todos pedidos</option>
 				<option value="aberto">Pendentes</option>
-				<option value="caminho">A caminho</option>
+				<option value="a_caminho">A caminho</option>
 				<option value="entregue">Entregue</option>
 			</select>
 		</div>
@@ -54,27 +83,72 @@
 		{/each}
 	{:else}
 		<div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
-			<div class="bg-red-100 rounded-lg p-2">
+			<div class="max-h-[88vh] overflow-y-auto rounded-lg bg-red-100 p-2">
 				<h1 class="text-center">Pendentes:</h1>
 				{#each pedidos as pedido}
 					{#if pedido.status === 'aberto'}
-						<CardShowPedidos {pedido} {supabase} />
+						<CardShowPedidos
+							{pedido}
+							{supabase}
+							button_text="Saiu Pra Entrega"
+							click_button={async () => {
+								console.log('click aberto')
+								pedido.status = 'a_caminho'
+								const { error } = await updateStatusPedido(supabase, {
+									id: pedido.id,
+									status: 'a_caminho',
+								})
+								if (error) {
+									pedido.status = 'aberto'
+								}
+							}}
+						/>
 					{/if}
 				{/each}
 			</div>
-			<div class="bg-yellow-100 rounded-lg p-2">
+			<div class="max-h-[88vh] overflow-y-auto rounded-lg bg-yellow-100 p-2">
 				<h1 class="text-center">A caminho:</h1>
 				{#each pedidos as pedido}
-					{#if pedido.status === 'caminho'}
-						<CardShowPedidos {pedido} {supabase} />
+					{#if pedido.status === 'a_caminho'}
+						<CardShowPedidos
+							{pedido}
+							{supabase}
+							button_text="Chegou"
+							click_button={async () => {
+								console.log('click caminho')
+								pedido.status = 'entregue'
+								const { error } = await updateStatusPedido(supabase, {
+									id: pedido.id,
+									status: 'entregue',
+								})
+								if (error) {
+									pedido.status = 'aberto'
+								}
+							}}
+						/>
 					{/if}
 				{/each}
 			</div>
-			<div class="bg-green-100 rounded-lg p-2">
+			<div class="max-h-[88vh] overflow-y-auto rounded-lg bg-green-100 p-2">
 				<h1 class="text-center">Entregue:</h1>
 				{#each pedidos as pedido}
 					{#if pedido.status === 'entregue'}
-						<CardShowPedidos {pedido} {supabase} />
+						<CardShowPedidos
+							{pedido}
+							{supabase}
+							button_text="Confirmar Entrega"
+							click_button={async () => {
+								console.log('click entregue')
+								pedido.status = 'finalizado'
+								const { error } = await updateStatusPedido(supabase, {
+									id: pedido.id,
+									status: 'finalizado',
+								})
+								if (error) {
+									pedido.status = 'entregue'
+								}
+							}}
+						/>
 					{/if}
 				{/each}
 			</div>
