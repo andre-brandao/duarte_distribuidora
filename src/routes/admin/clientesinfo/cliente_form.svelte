@@ -70,16 +70,15 @@
 		telefone_fixo: string | null
 		tipo_pessoa: string
 		endereco: {
-			bairro: string | null
+			bairro: string
 			cep: string
-			cidade: string | null
+			cidade: string
 			cliente_id: number
 			created_at: string
-			endereco: string
 			id: number
 			numero: number | null
-			rua: string | null
-			uf: string | null
+			rua: string
+			uf: string
 		}[]
 	}[] = []
 
@@ -144,7 +143,6 @@
 				bairro: formEndereco.bairro,
 				cep: formEndereco.cep,
 				cidade: formEndereco.cidade,
-				endereco: '',
 				numero: formEndereco.numero,
 				rua: formEndereco.rua,
 				uf: formEndereco.uf,
@@ -226,7 +224,7 @@
 			{/each}
 		</div>
 	</div>
-	<div class="mb-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+	<div class="mb-3 grid grid-cols-1 gap-2 md:grid-cols-2">
 		<div>
 			<Label for="nome">Nome*</Label>
 			<Input
@@ -251,7 +249,7 @@
 			<p class="mt-1 text-[0.8rem] text-muted-foreground">Email do cliente.</p>
 		</div>
 	</div>
-	<div class="mb-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+	<div class="mb-3 grid grid-cols-1 gap-2 md:grid-cols-2">
 		<div class="">
 			<Input
 				placeholder="Digite o {formNovoCliente.tipo_pessoa === 'juridica'
@@ -276,7 +274,7 @@
 			</p>
 		</div>
 	</div>
-	<div class="mb-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+	<div class="mb-3 grid grid-cols-1 gap-2 md:grid-cols-2">
 		<div>
 			<Label for="celular">Celular*</Label>
 			<Input
@@ -353,7 +351,7 @@
 		</div>
 	</div>
 
-	<div class="mb-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+	<div class="mb-2 grid grid-cols-1 gap-2 md:grid-cols-2">
 		<div>
 			<Label for="cidade">Cidade</Label>
 			<Input
@@ -373,7 +371,7 @@
 			/>
 		</div>
 	</div>
-	<div class="mb-3 grid grid-cols-1 md:grid-cols-3 gap-2">
+	<div class="mb-3 grid grid-cols-1 gap-2 md:grid-cols-3">
 		<div>
 			<Label for="rua">Rua</Label>
 			<Input

@@ -127,40 +127,37 @@ export type Database = {
       }
       endereco: {
         Row: {
-          bairro: string | null
+          bairro: string
           cep: string
-          cidade: string | null
+          cidade: string
           cliente_id: number
           created_at: string
-          endereco: string
           id: number
           numero: number | null
-          rua: string | null
-          uf: string | null
+          rua: string
+          uf: string
         }
         Insert: {
-          bairro?: string | null
+          bairro: string
           cep: string
-          cidade?: string | null
+          cidade: string
           cliente_id: number
           created_at?: string
-          endereco: string
           id?: number
           numero?: number | null
-          rua?: string | null
-          uf?: string | null
+          rua: string
+          uf: string
         }
         Update: {
-          bairro?: string | null
+          bairro?: string
           cep?: string
-          cidade?: string | null
+          cidade?: string
           cliente_id?: number
           created_at?: string
-          endereco?: string
           id?: number
           numero?: number | null
-          rua?: string | null
-          uf?: string | null
+          rua?: string
+          uf?: string
         }
         Relationships: [
           {
