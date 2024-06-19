@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import type { PageData } from '../clientesinfo/$types';
-	import { formatM } from '$lib/utils';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import ProdutoForm from './cliente_form.svelte';
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js'
+	import type { PageData } from '../clientesinfo/$types'
+	import { formatM } from '$lib/utils'
+	import * as Dialog from '$lib/components/ui/dialog/index.js'
+	import ClienteForm from './cliente_form.svelte'
 	import DataTable from './data-table.svelte'
+	import { toast } from 'svelte-sonner'
 
-	export let data: PageData;
+	export let data: PageData
 
-	let clientes = data.clientes;
+	let { supabase } = data
+	$: ({ supabase } = data)
 
-	
+	let clientes = data.clientes
 </script>
 
 <main class="mx-auto">
@@ -22,7 +24,14 @@
 					>Adicionar cliente</Dialog.Trigger
 				>
 				<Dialog.Content class="sm:max-w-[500px]">
-					<ProdutoForm data={data.form}/>
+					<ClienteForm
+						{supabase}
+						{clientes}
+						criaCliente={(c) => {
+							clientes?.push(c)
+							clientes = clientes
+						}}
+					/>
 				</Dialog.Content>
 			</Dialog.Root>
 		</div>
@@ -86,7 +95,7 @@
 			</tbody>
 		</table>
 	</div>
-	{#if clientes}
+	<!-- {#if clientes}
 		<div class="flex justify-center">
 			<div class="overflow-x-auto">
 				<DataTable {clientes} />
@@ -94,5 +103,5 @@
 		</div>
 	{:else}
 		<p>Nenhum cliente encontrado!</p>
-	{/if}
+	{/if} -->
 </main>
