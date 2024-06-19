@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({
 	if (!id) {
 		const { data: clientes, error: err_cliente } = await supabase
 			.from('cliente')
-			.select('*')
+			.select('*,endereco(*)')
 
 		if (err_cliente) {
 			console.error(err_cliente)

@@ -23,7 +23,7 @@
 				<Dialog.Trigger class={buttonVariants({ variant: 'default' })}
 					>Adicionar cliente</Dialog.Trigger
 				>
-				<Dialog.Content class="sm:max-w-[500px]">
+				<Dialog.Content class="sm:max-w-[620px] overflow-y-auto">
 					<ClienteForm
 						{supabase}
 						{clientes}
