@@ -98,7 +98,7 @@
 			tipo: tipo_pagamento,
 			meta_data: {
 				tipo_pessoa:
-					cliente_selecionado?.tipo_pessoa == `juridico` ? 'atacado' : 'varejo',
+					cliente_selecionado?.tipo_pessoa == `juridica` ? 'atacado' : 'varejo',
 			},
 			status: 'aberto',
 			distribuidora_id: 1,
