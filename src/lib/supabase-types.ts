@@ -61,7 +61,10 @@ export type Database = {
       }
       cliente: {
         Row: {
+          bairro: string | null
           celular: string
+          cep: string | null
+          cidade: string | null
           cpf_cnpj: string | null
           created_at: string
           credito_maximo: number
@@ -70,12 +73,18 @@ export type Database = {
           email: string | null
           id: number
           nome: string
+          numero: number | null
           rg_ie: string | null
+          rua: string | null
           telefone_fixo: string | null
           tipo_pessoa: string
+          uf: string | null
         }
         Insert: {
+          bairro?: string | null
           celular: string
+          cep?: string | null
+          cidade?: string | null
           cpf_cnpj?: string | null
           created_at?: string
           credito_maximo?: number
@@ -84,12 +93,18 @@ export type Database = {
           email?: string | null
           id?: number
           nome?: string
+          numero?: number | null
           rg_ie?: string | null
+          rua?: string | null
           telefone_fixo?: string | null
           tipo_pessoa?: string
+          uf?: string | null
         }
         Update: {
+          bairro?: string | null
           celular?: string
+          cep?: string | null
+          cidade?: string | null
           cpf_cnpj?: string | null
           created_at?: string
           credito_maximo?: number
@@ -98,9 +113,12 @@ export type Database = {
           email?: string | null
           id?: number
           nome?: string
+          numero?: number | null
           rg_ie?: string | null
+          rua?: string | null
           telefone_fixo?: string | null
           tipo_pessoa?: string
+          uf?: string | null
         }
         Relationships: []
       }
