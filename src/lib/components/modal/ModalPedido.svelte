@@ -85,9 +85,9 @@
 						<Button on:click={increase}><Plus /></Button>
 					</div>
 				</div>
-				<p class="mt-3 text-right text-xl">
+				<!-- <p class="mt-3 text-right text-xl">
 					Valor total: <span class="font-bold text-primary">R${precoTotal}</span>
-				</p>
+				</p> -->
 			</div>
 			<Dialog.Footer>
 				<Button type="submit" class="flex items-center">

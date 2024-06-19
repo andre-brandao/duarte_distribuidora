@@ -67,7 +67,7 @@
 		sort: addSortBy({
 			initialSortKeys: [
 				{
-					id: 'created_at',
+					id: 'id',
 					order: 'desc',
 				},
 			],

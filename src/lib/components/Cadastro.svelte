@@ -28,6 +28,11 @@
 		const { data, error } = await supabase.auth.signUp({
 			email,
 			password,
+			options: {
+				data:{
+					'tipo':'admin'
+				}
+			}
 		});
 		if (error) {
 			console.error(error);

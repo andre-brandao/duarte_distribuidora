@@ -16,7 +16,7 @@
 				Resumo a partir da abertura do caixa:
 			</Dialog.Description>
 		</Dialog.Header>
-		<div class="grid gap-4 py-4">
+		<!-- <div class="grid gap-4 py-4">
 			<h1>
 				Quantidade de vendas no caixa: <span class="font-medium">1000</span>
 			</h1>
@@ -27,7 +27,7 @@
 			<h1>
 				Valor do caixa depois do dia: <span class="font-medium">R$00.00</span>
 			</h1>
-		</div>
+		</div> -->
 		<Dialog.Footer>
 			<slot />
 		</Dialog.Footer>

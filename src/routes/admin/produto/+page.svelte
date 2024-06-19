@@ -47,7 +47,7 @@
 			<div class="grid grid-cols-1 gap-3 md:grid-cols-3 lg:grid-cols-4">
 				{#each produtos as produto}
 					<a
-						class="rounded-lg bg-gray-100 p-6 text-center font-bold transition ease-in-out hover:bg-gray-50"
+						class="rounded-lg bg-gray-300 bg-opacity-85 p-6 text-center font-bold transition ease-in-out hover:bg-gray-200"
 						href="/admin/produto/{produto.id}"
 					>
 						<span>{produto.nome}</span>

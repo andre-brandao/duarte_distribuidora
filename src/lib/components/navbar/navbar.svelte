@@ -32,7 +32,7 @@
 		// 	icon: PackageOpen,
 		// },
 		{ label: 'Caixa', href: '/admin/caixa', icon: ShoppingCart },
-		{ label: 'Pedidos delivery', href: '/admin/pedidos', icon: Truck },
+		{ label: 'Pedidos', href: '/admin/pedidos', icon: Truck },
 	];
 	let navseila: HTMLElement;
 
