@@ -20,7 +20,7 @@
 	import { Button } from '$lib/components/ui/button'
 	import { Input } from '$lib/components/ui/input'
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu'
-	import { formatM } from '$lib/utils'
+	import { formatDate, formatDateHora, formatM } from '$lib/utils'
 
 	export let data: Transacao[]
 
@@ -64,7 +64,14 @@
 
 	const table = createTable(filteredData, {
 		page: addPagination(),
-		sort: addSortBy(),
+		sort: addSortBy({
+			initialSortKeys: [
+				{
+					id: 'created_at',
+					order: 'desc',
+				},
+			],
+		}),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) =>
 				value.toLowerCase().includes(filterValue.toLowerCase()),
@@ -82,6 +89,22 @@
 				},
 				filter: {
 					exclude: true,
+				},
+			},
+		}),
+		table.column({
+			accessor: 'created_at',
+			header: 'Criado em',
+			cell: ({ value }) => {
+				const formatted = formatDateHora(value)
+				return formatted
+			},
+			plugins: {
+				sort: {
+					disable: false,
+				},
+				filter: {
+					exclude: false,
 				},
 			},
 		}),
@@ -159,7 +182,7 @@
 			},
 			plugins: {
 				sort: {
-					disable: false,
+					disable: true,
 				},
 				filter: {
 					exclude: true,
@@ -208,6 +231,7 @@
 		/> -->
 		<div class="flex gap-2">
 			<select
+				class="z-50 min-w-[8rem] rounded-md border bg-popover p-1 px-3 text-popover-foreground shadow-md focus:outline-none"
 				on:change={(e) => {
 					if (e.target && e.target instanceof HTMLSelectElement) {
 						selectedCaixaId.set(
@@ -215,11 +239,17 @@
 						)
 					}
 				}}
-				class="flex h-9 rounded-md border border-input bg-background px-3 py-1 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground"
 			>
-				<option value="">Todos os caixas</option>
+				<option
+					class="relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50"
+					value="">Todos os caixas</option
+				>
+				<hr />
 				{#each uniqueCaixas as caixa}
-					<option value={caixa?.id}>
+					<option
+						class="relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50"
+						value={caixa?.id}
+					>
 						Caixa {caixa?.id} - {caixa?.distribuidora?.nome}
 					</option>
 				{/each}
@@ -256,12 +286,16 @@
 									let:props
 								>
 									<Table.Head {...attrs} class="text-primary-foreground">
-										{#if cell.id === 'total_log'}
-											<div class="text-right">
+										{#if cell.id === 'created_at'}
+											<div class="text-left">
 												<Button variant="ghost" on:click={props.sort.toggle}>
 													<Render of={cell.render()} />
 													<ArrowUpDown class={'ml-2 h-4 w-4'} />
 												</Button>
+											</div>
+										{:else if cell.id === 'total_log'}
+											<div class="text-right">
+												<Render of={cell.render()} />
 											</div>
 										{:else if cell.id === 'cents_transacao'}
 											<div class="text-right font-medium">
@@ -284,8 +318,12 @@
 							{#each row.cells as cell (cell.id)}
 								<Subscribe attrs={cell.attrs()} let:attrs>
 									<Table.Cell {...attrs}>
-										{#if cell.id === 'total_log'}
-											<div class="text-right font-medium">
+										{#if cell.id === 'created_at'}
+											<div class="text-left font-medium">
+												<Render of={cell.render()} />
+											</div>
+										{:else if cell.id === 'total_log'}
+											<div class="text-right">
 												R$<Render of={cell.render()} />
 											</div>
 										{:else if cell.id === 'cents_transacao'}

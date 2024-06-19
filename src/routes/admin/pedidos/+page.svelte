@@ -17,17 +17,23 @@
 
 	let pedidosFiltrados = pedidos
 
-	$: if (pedidoSelecionado) pedidosPorStatus()
-
 	const pedidosPorStatus = () => {
 		if (pedidoSelecionado === 'all') {
 			return pedidos
 		}
 
-		console.log(pedidosFiltrados)
-		return (pedidosFiltrados = pedidos.filter(
-			(pedido) => pedido.status === pedidoSelecionado,
-		))
+		if (pedidoSelecionado === 'varejo' || pedidoSelecionado === 'atacado') {
+			const filteredPedidos = pedidos.filter(
+				(pedido) => pedido.meta_data?.tipo_pessoa === pedidoSelecionado,
+			)
+			return filteredPedidos
+		}
+
+		return pedidos.filter((pedido) => pedido.status === pedidoSelecionado)
+	}
+	
+	$: if (pedidoSelecionado) {
+		pedidosFiltrados = pedidosPorStatus()
 	}
 
 	onMount(() => {
@@ -47,9 +53,8 @@
 			)
 			.subscribe()
 
-			return sub_channel.unsubscribe()
+		return sub_channel.unsubscribe()
 	})
-	
 </script>
 
 <!-- <pre>
@@ -71,21 +76,24 @@
 				bind:value={pedidoSelecionado}
 			>
 				<option value="all">Todos pedidos</option>
+				<option value="varejo">Varejo</option>
+				<option value="atacado">Atacado</option>
+				<hr />
 				<option value="aberto">Pendentes</option>
 				<option value="a_caminho">A caminho</option>
 				<option value="entregue">Entregue</option>
 			</select>
 		</div>
 	</div>
-	{#if pedidoSelecionado != 'all'}
+	{#if pedidoSelecionado != 'all' && pedidoSelecionado != 'varejo' && pedidoSelecionado != 'atacado'}
 		{#each pedidosFiltrados as pedido}
 			<CardShowPedidos {pedido} {supabase} />
 		{/each}
-	{:else}
+	{:else if pedidoSelecionado === 'all' || pedidoSelecionado === 'varejo' || pedidoSelecionado === 'atacado'}
 		<div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
 			<div class="max-h-[88vh] overflow-y-auto rounded-lg bg-red-100 p-2">
 				<h1 class="text-center">Pendentes:</h1>
-				{#each pedidos as pedido}
+				{#each pedidosFiltrados as pedido}
 					{#if pedido.status === 'aberto'}
 						<CardShowPedidos
 							{pedido}
@@ -108,7 +116,7 @@
 			</div>
 			<div class="max-h-[88vh] overflow-y-auto rounded-lg bg-yellow-100 p-2">
 				<h1 class="text-center">A caminho:</h1>
-				{#each pedidos as pedido}
+				{#each pedidosFiltrados as pedido}
 					{#if pedido.status === 'a_caminho'}
 						<CardShowPedidos
 							{pedido}
@@ -131,7 +139,7 @@
 			</div>
 			<div class="max-h-[88vh] overflow-y-auto rounded-lg bg-green-100 p-2">
 				<h1 class="text-center">Entregue:</h1>
-				{#each pedidos as pedido}
+				{#each pedidosFiltrados as pedido}
 					{#if pedido.status === 'entregue'}
 						<CardShowPedidos
 							{pedido}

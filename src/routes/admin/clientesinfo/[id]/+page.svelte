@@ -174,7 +174,7 @@
 								{produto.var_produto?.produto?.nome}
 								{produto.var_produto?.categoria?.nome} -
 								<span class="font-bold text-green-500">
-									R${produto.total_in_cents}
+									R${formatM(produto.total_in_cents)}
 								</span>
 							</p>
 						</div>

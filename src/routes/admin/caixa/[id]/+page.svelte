@@ -97,7 +97,8 @@
 			total_in_cents,
 			tipo: tipo_pagamento,
 			meta_data: {
-				tipo_pessoa: cliente_selecionado?.tipo_pessoa == `juridico` ? 'atacado' : 'varejo'
+				tipo_pessoa:
+					cliente_selecionado?.tipo_pessoa == `juridico` ? 'atacado' : 'varejo',
 			},
 			status: 'aberto',
 			distribuidora_id: 1,
@@ -118,7 +119,7 @@
 		const pedido_id = result_pedido.id
 
 		if (tipo_pagamento === 'dinheiro') {
-			const { data: result_transacao_data } = await supabase
+			const { error: err_dinheiro } = await supabase
 				.from('transacao_caixa')
 				.insert([
 					{
@@ -140,7 +141,13 @@
 						caixa_id: caixa.id,
 					},
 				])
+				if (err_dinheiro) {
+					toast.error(err_dinheiro.message)
+					console.error(err_dinheiro)
+					return
+				}
 		}
+
 
 		// inserir na tabela produto_pedido
 		const produtosToInsert = $pedidoStore.map((p) => {
@@ -168,6 +175,10 @@
 		isDinheiro = false
 		$pedidoStore = []
 		cliente_selecionado = null
+
+		setTimeout(() => {
+			window.location.reload()
+		}, 500)
 	}
 
 	async function abrirCaixa() {
@@ -223,7 +234,7 @@
 			const { error: err_transacao } = await supabase
 				.from('transacao_caixa')
 				.insert({
-					cents_transacao: 0,
+					cents_transacao: -caixa.cents_em_caixa,
 					meta_data: {
 						tipo: 'Fechar caixa',
 						user: session?.user.email,

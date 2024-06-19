@@ -256,7 +256,7 @@ function clean(input: string, mask: string) {
 	return output;
 }
 
-export function getEnderecoFromCEP(cep: string) {
+export function getEnderecoFromCEP(cep) {
 	return fetch(`https://viacep.com.br/ws/${cep}/json/`)
 		.then((res) => res.json())
 		.then((data) => {
@@ -275,6 +275,22 @@ export function formatDate(dateString: string): string {
 		day: '2-digit',
 		// hour: '2-digit',
 		// minute: '2-digit',
+		hour12: false,
+		timeZone: 'UTC',
+	};
+
+	const formattedDate = date.toLocaleString('pt-BR', options);
+	return formattedDate.replace(',', ' às');
+}
+
+export function formatDateHora(dateString: string): string {
+	const date = new Date(dateString);
+	const options: Intl.DateTimeFormatOptions = {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
 		hour12: false,
 		timeZone: 'UTC',
 	};

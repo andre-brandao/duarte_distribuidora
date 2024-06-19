@@ -8,7 +8,9 @@ export const load = (async ({ locals }) => {
 		await Promise.all([
 			supabase
 				.from('transacao_caixa')
-				.select('*,caixa(*,distribuidora(id,nome))'),
+				.select('*,caixa(*,distribuidora(id,nome))').order('created_at',{
+					ascending: true
+				}),
 		])
 
 	if (err_transacao_caixa) {

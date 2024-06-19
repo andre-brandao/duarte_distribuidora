@@ -45,15 +45,20 @@
 </script>
 
 <div class=" mt-2 rounded-lg border bg-gray-100 p-2 shadow-sm">
-	<div class="mb-4 grid grid-cols-1 sm:grid-cols-4 gap-1 text-center text-sm">
-		<h3>Pedido <strong>#{pedido.id}</strong></h3>
-		<p>Tipo: <strong>{pedido.tipo}</strong></p>
-		<p>
-			Total: <strong class="text-green-500"
-				>R${formatM(pedido.total_in_cents)}</strong
-			>
-		</p>
-		<p>Data: {formatDate(pedido.created_at)}</p>
+	<div class="mb-4 flex justify-between gap-1 text-center text-sm">
+		<div class="flex flex-col items-start">
+			<h3>Pedido <strong>#{pedido.id}</strong></h3>
+			<p>Data: {formatDate(pedido.created_at)}</p>
+			<p>Tipo: {pedido.meta_data?.tipo_pessoa ?? 'Nenhum'}</p>
+		</div>
+		<div class="flex flex-col items-end">
+			<p>Pagamento em <strong>{pedido.tipo}</strong></p>
+			<p>
+				Total: <strong class="text-green-500"
+					>R${formatM(pedido.total_in_cents)}</strong
+				>
+			</p>
+		</div>
 	</div>
 	<div>
 		<h4 class="mb-2 text-lg font-semibold">Produtos pedidos:</h4>
