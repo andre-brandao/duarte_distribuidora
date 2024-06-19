@@ -99,13 +99,7 @@
 				{/each}
 			</ul>
 		</div>
-		<hr />
-		<h1>Cliente:</h1>
-		<ButtonNav
-			label={'Cardapio online'}
-			Icon={SquareMenu}
-			href={'/cliente/cardapio'}
-		/>
+		
 		<button on:click={signOut}>
 			<ButtonNav label={'Deslogar'} Icon={LogOut} />
 		</button>

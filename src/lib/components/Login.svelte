@@ -29,7 +29,7 @@
 
 <section class="bg-gray-50">
 	<div
-		class="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-[90vh] lg:py-0"
+		class="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-[100vh] lg:py-0"
 	>
 		<a
 			href="/"

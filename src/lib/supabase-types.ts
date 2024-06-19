@@ -208,6 +208,38 @@ export type Database = {
           },
         ]
       }
+      info_user: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nome: string | null
+          tipo: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          nome?: string | null
+          tipo?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nome?: string | null
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "info_user_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pedido: {
         Row: {
           cliente_id: number | null
@@ -255,6 +287,35 @@ export type Database = {
             columns: ["cliente_id"]
             isOneToOne: false
             referencedRelation: "cliente"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      permissoes: {
+        Row: {
+          created_at: string
+          id: number
+          nome: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          nome: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          nome?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "permissoes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "info_user"
             referencedColumns: ["id"]
           },
         ]

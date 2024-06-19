@@ -1,16 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import { Trigger } from '$lib/components/ui/dropdown-menu';
-
-	export let data: PageData;
-
-	const clientes = data.clientes;
-	const produtos = data.produtos;
-
 	let logo ='202403131209_krxb_i.jpg';
 </script>
 
