@@ -1,61 +1,43 @@
 <script lang="ts">
+	import { formatM } from '$lib/utils'
 	import {
 		createTable,
 		Render,
 		Subscribe,
 		createRender,
-	} from 'svelte-headless-table';
-	import { readable } from 'svelte/store';
-	import * as Table from '$lib/components/ui/table';
-	import type { PageData } from './$types';
+	} from 'svelte-headless-table'
+	import { readable } from 'svelte/store'
+	import * as Table from '$lib/components/ui/table'
+	import type { PageData } from './$types'
 	//import ModalShowInfo from './ModalShowInfo.svelte';
-	import Input from '$lib/components/ui/input/input.svelte';
+	import Input from '$lib/components/ui/input/input.svelte'
 	import {
 		addTableFilter,
 		addPagination,
 		addSortBy,
-	} from 'svelte-headless-table/plugins';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down';
-	import DataTableActions from './data-table-actions.svelte';
+	} from 'svelte-headless-table/plugins'
+	import Button from '$lib/components/ui/button/button.svelte'
+	import ArrowUpDown from 'lucide-svelte/icons/arrow-up-down'
+	import DataTableActions from './data-table-actions.svelte'
 
-	export let clientes: {
-		celular: string;
-		cpf_cnpj: string | null;
-		created_at: string;
-		data_nascimento: string | null;
-		email: string | null;
-		id: number;
-		nome: string;
-		rg_ie: string | null;
-		telefone_fixo: string | null;
-	}[];
+	export let clientes: Cliente[]
 
-	const data = readable(clientes);
+	const data = readable(clientes)
 
 	type Cliente = {
-		id: number;
-		nome: string;
-		email: string | null;
-		celular: string;
-		cpf_cnpj: string | null;
-		created_at: string;
-		data_nascimento: string | null;
-		rg_ie: string | null;
-		telefone_fixo: string | null;
-	};
-
-	const mappedData: Cliente[] = clientes.map((cliente) => ({
-		id: cliente.id,
-		nome: cliente.nome,
-		email: cliente.email,
-		celular: cliente.celular,
-		cpf_cnpj: cliente.cpf_cnpj,
-		created_at: cliente.created_at,
-		data_nascimento: cliente.data_nascimento,
-		rg_ie: cliente.rg_ie,
-		telefone_fixo: cliente.telefone_fixo,
-	}));
+		celular: string
+		cpf_cnpj: string | null
+		created_at: string
+		credito_maximo: number
+		credito_usado: number
+		data_nascimento: string | null
+		email: string | null
+		id: number
+		nome: string
+		rg_ie: string | null
+		telefone_fixo: string | null
+		tipo_pessoa: string
+	}
 
 	const table = createTable(data, {
 		sort: addSortBy(),
@@ -63,7 +45,7 @@
 			fn: ({ filterValue, value }) =>
 				value.toLowerCase().includes(filterValue.toLowerCase()),
 		}),
-	});
+	})
 
 	const columns = table.createColumns([
 		table.column({
@@ -103,6 +85,18 @@
 			},
 		}),
 		table.column({
+			accessor: 'celular',
+			header: 'Celular',
+			plugins: {
+				sort: {
+					disable: true,
+				},
+				filter: {
+					exclude: true,
+				},
+			},
+		}),
+		table.column({
 			accessor: 'cpf_cnpj',
 			header: 'CPF/CNPJ',
 			plugins: {
@@ -127,47 +121,39 @@
 			},
 		}),
 		table.column({
-			accessor: ({
+			accessor: 'credito_usado',
+			header: 'Credito',
+			plugins: {
+				sort: {
+					disable: true,
+				},
+				filter: {
+					exclude: true,
+				},
+			},
+			cell: ({ row }) => {
+				const cliente: Cliente = row.original
+				return `
+					R$${formatM(cliente.credito_usado)} - R$${formatM(cliente.credito_maximo)}
+        			`
+			},
+		}),
+		table.column({
+			accessor: ({ id }) => ({
 				id,
-				nome,
-				email,
-				celular,
-				cpf_cnpj,
-				created_at,
-				data_nascimento,
-				rg_ie,
-				telefone_fixo,
-			}) => ({
-				id,
-				nome,
-				email,
-				celular,
-				cpf_cnpj,
-				created_at,
-				data_nascimento,
-				rg_ie,
-				telefone_fixo,
 			}),
 			header: '',
 			cell: ({ value }) => {
 				return createRender(DataTableActions, {
 					id: value.id,
-					nome: value.nome,
-					email: value.email,
-					celular: value.celular,
-					cpf_cnpj: value.cpf_cnpj,
-					created_at: value.created_at,
-					data_nascimento: value.data_nascimento,
-					rg_ie: value.rg_ie,
-					telefone_fixo: value.telefone_fixo,
-				});
+				})
 			},
 		}),
-	]);
+	])
 
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
-		table.createViewModel(columns);
-	const { filterValue } = pluginStates.filter;
+		table.createViewModel(columns)
+	const { filterValue } = pluginStates.filter
 </script>
 
 <div class="flex items-center py-4">

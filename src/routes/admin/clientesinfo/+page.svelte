@@ -23,7 +23,7 @@
 				<Dialog.Trigger class={buttonVariants({ variant: 'default' })}
 					>Adicionar cliente</Dialog.Trigger
 				>
-				<Dialog.Content class="sm:max-w-[620px] overflow-y-auto">
+				<Dialog.Content class="overflow-y-auto sm:max-w-[620px]">
 					<ClienteForm
 						{supabase}
 						{clientes}
@@ -36,7 +36,7 @@
 			</Dialog.Root>
 		</div>
 	</div>
-	<div class="overflow-x-auto">
+	<!-- <div class="overflow-x-auto">
 		<table class="min-w-full border border-gray-300 leading-normal">
 			<thead>
 				<tr class="border-b border-gray-300 bg-gray-100">
@@ -94,14 +94,10 @@
 				{/each}
 			</tbody>
 		</table>
-	</div>
-	<!-- {#if clientes}
-		<div class="flex justify-center">
-			<div class="overflow-x-auto">
-				<DataTable {clientes} />
-			</div>
-		</div>
+	</div> -->
+	{#if clientes}
+		<DataTable {clientes} />
 	{:else}
 		<p>Nenhum cliente encontrado!</p>
-	{/if} -->
+	{/if}
 </main>
