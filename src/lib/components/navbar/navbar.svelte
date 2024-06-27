@@ -13,7 +13,7 @@
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { Icon } from 'lucide-svelte';
-	import { LogOut } from 'lucide-svelte';
+	import { LogOut,Settings  } from 'lucide-svelte';
 	import type { SupabaseClient } from '@supabase/supabase-js';
 
 	export let supabase: SupabaseClient;
@@ -100,8 +100,11 @@
 			</ul>
 		</div>
 		
-		<button on:click={signOut}>
-			<ButtonNav label={'Deslogar'} Icon={LogOut} />
-		</button>
+		<div class="w-full flex flex-col gap-3">
+			<ButtonNav label={'Editar permissões'} Icon={Settings} href={'/admin/editarpermissoes'}/>
+			<button on:click={signOut}>
+				<ButtonNav label={'Deslogar'} Icon={LogOut} />
+			</button>
+		</div>
 	</div>
 </aside>

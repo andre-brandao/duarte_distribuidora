@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js'
-	import type { PageData } from '../clientesinfo/$types'
+	import type { PageData } from './$types'
 	import { formatM } from '$lib/utils'
 	import * as Dialog from '$lib/components/ui/dialog/index.js'
 	import ClienteForm from './cliente_form.svelte'
