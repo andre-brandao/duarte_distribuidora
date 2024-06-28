@@ -104,7 +104,7 @@
 				<div class="relative">
 					{#if pedidosAbertos.length > 0}
 						<div class="absolute right-0 top-0 rounded-full bg-red-500">
-							<span class="p-2 text-sm font-bold text-white text-center"
+							<span class="p-2 text-center text-sm font-bold text-white"
 								>{pedidosAbertos.length}</span
 							>
 						</div>
@@ -115,14 +115,14 @@
 				</div>
 			</div>
 		{:else}
-			<div class="mt-2">
+			<div class="mt-2 p-2">
 				<Button on:click={togglePendente}>Pedidos aceitos</Button>
 			</div>
 		{/if}
 	</div>
 	{#if !pendentes}
-		<h1 class="text-3xl font-bold">Pendentes:</h1>
-		<p>(Clique em "aceitar" para aceitar pedido)</p>
+		<h1 class="text-center text-3xl font-bold">Pedidos pendentes</h1>
+		<p class="text-center">(Todos pedidos pendentes aguardando aprovacão)</p>
 		<!--BUTTON DE RECUSAR AINDA NÃO FAZ NADA-->
 		{#if pedidosAbertos.length > 0}
 			{#each pedidosFiltrados as pedido}
