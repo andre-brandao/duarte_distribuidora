@@ -90,7 +90,7 @@
 				</Button>
 			{/if}
 			{#if button_text}
-				<Button class="bg-green-600 text-white hover:text-black" on:click={() => clickButton(pedido.id)}>
+				<Button on:click={() => clickButton(pedido.id)}>
 					{button_text}
 				</Button>
 			{/if}

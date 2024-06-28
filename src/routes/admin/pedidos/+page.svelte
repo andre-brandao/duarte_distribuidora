@@ -83,27 +83,40 @@
 		{/if}
 
 		{#if pendentes === true}
-			<div class="mt-2">
-				<label for="filtro">Filtrar pedidos:</label>
-				<select
-					name="filtro"
-					id="filtro"
-					class="rounded-lg border bg-white p-2"
-					bind:value={pedidoSelecionado}
-				>
-					<option value="all">Todos pedidos</option>
-					<option value="varejo">Varejo</option>
-					<option value="atacado">Atacado</option>
-					<hr />
-					<option value="aceito">Pedidos aceitos</option>
-					<option value="a_caminho">A caminho</option>
-					<option value="entregue">Entregue</option>
-				</select>
-				<Button on:click={togglePendente}>Pedidos aceitos</Button>
+			<div class="mt-2 flex items-center">
+				<div>
+					<label for="filtro">Filtrar pedidos:</label>
+					<select
+						name="filtro"
+						id="filtro"
+						class="rounded-lg border bg-white p-2"
+						bind:value={pedidoSelecionado}
+					>
+						<option value="all">Todos pedidos</option>
+						<option value="varejo">Varejo</option>
+						<option value="atacado">Atacado</option>
+						<hr />
+						<option value="aceito">Pedidos aceitos</option>
+						<option value="a_caminho">A caminho</option>
+						<option value="entregue">Entregue</option>
+					</select>
+				</div>
+				<div class="relative">
+					{#if pedidosAbertos.length > 0}
+						<div class="absolute right-0 top-0 rounded-full bg-red-500">
+							<span class="p-2 text-sm font-bold text-white text-center"
+								>{pedidosAbertos.length}</span
+							>
+						</div>
+					{/if}
+					<div class="p-2">
+						<Button on:click={togglePendente}>Pedidos pendentes</Button>
+					</div>
+				</div>
 			</div>
 		{:else}
 			<div class="mt-2">
-				<Button on:click={togglePendente}>Pedidos pendentes</Button>
+				<Button on:click={togglePendente}>Pedidos aceitos</Button>
 			</div>
 		{/if}
 	</div>
