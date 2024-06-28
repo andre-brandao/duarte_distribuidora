@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Button from '$lib/components/ui/button/button.svelte'
 	import { formatDate, formatM } from '$lib/utils'
 	import type { PageData } from './$types'
 	import CardShowPedidos from './CardShowPedidos.svelte'
@@ -17,6 +18,8 @@
 
 	let pedidosFiltrados = pedidos
 
+	let pendentes = false
+
 	const pedidosPorStatus = () => {
 		if (pedidoSelecionado === 'all') {
 			return pedidos
@@ -31,7 +34,7 @@
 
 		return pedidos.filter((pedido) => pedido.status === pedidoSelecionado)
 	}
-	
+
 	$: if (pedidoSelecionado) {
 		pedidosFiltrados = pedidosPorStatus()
 	}
@@ -55,6 +58,17 @@
 
 		return sub_channel.unsubscribe()
 	})
+
+	function togglePendente() {
+		pendentes = !pendentes
+		pedidoSelecionado = 'all'
+	}
+
+	$: pedidosAbertos = pedidosFiltrados.filter(
+		(pedido) => pedido.status === 'aberto',
+	)
+
+	//Dé, esse código ta cheio de if else, não sei se fiz do jeito ideal, então se vc quiser otimizar do seu jeito pode, mas esse foi o jeito que eu pude pensar
 </script>
 
 <!-- <pre>
@@ -67,34 +81,69 @@
 		{:else}
 			<h1 class="text-3xl font-bold">Pedidos {pedidoSelecionado}:</h1>
 		{/if}
-		<div class="mt-2">
-			<label for="filtro">Filtrar pedidos:</label>
-			<select
-				name="filtro"
-				id="filtro"
-				class="rounded-lg border bg-white p-2"
-				bind:value={pedidoSelecionado}
-			>
-				<option value="all">Todos pedidos</option>
-				<option value="varejo">Varejo</option>
-				<option value="atacado">Atacado</option>
-				<hr />
-				<option value="aberto">Pendentes</option>
-				<option value="a_caminho">A caminho</option>
-				<option value="entregue">Entregue</option>
-			</select>
-		</div>
+
+		{#if pendentes === true}
+			<div class="mt-2">
+				<label for="filtro">Filtrar pedidos:</label>
+				<select
+					name="filtro"
+					id="filtro"
+					class="rounded-lg border bg-white p-2"
+					bind:value={pedidoSelecionado}
+				>
+					<option value="all">Todos pedidos</option>
+					<option value="varejo">Varejo</option>
+					<option value="atacado">Atacado</option>
+					<hr />
+					<option value="aceito">Pedidos aceitos</option>
+					<option value="a_caminho">A caminho</option>
+					<option value="entregue">Entregue</option>
+				</select>
+				<Button on:click={togglePendente}>Pedidos aceitos</Button>
+			</div>
+		{:else}
+			<div class="mt-2">
+				<Button on:click={togglePendente}>Pedidos pendentes</Button>
+			</div>
+		{/if}
 	</div>
-	{#if pedidoSelecionado != 'all' && pedidoSelecionado != 'varejo' && pedidoSelecionado != 'atacado'}
+	{#if !pendentes}
+		<h1 class="text-3xl font-bold">Pendentes:</h1>
+		<p>(Clique em "aceitar" para aceitar pedido)</p>
+		{#if pedidosAbertos.length > 0}
+			{#each pedidosFiltrados as pedido}
+				{#if pedido.status === 'aberto'}
+					<CardShowPedidos
+						{pedido}
+						{supabase}
+						button_text="Aceitar pedido"
+						click_button={async () => {
+							console.log('click aceitar')
+							pedido.status = 'aceito'
+							const { error } = await updateStatusPedido(supabase, {
+								id: pedido.id,
+								status: 'aceito',
+							})
+							if (error) {
+								pedido.status = 'aceito'
+							}
+						}}
+					/>
+				{/if}
+			{/each}
+		{:else}
+			<p class="mt-10 text-center text-xl">Nenhum pedido pendente!</p>
+		{/if}
+	{:else if pedidoSelecionado != 'all' && pedidoSelecionado != 'varejo' && pedidoSelecionado != 'atacado'}
 		{#each pedidosFiltrados as pedido}
 			<CardShowPedidos {pedido} {supabase} />
 		{/each}
 	{:else if pedidoSelecionado === 'all' || pedidoSelecionado === 'varejo' || pedidoSelecionado === 'atacado'}
 		<div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
 			<div class="max-h-[88vh] overflow-y-auto rounded-lg bg-red-100 p-2">
-				<h1 class="text-center">Pendentes:</h1>
+				<h1 class="text-center">Pedidos aceitos:</h1>
 				{#each pedidosFiltrados as pedido}
-					{#if pedido.status === 'aberto'}
+					{#if pedido.status === 'aceito'}
 						<CardShowPedidos
 							{pedido}
 							{supabase}

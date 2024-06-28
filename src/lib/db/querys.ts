@@ -32,4 +32,5 @@ export function getPedidosNaoFinalizado(supabase: DB, args?: {}) {
 	return supabase
 		.from('pedido')
 		.select('*, produto_pedido(*,var_produto(id, produto(*), categoria(nome)))')
+		.neq('status', 'finalizado')
 }
