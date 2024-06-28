@@ -35,7 +35,8 @@
 
 	export let click_button = () => {}
 
-	export let button_text = 'processar pedido'
+	export let button_text = ''
+	export let button_recusar = ''
 
 	async function clickButton(id_pedido: number) {
 		// tirar estoque
@@ -62,7 +63,7 @@
 	</div>
 	<div>
 		<h4 class="mb-2 text-lg font-semibold">Produtos pedidos:</h4>
-		<div class="flex flex-col sm:flex-row gap-2">
+		<div class="flex flex-col gap-2 sm:flex-row">
 			{#each pedido.produto_pedido as produto}
 				<div class="flex rounded-md bg-white p-2 shadow-sm">
 					<p class="text-gray-800">
@@ -77,13 +78,22 @@
 			{/each}
 		</div>
 	</div>
-	<div class="mt-2 flex flex-col sm:flex-row items-center justify-between text-sm gap-3">
+	<div
+		class="mt-2 flex flex-col items-center justify-between gap-3 text-sm sm:flex-row"
+	>
 		<p>Observacoes: {pedido.observacao ?? 'Nenhuma'}</p>
 
-		{#if button_text}
-			<Button on:click={() => clickButton(pedido.id)}>
-				{button_text}
-			</Button>
-		{/if}
+		<div>
+			{#if button_recusar}
+				<Button class="bg-red-600 text-white hover:text-black">
+					{button_recusar}
+				</Button>
+			{/if}
+			{#if button_text}
+				<Button class="bg-green-600 text-white hover:text-black" on:click={() => clickButton(pedido.id)}>
+					{button_text}
+				</Button>
+			{/if}
+		</div>
 	</div>
 </div>

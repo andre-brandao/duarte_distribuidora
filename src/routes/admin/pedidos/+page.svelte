@@ -110,6 +110,7 @@
 	{#if !pendentes}
 		<h1 class="text-3xl font-bold">Pendentes:</h1>
 		<p>(Clique em "aceitar" para aceitar pedido)</p>
+		<!--BUTTON DE RECUSAR AINDA NÃO FAZ NADA-->
 		{#if pedidosAbertos.length > 0}
 			{#each pedidosFiltrados as pedido}
 				{#if pedido.status === 'aberto'}
@@ -117,6 +118,7 @@
 						{pedido}
 						{supabase}
 						button_text="Aceitar pedido"
+						button_recusar="Recusar pedido"
 						click_button={async () => {
 							console.log('click aceitar')
 							pedido.status = 'aceito'
